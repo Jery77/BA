@@ -1,0 +1,3 @@
+latexmk ausarbeitung
+pause
+start ausarbeitung.pdf
