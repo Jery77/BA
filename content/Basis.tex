@@ -1,14 +1,94 @@
-% !TeX spellcheck = de_DE
+% !TeX spellcheck = en_US
 
 \chapter{Basis}
 \label{chap:basis}
 
-Hier wird der Hauptteil stehen. Falls mehrere Kapitel gewünscht, entweder mehrmals \texttt{\textbackslash{}chapter} benutzen oder pro Kapitel eine eigene Datei anlegen und \texttt{ausarbeitung.tex} anpassen.
-
-LaTeX-Hinweise stehen in \cref{chap:latextipps}.
-
 \section{Cloud Computing}
-\section{TOSCA}
+
+\if 0
+Сейчас Облачные сервера и сервисы можно встретить повсюду, и их число постоянно ратёт (вставь статистику)
+Они оспользуются в ... нужны примеры...
+История? 
+Ранние концепции использования вычислительных ресурсов по принципу системы коммунального хозяйства относят к 1960-м годам (к Джону Маккарти или Джозефу Ликлайдеру)[вставь сам].
+Следующими шагами к концептуализации облачных вычислений считаются появление CRM-системы Salesforce.com, предоставляемой по подписке в виде веб-сайта (1999) и начало предоставления услуг по доступу к вычислительным ресурсам через Интернет книжным магазином Amazon.com (2002)[4]. Развитие сервисов Amazon, фактически превратившейся благодаря этим услугам в технологическую компанию, привело к формулировке идеи вычислительной эластичности и запуску в августе 2006 года проекта под названием Elastic Computing Cloud (Amazon EC2). Практически одновременно с запуском ECC термины cloud и cloud computing прозвучали в одном из выступлений главы Google Эрика Шмидта[5][6][7], начиная с этого времени встречаются многочисленные упоминания облачных вычислений в СМИ, в публикациях специалистов по информационным технологиям, в научно-исследовательской среде. Отсылка к «облаку» использовалась как метафора, основанная на изображении Интернета на диаграмме компьютерной сети, или как образ сложной инфраструктуры, за которой скрываются все технические детали.
+
+Запуск в 2009 году приложений Google Apps отмечается как следующий важный шаг к популяризации и осмыслению облачных вычислений[4]. В 2009—2011 годы были сформулированы несколько важных обобщений представлений об облачных вычислениях, в частности, выдвинута модель частных облачных вычислений. В 2011 году Национальный институт стандартов и технологий сформировал определение, которое структурировало и зафиксировало все возникшие к этому времени трактовки и вариации относительно облачных вычислений в едином понятии[8].
+
+определение 
+Так как определение выдвиннутое Национального института стандартов и технологий подходящим образом описывает концепцию облачных вычислителей, используемую в данной работе, оно и будет использовано и представленно ниже
+\fi
+Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared
+pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that
+can be rapidly provisioned and released with minimal management effort or service provider interaction. [nist]
+\if 0
+НИСТ различает 3 типа моделей сервисов 
+\fi
+Service Models:
+Software as a Service (SaaS). The capability provided to the consumer is to use the provider’s
+applications running on a cloud infrastructure2
+. The applications are accessible from
+various client devices through either a thin client interface, such as a web browser (e.g.,
+web-based email), or a program interface. The consumer does not manage or control the
+underlying cloud infrastructure including network, servers, operating systems, storage, or
+even individual application capabilities, with the possible exception of limited userspecific
+application configuration settings.
+Platform as a Service (PaaS). The capability provided to the consumer is to deploy onto the cloud
+infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider.3 The consumer does
+not manage or control the underlying cloud infrastructure including network, servers,
+operating systems, or storage, but has control over the deployed applications and possibly
+configuration settings for the application-hosting environment.
+Infrastructure as a Service (IaaS). The capability provided to the consumer is to provision
+processing, storage, networks, and other fundamental computing resources where the
+consumer is able to deploy and run arbitrary software, which can include operating
+systems and applications. The consumer does not manage or control the underlying cloud
+infrastructure but has control over operating systems, storage, and deployed applications;
+and possibly limited control of select networking components (e.g., host firewalls).
+
+\if 0
+и 4 типа моделей размещения 
+
+\fi 
+Deployment Models:
+Private cloud. The cloud infrastructure is provisioned for exclusive use by a single organization
+comprising multiple consumers (e.g., business units). It may be owned, managed, and
+operated by the organization, a third party, or some combination of them, and it may exist
+on or off premises.
+Community cloud. The cloud infrastructure is provisioned for exclusive use by a specific
+community of consumers from organizations that have shared concerns (e.g., mission,
+security requirements, policy, and compliance considerations). It may be owned,
+managed, and operated by one or more of the organizations in the community, a third
+party, or some combination of them, and it may exist on or off premises.
+Public cloud. The cloud infrastructure is provisioned for open use by the general public. It may be
+owned, managed, and operated by a business, academic, or government organization, or
+some combination of them. It exists on the premises of the cloud provider.
+Hybrid cloud. The cloud infrastructure is a composition of two or more distinct cloud
+infrastructures (private, community, or public) that remain unique entities, but are bound
+together by standardized or proprietary technology that enables data and application
+portability (e.g., cloud bursting for load balancing between clouds). 
+
+
+\if 0
+
+Облачные вычислители позволяют эффективно использовать ресурсы, распределив нагрузку на систему  из нескольких физических серверов и переложить работу по их обслуживанию на провайдеров.
+У пользователя нет прямого доступа к инфраструктуре (серверам и операционным система), он использует только предоставленные провайдером службы и сервисы. 
+Набор и функционал этих сервисов и служб зависит от каждого конкретного провайдера и его области специализации, что облегчает работу с этим провайдером. Как недостаток эти Отличия в наборах сервисов и служб затрудняют миграцию от одного провайдера к другому и автоматизацию работы с разными провайдерами.
+\fi 
+
+\section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)}
+definition
+The upcoming OASIS Topology and Orchestration Specification for
+Cloud Applications (TOSCA) standard provides new ways to enable portable automated
+deployment and management of composite applications. TOSCA describes the
+structure of composite applications as topologies containing their components and
+their relationships. Plans capture management tasks by orchestrating management
+operations exposed by the components.
+[TOSCA: Portable Automated Deployment and Management of Cloud Applications]
+Usage
+\if 0
+Тоска может быть использована не только для описания всех стадий жизни- работы облачного приложения, но и служить прослойкой, между облачным приложением и сервисами провайдера, позволяя реализовать единое приложение подходящее для работы с разными провайдерами. 
+\fi 
+Structure
+
 \section{OpenTOSCA}
 \section{CSAR}
 \section{Linux Packet management}
