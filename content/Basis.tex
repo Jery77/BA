@@ -88,10 +88,129 @@ Usage
 Тоска может быть использована не только для описания всех стадий жизни- работы облачного приложения, но и служить прослойкой, между облачным приложением и сервисами провайдера, позволяя реализовать единое приложение подходящее для работы с разными провайдерами. 
 \fi 
 Structure
-
-\section{OpenTOSCA}
+TOSCA specification provides a language to describe service
+5 components and their relationships using a service topology, and it provides for describing the
+6 management procedures that create or modify services using orchestration processes. The combination
+7 of topology and orchestration in a Service Template describes what is needed to be preserved across
+8 deployments in different environments to enable interoperable deployment of cloud services and their
+9 management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.) when the
+10 applications are ported over alternative cloud environments.
+[TOSCA-v1.0-cs01.pdf]
+ A Topology Template (also referred to as the topology
+103 model of a service) defines the structure of a service
+A Topology Template consists of a set of Node Templates and Relationship Templates that together
+108 define the topology model of a service as a (not necessarily connected) directed graph. A node in this
+109 graph is represented by a Node Template. A Node Template specifies the occurrence of a Node Type as
+110 a component of a service. A Node Type defines the properties of such a component (via Node Type
+111 Properties) and the operations (via Interfaces) available to manipulate the component. Node Types are
+112 defined separately for reuse purposes and a Node Template references a Node Type and adds usage
+113 constraints, such as how many times the component can occur.
+A Relationship Template specifies the occurrence of a relationship between nodes in a Topology
+126 Template. Each Relationship Template refers to a Relationship Type that defines the semantics and any
+127 properties of the relationship. Relationship Types are defined separately for reuse purposes. The
+128 Relationship Template indicates the elements it connects and the direction of the relationship by defining
+129 one source and one target element (in nested SourceElement and TargetElement elements). The
+130 Relationship Template also defines any constraints with the OPTIONAL
+131 RelationshipConstraints element. 
+An artifact represents the content needed to realize a deployment such as an executable (e.g. a script, an
+217 executable program, an image), a configuration file or data file, or something that might be needed so that
+218 another executable can run (e.g. a library). Artifacts can be of different types, for example EJBs or python
+219 scripts. The content of an artifact depends on its type. Typically, descriptive metadata will also be
+220 provided along with the artifact. This metadata might be needed to properly process the artifact, for
+221 example by describing the appropriate execution environment.
+222 TOSCA distinguishes two kinds of artifacts: implementation artifacts and deployment artifacts. An
+223 implementation artifact represents the executable of an operation of a node type, and a deployment 
+artifact represents the executable for materializing instances of a node. For example, a REST operation
+225 to store an image can have an implementation artifact that is a WAR file. The node type this REST
+226 operation is associated with can have the image itself as a deployment artifact.
+227 The fundamental difference between implementation artifacts and deployment artifacts is twofold, namely
+228 1. the point in time when the artifact is deployed, and
+229 2. by what entity and to where the artifact is deployed.
 \section{CSAR}
-\section{Linux Packet management}
+Ein Cloud Service Archive (CSAR) wird zur Verteilung einer TOSCA-Anwendung
+eingesetzt. Es handelt sich um eine ZIP-Datei (üblicherweise komprimiert) mit der
+Dateiendung „csar“, die alle Artefakte enthält, die zur Instanziierung und zum
+Management der Cloud-Anwendung bzw. Service benötigt werden. Dazu gehören
+Definitions-Dokumente, Implementation Artifacts, Deployment Artifacts und Pläne.
+In dieser Form kann eine Cloud-Anwendung einer TOSCA-Laufzeitumgebung
+übergeben werden. [TOS13]
+Das Wurzelverzeichnis einer CSAR muss zumindest die Ordner „Definitions“ und
+„TOSCA-Metadata“ enthalten. In „Definitions“ liegen eine oder mehrere Definitions-
+Dokumente der Cloud-Anwendung. Beispielsweise wäre es denkbar, dass eine CSAR
+zur Wiederverwendung lediglich Node Types und Relationship Types spezifiziert. In
+weiteren CSARs könnten dann Node Templates bzw. Relationship Templates definiert
+sein, die auf diese Node Types bzw. Relationship Types referenzieren. In diesem
+Fall müssten die Definitions-Dokumente mit den Types importiert werden (siehe
+Abschnitt 2.2.1). Falls eine Cloud-Anwendung dagegen vollständig in einer CSAR
+verteilt wird, so muss mindestens ein Definitions-Dokument ein Service Template
+enthalten. [TOS13]
+Der Ordner „TOSCA-Metadata“ enthält die TOSCA Metadatei „TOSCA.meta“
+(auch CSAR Manifest genannt), in der Metadaten der CSAR als Schlüssel-Wert-Paare
+hinterlegt sind. Abbildung 2.1 veranschaulicht den Aufbau der TOSCA Metadatei.
+Die Datei teilt sich in Blöcken auf, die durch Leerzeilen voneinander getrennt sind. Im
+ersten Block („block_0“) stehen Metadaten über die CSAR selbst, wie z. B. der Autor
+der CSAR. Unter dem optionalen Attribut „Entry-Definitions“ kann der relative Pfad
+15
+2 Grundlagen
+zum Haupt-Definitions-Dokument definiert werden, um einem TOSCA-Container eine
+effizientere Verarbeitung der Definitions-Dokumente zu ermöglichen. Auch “Topology“
+ist optional und referenziert auf ein Bild, dass die Topologie der Cloud-Anwendung
+veranschaulicht. Letzteres Attribut ist dabei nicht durch TOSCA spezifiziert. Es wird
+lediglich vom TOSCA-Container OpenTOSCA (siehe Abschnitt 2.5) verstanden und
+verwendet.
+In weiteren Blöcken können Metadaten zu Dateien in der CSAR definiert werden,
+z. B. der Hash einer Datei. Falls Metadaten zu einer Datei definiert werden sollen, so
+muss neben dem relativen Pfad der Datei mindestens ihr Content-Type2 angegeben
+werden. Statt dem relativen Pfad der Datei können auch Pattern definiert werden,
+um Metadaten direkt mehreren Dateien zuzuweisen. [TOS13]
+Die übrige CSAR-Struktur ist dem Ersteller der CSAR überlassen [TOS13]. Abbildung
+2.2 zeigt ein Beispiel einer gültigen CSAR.
+\section{OpenTOSCA}
+OpenTOSCA [AI] ist eine am Institut für Architektur von Anwendungssystemen der Universität
+Stuttgart entwickelte Laufzeitumgebung für TOSCA Anwendungen.
+Mittels OpenTOSCA können Cloud Service Archives (CSARs) [29] installiert
+werden.
+Abbildung 1 zeigt die Architektur von OpenTOSCA. Hauptkomponenten des
+Containers sind OpenTOSCAControl, IA-Engine und Plan-Engine.
+Aufgabe der OpenTOSCAControl Komponente ist es, den Ablauf der Bearbeitung
+einer CSAR-Datei zu dirigieren. Sie bietet zudem Funktionen an, die durch
+die OpenTOSCA Container API mittels einer REST-Schnittstelle nach außen hin,
+unter anderem einer grafischen Benutzerschnittstelle, zur Verfügung gestellt
+werden.
+Die IA-Engine ist für das Deployment von Implementation Artifacts
+zuständig, welche in der CSAR enthaltenen sind. Da Implementation
+Artifacts, wie in Kapitel 2.2 beschrieben, verschiedenster Art sein können,
+ist die IA-Engine mittels eines Plug-in-Systems realisiert. Dadurch können neue
+Plug-ins, welche das eigentliche Deployment der Implementation
+Artifacts ausführen, zur Laufzeit hinzugefügt werden. Die Endpunkte der
+erfolgreich deployten Implementation Artifacts werden in einer Endpunktdatenbank
+gespeichert. Aktuell wird das Deployment von Web Archives
+(WAR) auf Tomcat [6] sowie Axis Archives (AAR) auf Apache Axis [1] unterstützt.
+The OpenTOSCA ecosystem consists out of three parts, as shown in the figure above:
 
+OpenTOSCA Container, a TOSCA runtime environment
+Winery, a graphical modelling TOSCA tool
+Vinothek, a self-service portal for the applications available in the container
+
+Winery will be used to show results.
+\section{Packet management}
+
+\if 0
+Мэнеджер пактов
+мэнеждер пакетов это набор софтварных инструментов, которые автоматизируют процесс установки, обновления, конфигурации и удаления компьютерных программ. 
+Менеджеры пакетов работают с пакетами, расделёнными программами и данными в архивах. пакеты содержат метаданные, такими как имя программы, назначение, версия, производитель и список зависимостей. 
+Менеджеры пакетов служат для управления базой данных пакетов, их зависимостей и версий, для предотвращения ошибочной установки программ и отстутствующих зависимостей. 
+Менеджеры пакетов разработаны для устранения необходимости в ручную устанавливать и обновлять пакеты. Это очень полезно для больших систем с тысячами установленных программ и запутанной схемой зависимостей и необходимых версий
+
+пакеты
+Скаченный менеджерами пакеты, это архивные файлы, содержащие программу или исходный код для её компиляции и метаданные описывающие что необходимо для её равёртывания и работы 
+
+динамические библиотеки
+Computer systems which rely on dynamic library linking, instead of static library linking, share executable libraries of machine instructions across packages and applications. In these systems, complex relationships between different packages requiring different versions of libraries results in a challenge colloquially known as "dependency hell".  Good package management is vital on these systems.
+
+репозитории 
+To give users more control over the kinds of software that they are allowing to be installed on their system (and sometimes due to legal or convenience reasons on the distributors' side), software is often downloaded from a number of software repositories.[4]
+По умолчанию в юникс системах менеджер пакетов использует официальные репозитории, подходящие для данной операционной системы и архитектуры девайса, но пользователь может так же добавить сторонние репозитории, например репозитории стороннего производителя или репозитории с пакетами для другой архитектуры
+\fi
 
 
