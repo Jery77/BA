@@ -211,6 +211,12 @@ Computer systems which rely on dynamic library linking, instead of static librar
 репозитории 
 To give users more control over the kinds of software that they are allowing to be installed on their system (and sometimes due to legal or convenience reasons on the distributors' side), software is often downloaded from a number of software repositories.[4]
 По умолчанию в юникс системах менеджер пакетов использует официальные репозитории, подходящие для данной операционной системы и архитектуры девайса, но пользователь может так же добавить сторонние репозитории, например репозитории стороннего производителя или репозитории с пакетами для другой архитектуры
+
+Зависимости
+Менеджеры пакетов различают 2 вида зависимостей в пакетах req and prereq
+зависимость  пакет1 рек пакет2, отображает необходимость наличия необходимого пакета2 для работы пакета1
+зависимость пакет1 пререк пакет2, отображает неоьходимость наличия пакета 2 для установки пакета1
+зависимоть первого типа, рек, приводит к наличию циклов в структуре зависимостей.
 \fi
 
 
