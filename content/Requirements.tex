@@ -1,4 +1,4 @@
-% !TeX spellcheck = de_DE
+% !TeX spellcheck = en_EN
 
 \chapter{Requirements}
 \label{chap:req}
@@ -18,17 +18,28 @@
 это инструмент для опэнтоски, с помощью которго можно отображать и редактировать CSAR архивы.
 
 пример работа программы
-
-0) начало работы 
-распакова архива во временную директорию
-
-1)предобработка архива
-построение зависимостей скрипт-ноду-сервис
-добавление своих файлов, зависимости и артифакты
-
-2)обработка языками
-все файлы архива необходимо пропустить через каждый язык, для установки принадлежности. например по расширению ".sh", для баш скриптов, или по внутренним файлам, для энсибл-архивов 
-
+\fi
+\section*{Stages of CSAR processing}
+\begin{itemize}  
+	\item Begin  \\
+	To start the work over program need to become input CSAR name, output CSAR name, and architecture of target hardware. 
+	Then input CSAR need to be extracted.
+	\item Preprocessing\\
+	During preprocessing stage, RR need to analyze internal references and build dependency three.
+	Furthermore, common Tosca definitions for artifacts and  relations between packages need to be added.
+	\item Processing with Languages
+	Each file from CSAR need to be processed by each Language handler, described in RR, to determine belonging to this language.
+	\item Processing with Packet Managers
+	Each file belonging to the Language, must be processed by Packet Manager Handler to find and resolve external references.
+	\item Package handling
+	After Package Handler receives package name he must download the right package, create TOSCA Node, sends request to Topology Handler  and recursively repeats this actions for all dependent packages, creating Dependency Tree.
+	\item Topology handling
+	Topology Handler use information about internal references and dependencies to update TOSCA Topology and add downloaded packages and created nodes. 
+	\item End
+	To complete the work we need to update Meta-file and pack Date back to the CSAR.
+	
+\end{itemize}
+\if 0
 3) обработка для менеджерами пакетов
 каждый файл принадлежащий определённому языку, необходимо пропустить через обработчики менеджеров пакетов для этого языка. 
 как пример, все файлы принадлежащие языку баш (имеющие расширение .sh), нужно пропустить через обработчик apt-get и через обработчик aptitude.
