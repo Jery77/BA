@@ -145,12 +145,16 @@
 \else
 \section*{Abstract}
 \fi
-\if 0
-В последние годы облачные системы набирают всё большую популярность. ТОСКА предоставляет целый спектр инструментов для управления и автоматизации работы облачных системам. стандарт ТОСКА добавляет дополнительный уровень абстрактности в облычные системы, так сказать прослойку между внешними операциями облачных систем и АПИ провайдеров. Описание нескольких методов взаимодействия с АПИ различных провайдеров позволяет автоматизировать быстрое развертывоние/свёртывание на площадках разных провайдеров с разными АПИ. 
-Университет штуттгарта реализовал этот стандарт в лауфцетумгэбунг под названием OpenTOSCA. Данные описывающие облачную систему сохраняются в CSAR, содержащий все необходимые компоненты для развертывания облачной системы\\
-Часто облачные системы описаны так, что во время их развертывания необходимо загрузить дополнительные пакеты и программы черз сеть интернет. Даже при наличии одной платформы это может значительно замедлить развёртывание облачной системы, а если необходимо развернуть большое число серверов, каждый из которых во врем развертывания должен загрузить большой объём программ, это может значительно увеличить как расход времени и денег.\\
-В рамках этой работы необходимо реализовать инструмент, позволяющий устранить внешние зависимости в входного CSAR, дополнив его всеми необходимыми при развертывании программами и пакетами, также изменив внутренюю структуру для отображения достигнутой self-containment. К примеру необходимо устранить все часто используемые apt-get, во время развертывания сервара скачивающие пакеты через интернет. Цель этой работы, в данном CSAR найти все артифакты с внешними зависимостями, и устранить эти зависимости. В завершении необходимо адаптировать топологию ТОСКИ для отображения внесённых изменений. 
-\fi
+In recent years, cloud computing are gaining even more popularity. 
+\textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) provides a whole range of tools for managing and automation of cloud application.
+The TOSCA standard adds an additional level of abstraction to the Cloud Systems, in other words, a layer between the external operations of cloud systems and Cloud Service provider's API.
+With the help of TOSCA it's possible to describe several methods of interaction with different APIs, what allows to automate the rapid deployment/roll-up on the sites of different providers.
+The University of Stuttgart implemented this Specification in the Runtime Environment named OpenTOSCA.
+Description of a Cloud System is stored in the \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for a cloud system life-cycle.\\
+Often, cloud system are described so that during they deployment, additional packages and programs need to be downloaded vie the Internet.
+Even with a single platform, this can significantly slow down the deployment of cloud system, and if it's necessary to deploy a large number of servers, each of them will download a large amount of data during the deployment, this can significantly increase both time and money consumption.\\
+During this work an framework will be implemented, which will eliminate external dependencies in a CSAR, resupply they with all necessary for deployment packages and also change the internal structure to display the achieved self-containment. For example all commonly used "apt-get" commands, which download packages over the Internet during deployment, must be removed. Appropriate package must be downloaded and integrated into CSAR structure. Furthermore all dependencies needed for that package must be resolved too.\\
+This Document concern about Concept and Architecture for mentioned framework. Besides some aspects of implementation will be described.
 \cleardoublepage
 
 
@@ -239,7 +243,6 @@
 %\renewcommand{\appendixname}{Anhang}
 %\renewcommand{\appendixpagename}{Anhang}
 \appendix
-\input{content/latex-tipps}
 
 \clearpage
 

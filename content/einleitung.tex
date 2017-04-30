@@ -3,26 +3,27 @@
 \chapter{Introduction}
 \if 0
 индустриальная революция?
-Облачные системы всё чаще используются как в больших предприятиях, так и частными лицами (опрос?).
-Одной из важнейших причин развития облачных систем считается экономия, гораздо легче и дешевле арендовать часть чужого большого мэйнфрэйма, чем содержать и обслуживать свой маленький сервер. Так же как проще и дешевле отправить небольшую посылку почтой, чем содержать свой автомобиль (сервер) и водителя(администратора) для редких перевозок.
-рост популярности облачных систем делает всё более важной тему автоматизации и облегчения управления ими.  Под управлением понимают развертывание, администрирование, обслуживание и финальное свёртывание облачных систем. Одна из часто встречающихся проблем облачных систем является "привязанность", перенос облака настроеного на работу с АПИ одного провайдера, на работы с другим провайдером и другим АПИ является сложной задачей. возможность переноса облаков к более подходящим провайдерам, является залогом развития конкуренции и снежения стоимости содержания облачных систем.
-Для решения этой проблемы был разработан стандарт ТОСКА, описывающий  interoperablen und portablen облачные системы и управление ими. Это позволяет облегчить и автоматизировать развёртывание и управление Облачными системами на площадках разных провайдеров. 
-ОпенТОСКА это опэн соурс реализация лауфцайтумгэбунг для ТОСКА-приложений разработанное в уни штуттгарт, которое постоянно улучшается и рсширяется.\\
-Облачная система ОПэнТОСКИ хранится в формате CSAR, это архив содержащий как описание облачной системы, её внешние функции и связи, так и внутренние пакеты, необходимые для развертывания и работы облачных приложений. Часто это описание содержит ссылки на внешние пакеты и программы, необходимые для развёртывания облачной системы, которые во время разврётывания облачного приложения будут загружены через интернет. Эти загрузки могу внести дополнительные издержки как времени, необходимого на загрузку пакетов, так и денег, потраченных на аренду в холостую работающего сервера, и мегабайты заранее известных пакетов. При наличии одного развёртываемого сервера это может значить несколько секунд промедления, при развертывании большого числа серверов, издержки могут возрасти значительно.
+\fi
+Cloud Applications Market increases with great speed. Globally annual growth is about 15\%. \cite*{statista_global}
+Furthermore observed the growth in the number of firms, which use Cloud applications. And that are not only big company but also small firms. \cite*{destatis_2014, destatis_2016} \\ \\
+One of the most important reason for development of cloud applications is the saving of resources.
+It is much easier and often cheaper to rent a part of someone else's big mainframe, then to maintain your own server.
+As well as it is also easier and cheaper to send a small package by mail, than to keep your own car (server) and driver (administrator) for a rare traffic.\\ \\
+The growing popularity of cloud applications makes the automation and the ease of management increasingly important.
+Under the management is understood the deployment, administration, maintenance and the final coagulation of cloud applications.\\
+One common problem of cloud application \emph{affection}. The transfer of a cloud application configured to work with the API of one provider, to work with another provider and another API is a difficult, but important task. The ability to quickly transfer cloud application to more suitable provider, is a key to developing competition and reducing the cost of maintenance.\\ \\
+\textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) \cite*{TOSCA-v1.0} provides a opportunity to solve this problem. TOSCA defines the language, which allows to describe cloud application and they management portable and inter-operable. 
+The use of TOSCA allows to simplify and automate the management of cloud applications by different providers. By TOSCA standard a cloud application is stored into \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR). This archive contains the description of the cloud application, its external functions and internal dependencies, and the data needed for the deployment and operation of the application\\\\
+OpenTOSCA \cite*{OpenTOSCA} is an open source ecosystem (runtime environment) for TOSCA standard developed in University of Stuttgart, which is constantly improved and expanded. OpenTOSCA processes data in CSAR format and performs the actions specified in it.\\\\
+Often these actions contain links to external packages and programs needed to deploy the cloud system, which will be subsequently downloaded over the Internet.
+\if 0 
+ Часто это описание содержит ссылки на внешние пакеты и программы, необходимые для развёртывания облачной системы, которые во время разврётывания облачного приложения будут загружены через интернет. Эти загрузки могу внести дополнительные издержки как времени, необходимого на загрузку пакетов, так и денег, потраченных на аренду в холостую работающего сервера, и мегабайты заранее известных пакетов. При наличии одного развёртываемого сервера это может значить несколько секунд промедления, при развертывании большого числа серверов, издержки могут возрасти значительно.
 Другой проблемой внешних зависимостей является безопастность и стабильности. Для гарантии безопастности информации, некоторые предприятия ограничивают доступ в интернет для внутренней сети. В других сетях доступ в интернет является крайне ограниченным (например отсутствует широкополосный доступ, медленная связь только по спутнику в определённые часы и тд) Попытка развернуть облачную систему с внешними зависимостями в таких сетях вполне может не увенчатся успехом.  \\
 В рамках данной работы необходимо реализовать инструмент для решения проблемы внешних зависимостей. Этот Инструмент должен проанализировать все артефакты  в данном CSAR, идентифицировать внешние зависимости (самый простой пример: найти все команды типа "apt-get install") и устранить их, скачав необходимые пакеты и дополнив ими CSAR. так же он должен адаптировать топологию ТОСКА, для отображения внесённых изменений. Инструмент должен быть легко расширяем, так как невозможно заранее предсказать и описать все возможные типы внешних зависимостей. Результатом работы инструмента является CSAR, содержащий в дополнение к исходной структуре, все необходимые для развертывания облачной системы пакеты и программы, с минимально возможным уровнем обращения к сети интернет во время развёртывания описанной облачной системы. 
   
 Структура проработки
 %TODO
 \fi
-In diesem Kapitel steht die Einleitung zu dieser Arbeit.
-Sie soll nur als Beispiel dienen und hat nichts mit dem Buch \cite{WSPA} zu tun.
-Nun viel Erfolg bei der Arbeit!
-
-Bei \LaTeX\ werden Absätze durch freie Zeilen angegeben.
-Da die Arbeit über ein Versionskontrollsystem versioniert wird, ist es sinnvoll, pro \emph{Satz} eine neue Zeile im \texttt{.tex}-Dokument anzufangen.
-So kann einfacher ein Vergleich von Versionsständen vorgenommen werden.
-
 \section*{Structure}
 Die Arbeit ist in folgender Weise gegliedert:
 \begin{description}
