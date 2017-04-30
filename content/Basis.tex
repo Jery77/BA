@@ -3,7 +3,7 @@
 \chapter{Basis}
 \label{chap:basis}
 
-\section{Cloud Computing}
+\section{Cloud Computing} \label{sec:cloud}
 
 \if 0
 Сейчас Облачные сервера и сервисы можно встретить повсюду, и их число постоянно ратёт (вставь статистику)
@@ -74,7 +74,7 @@ portability (e.g., cloud bursting for load balancing between clouds).
 Набор и функционал этих сервисов и служб зависит от каждого конкретного провайдера и его области специализации, что облегчает работу с этим провайдером. Как недостаток эти Отличия в наборах сервисов и служб затрудняют миграцию от одного провайдера к другому и автоматизацию работы с разными провайдерами.
 \fi 
 
-\section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)}
+\section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)} \label{sec:tosca}
 definition
 The upcoming OASIS Topology and Orchestration Specification for
 Cloud Applications (TOSCA) standard provides new ways to enable portable automated
@@ -126,7 +126,7 @@ artifact represents the executable for materializing instances of a node. For ex
 227 The fundamental difference between implementation artifacts and deployment artifacts is twofold, namely
 228 1. the point in time when the artifact is deployed, and
 229 2. by what entity and to where the artifact is deployed.
-\section{CSAR}
+\section{CSAR} \label{sec:csar}
 Ein Cloud Service Archive (CSAR) wird zur Verteilung einer TOSCA-Anwendung
 eingesetzt. Es handelt sich um eine ZIP-Datei (üblicherweise komprimiert) mit der
 Dateiendung „csar“, die alle Artefakte enthält, die zur Instanziierung und zum
@@ -165,7 +165,7 @@ werden. Statt dem relativen Pfad der Datei können auch Pattern definiert werden
 um Metadaten direkt mehreren Dateien zuzuweisen. [TOS13]
 Die übrige CSAR-Struktur ist dem Ersteller der CSAR überlassen [TOS13]. Abbildung
 2.2 zeigt ein Beispiel einer gültigen CSAR.
-\section{OpenTOSCA}
+\section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA [AI] ist eine am Institut für Architektur von Anwendungssystemen der Universität
 Stuttgart entwickelte Laufzeitumgebung für TOSCA Anwendungen.
 Mittels OpenTOSCA können Cloud Service Archives (CSARs) [29] installiert
@@ -193,7 +193,7 @@ Winery, a graphical modelling TOSCA tool
 Vinothek, a self-service portal for the applications available in the container
 
 Winery will be used to show results.
-\section{Packet management}
+\section{Packet management} \label{sec:pm}
 
 \if 0
 Мэнеджер пактов
