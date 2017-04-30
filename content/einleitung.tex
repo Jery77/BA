@@ -13,20 +13,27 @@ The growing popularity of cloud applications makes the automation and the ease o
 Under the management is understood the deployment, administration, maintenance and the final coagulation of cloud applications.\\
 One common problem of cloud application \emph{affection}. The transfer of a cloud application configured to work with the API of one provider, to work with another provider and another API is a difficult, but important task. The ability to quickly transfer cloud application to more suitable provider, is a key to developing competition and reducing the cost of maintenance.\\ \\
 \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) \cite*{TOSCA-v1.0} provides a opportunity to solve this problem. TOSCA defines the language, which allows to describe cloud application and they management portable and inter-operable. 
-The use of TOSCA allows to simplify and automate the management of cloud applications by different providers. By TOSCA standard a cloud application is stored into \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR). This archive contains the description of the cloud application, its external functions and internal dependencies, and the data needed for the deployment and operation of the application\\\\
-OpenTOSCA \cite*{OpenTOSCA} is an open source ecosystem (runtime environment) for TOSCA standard developed in University of Stuttgart, which is constantly improved and expanded. OpenTOSCA processes data in CSAR format and performs the actions specified in it.\\\\
+The use of TOSCA allows to simplify and automate the management of cloud applications by different providers. By TOSCA standard a cloud application is stored into \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR).
+This archive contains the description of the cloud application, its external functions and internal dependencies, and the data needed for the deployment and operation of the application\\\\
+OpenTOSCA \cite*{OpenTOSCA} is an open source ecosystem (runtime environment) for TOSCA standard developed in University of Stuttgart, which is constantly improved and expanded.
+OpenTOSCA processes data in CSAR format and performs the actions specified in it.\\\\
 Often these actions contain links to external packages and programs needed to deploy the cloud system, which will be subsequently downloaded over the Internet.
-\if 0 
- Часто это описание содержит ссылки на внешние пакеты и программы, необходимые для развёртывания облачной системы, которые во время разврётывания облачного приложения будут загружены через интернет. Эти загрузки могу внести дополнительные издержки как времени, необходимого на загрузку пакетов, так и денег, потраченных на аренду в холостую работающего сервера, и мегабайты заранее известных пакетов. При наличии одного развёртываемого сервера это может значить несколько секунд промедления, при развертывании большого числа серверов, издержки могут возрасти значительно.
-Другой проблемой внешних зависимостей является безопастность и стабильности. Для гарантии безопастности информации, некоторые предприятия ограничивают доступ в интернет для внутренней сети. В других сетях доступ в интернет является крайне ограниченным (например отсутствует широкополосный доступ, медленная связь только по спутнику в определённые часы и тд) Попытка развернуть облачную систему с внешними зависимостями в таких сетях вполне может не увенчатся успехом.  \\
-В рамках данной работы необходимо реализовать инструмент для решения проблемы внешних зависимостей. Этот Инструмент должен проанализировать все артефакты  в данном CSAR, идентифицировать внешние зависимости (самый простой пример: найти все команды типа "apt-get install") и устранить их, скачав необходимые пакеты и дополнив ими CSAR. так же он должен адаптировать топологию ТОСКА, для отображения внесённых изменений. Инструмент должен быть легко расширяем, так как невозможно заранее предсказать и описать все возможные типы внешних зависимостей. Результатом работы инструмента является CSAR, содержащий в дополнение к исходной структуре, все необходимые для развертывания облачной системы пакеты и программы, с минимально возможным уровнем обращения к сети интернет во время развёртывания описанной облачной системы. 
-  
-Структура проработки
-%TODO
-\fi
+This downloads can add expenses to the time required to download packages, money spent on rent an idle server and megabytes of pre-known data.
+If there is one deployed server, this may mean a few seconds of delay, but when deploying a large number of servers, the costs can increase significantly.\\\\
+Another problems with external dependencies are security and stability.
+To ensure the security of information, some enterprises restrict Internet access for internal networks.
+In other networks, Internet access is extremely limited.
+(For example there can be no broadband access, slow communication only over a satellite at certain hours, etc)
+An attempt to deploy cloud application with external dependencies in such networks may well not succeed. \\\\
+As part of this work is necessary to implement a framework for resolving external dependencies in CSARs.
+This framework should analyze the CSAR, identify dependencies to external packages and resolve them by downloading this packages (as well as all other dependent packages) and adding them to the CSAR's structure.
+The simplest example is to find all the commands like "apt-get install package", delete this command, download the package and all packages necessary to this package, and add them to CSAR.
+This framework must be easily expanded, since it is impossible to predict and describe all possible types of external dependencies.
+The Result of the framework is a CSAR, which contains additional to original structure, like all the packages necessary for the deployment of the cloud application, with the minimum possible level of access to Internet during operation.
+
 \section*{Structure}
-Die Arbeit ist in folgender Weise gegliedert:
+The work is structured as follows:
 \begin{description}
-\item[Kapitel~\ref{chap:basis} -- \nameref{chap:basis}:] Hier werden werden die Grundlagen dieser Arbeit beschrieben.
-\item[Kapitel~\ref{chap:zusfas} -- \nameref{chap:zusfas}] fasst die Ergebnisse der Arbeit zusammen und stellt Anknüpfungspunkte vor.
+\item[Chapter~\ref{chap:basis} -- \nameref{chap:basis}:] Hier werden werden die Grundlagen dieser Arbeit beschrieben.
+\item[Chapter~\ref{chap:zusfas} -- \nameref{chap:zusfas}] fasst die Ergebnisse der Arbeit zusammen und stellt Anknüpfungspunkte vor.
 \end{description}
