@@ -3,168 +3,116 @@
 \chapter{Basis}
 \label{chap:basis}
 
-\section{Cloud Computing} \label{sec:cloud}
+\section{Cloud Computing and Cloud application} \label{sec:cloud}
 
-\if 0
-Сейчас Облачные сервера и сервисы можно встретить повсюду, и их число постоянно ратёт (вставь статистику)
-Они оспользуются в ... нужны примеры...
-История? 
-Ранние концепции использования вычислительных ресурсов по принципу системы коммунального хозяйства относят к 1960-м годам (к Джону Маккарти или Джозефу Ликлайдеру)[вставь сам].
-Следующими шагами к концептуализации облачных вычислений считаются появление CRM-системы Salesforce.com, предоставляемой по подписке в виде веб-сайта (1999) и начало предоставления услуг по доступу к вычислительным ресурсам через Интернет книжным магазином Amazon.com (2002)[4]. Развитие сервисов Amazon, фактически превратившейся благодаря этим услугам в технологическую компанию, привело к формулировке идеи вычислительной эластичности и запуску в августе 2006 года проекта под названием Elastic Computing Cloud (Amazon EC2). Практически одновременно с запуском ECC термины cloud и cloud computing прозвучали в одном из выступлений главы Google Эрика Шмидта[5][6][7], начиная с этого времени встречаются многочисленные упоминания облачных вычислений в СМИ, в публикациях специалистов по информационным технологиям, в научно-исследовательской среде. Отсылка к «облаку» использовалась как метафора, основанная на изображении Интернета на диаграмме компьютерной сети, или как образ сложной инфраструктуры, за которой скрываются все технические детали.
-
-Запуск в 2009 году приложений Google Apps отмечается как следующий важный шаг к популяризации и осмыслению облачных вычислений[4]. В 2009—2011 годы были сформулированы несколько важных обобщений представлений об облачных вычислениях, в частности, выдвинута модель частных облачных вычислений. В 2011 году Национальный институт стандартов и технологий сформировал определение, которое структурировало и зафиксировало все возникшие к этому времени трактовки и вариации относительно облачных вычислений в едином понятии[8].
-
-определение 
-Так как определение выдвиннутое Национального института стандартов и технологий подходящим образом описывает концепцию облачных вычислителей, используемую в данной работе, оно и будет использовано и представленно ниже
-\fi
+\subsection{Definitions}
+Unfortunately, the is no generally accepted definition of cloud computing that describes all possible situations. 
+But in scientific community the definition put forward by \textbf{N}ational \textbf{I}nstitute of \textbf{S}tandards and \textbf{T}echnology (NIST) is often used. 
+This definition appropriately describes the concept of cloud computing used in this paper, and therefore this definition will be used and presented below.
+\begin{definition}[Cloud computing]
+	\label{def:nist}
 Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared
 pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that
-can be rapidly provisioned and released with minimal management effort or service provider interaction. [nist]
-\if 0
-НИСТ различает 3 типа моделей сервисов 
-\fi
-Service Models:
-Software as a Service (SaaS). The capability provided to the consumer is to use the provider’s
-applications running on a cloud infrastructure2
-. The applications are accessible from
-various client devices through either a thin client interface, such as a web browser (e.g.,
-web-based email), or a program interface. The consumer does not manage or control the
-underlying cloud infrastructure including network, servers, operating systems, storage, or
-even individual application capabilities, with the possible exception of limited userspecific
-application configuration settings.
-Platform as a Service (PaaS). The capability provided to the consumer is to deploy onto the cloud
-infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider.3 The consumer does
-not manage or control the underlying cloud infrastructure including network, servers,
-operating systems, or storage, but has control over the deployed applications and possibly
-configuration settings for the application-hosting environment.
-Infrastructure as a Service (IaaS). The capability provided to the consumer is to provision
-processing, storage, networks, and other fundamental computing resources where the
-consumer is able to deploy and run arbitrary software, which can include operating
-systems and applications. The consumer does not manage or control the underlying cloud
-infrastructure but has control over operating systems, storage, and deployed applications;
-and possibly limited control of select networking components (e.g., host firewalls).
+can be rapidly provisioned and released with minimal management effort or service provider interaction. \cite*{nist}
+\end{definition}
+Also the are no generally accepted definitions of cloud application, but it can be obtained from the definition of cloud computing.
+\begin{definition}[Cloud application] 
+	\label{def:capp}
+	Cloud application is an application that is executed according to a cloud computing model. \cite*{cloudapp}
+\end{definition} 
+\subsubsection*{Service models}
+NIST distinguishes between three types of service models.\\
+\begin{itemize}
+	\item Software as a Service (SaaS). 
+	The capability provided to the consumer is to use the provider’s applications running on a cloud infrastructure. 
+	The applications are accessible from various client devices through either a thin client interface, such as a web browser (e.g., web-based email), or a program interface. 
+	The consumer does not manage or control the underlying cloud infrastructure including network, servers, operating systems, storage, or even individual application capabilities, with the possible exception of limited userspecific application configuration settings.
+	\item Platform as a Service (PaaS). 
+	The capability provided to the consumer is to deploy onto the cloud infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider.
+	The consumer does not manage or control the underlying cloud infrastructure including network, servers, operating systems, or storage, but has control over the deployed applications and possibly configuration settings for the application-hosting environment.
+	\item Infrastructure as a Service (IaaS).
+	The capability provided to the consumer is to provision processing, storage, networks, and other fundamental computing resources where the
+	consumer is able to deploy and run arbitrary software, which can include operating systems and applications.
+	The consumer does not manage or control the underlying cloud infrastructure but has control over operating systems, storage, and deployed applications; and possibly limited control of select networking components (e.g., host firewalls).
+\end{itemize}
 
-\if 0
-и 4 типа моделей размещения 
+\subsubsection*{Deployment models}
+Similarly, NIST distinguishes between four types of deployment models.\\
+\begin{itemize}
+	\item Private cloud. 
+	The cloud infrastructure is provisioned for exclusive use by a single organization comprising multiple consumers (e.g., business units). It may be owned, managed, and operated by the organization, a third party, or some combination of them, and it may exist on or off premises.
+\item Community cloud.
+	The cloud infrastructure is provisioned for exclusive use by a specific community of consumers from organizations that have shared concerns (e.g., mission, security requirements, policy, and compliance considerations).
+	It may be owned, managed, and operated by one or more of the organizations in the community, a third party, or some combination of them, and it may exist on or off premises.
+\item Public cloud.
+	The cloud infrastructure is provisioned for open use by the general public. 
+	It may be owned, managed, and operated by a business, academic, or government organization, or some combination of them.
+	It exists on the premises of the cloud provider.
+\item Hybrid cloud. 
+	The cloud infrastructure is a composition of two or more distinct cloud infrastructures (private, community, or public) that remain unique entities, but are bound together by standardized or proprietary technology that enables data and application portability (e.g., cloud bursting for load balancing between clouds). 
+\end{itemize}
 
-\fi 
-Deployment Models:
-Private cloud. The cloud infrastructure is provisioned for exclusive use by a single organization
-comprising multiple consumers (e.g., business units). It may be owned, managed, and
-operated by the organization, a third party, or some combination of them, and it may exist
-on or off premises.
-Community cloud. The cloud infrastructure is provisioned for exclusive use by a specific
-community of consumers from organizations that have shared concerns (e.g., mission,
-security requirements, policy, and compliance considerations). It may be owned,
-managed, and operated by one or more of the organizations in the community, a third
-party, or some combination of them, and it may exist on or off premises.
-Public cloud. The cloud infrastructure is provisioned for open use by the general public. It may be
-owned, managed, and operated by a business, academic, or government organization, or
-some combination of them. It exists on the premises of the cloud provider.
-Hybrid cloud. The cloud infrastructure is a composition of two or more distinct cloud
-infrastructures (private, community, or public) that remain unique entities, but are bound
-together by standardized or proprietary technology that enables data and application
-portability (e.g., cloud bursting for load balancing between clouds). 
-
-
-\if 0
-
-Облачные вычислители позволяют эффективно использовать ресурсы, распределив нагрузку на систему  из нескольких физических серверов и переложить работу по их обслуживанию на провайдеров.
-У пользователя нет прямого доступа к инфраструктуре (серверам и операционным система), он использует только предоставленные провайдером службы и сервисы. 
-Набор и функционал этих сервисов и служб зависит от каждого конкретного провайдера и его области специализации, что облегчает работу с этим провайдером. Как недостаток эти Отличия в наборах сервисов и служб затрудняют миграцию от одного провайдера к другому и автоматизацию работы с разными провайдерами.
-\fi 
+\subsection{Usage}
+Now cloud computing and application can be found everywhere, and they number constantly grows. \cite*{cloud_stat}
+They are used for test and development, big data analyses, file storage and so on.
+Cloud computing allows you to effectively use resources, distributing the load to a system from several physical servers and shifting the maintenance to the providers. 
+If your service uses a single one physical server and this server will be disabled, then entire service will be completely unavailable too.
+But if you use cloud computing with a hundred of physical servers, then disabling one of them will not carry such serious consequences.
+In addition, the user does not need to maintain a team of administrators for the event of various problems.\\\\ 
+Usually the user does not have direct access to the infrastructure (servers and operating systems), he uses only provided interface.
+An interface provides a set of methods to communicate with cloud infrastructure. 
+Each provider defines his own set of methods, depending on his area of specialization. 
+On the one hand this specialization makes it easier to work with the provider, on the other hand it becomes more difficult to switch to work with another provider.
 
 \section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)} \label{sec:tosca}
-definition
-The upcoming OASIS Topology and Orchestration Specification for
-Cloud Applications (TOSCA) standard provides new ways to enable portable automated
-deployment and management of composite applications. TOSCA describes the
-structure of composite applications as topologies containing their components and
-their relationships. Plans capture management tasks by orchestrating management
-operations exposed by the components.
-[TOSCA: Portable Automated Deployment and Management of Cloud Applications]
-Usage
-\if 0
-Тоска может быть использована не только для описания всех стадий жизни- работы облачного приложения, но и служить прослойкой, между облачным приложением и сервисами провайдера, позволяя реализовать единое приложение подходящее для работы с разными провайдерами. 
-\fi 
-Structure
-TOSCA specification provides a language to describe service
-5 components and their relationships using a service topology, and it provides for describing the
-6 management procedures that create or modify services using orchestration processes. The combination
-7 of topology and orchestration in a Service Template describes what is needed to be preserved across
-8 deployments in different environments to enable interoperable deployment of cloud services and their
-9 management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.) when the
-10 applications are ported over alternative cloud environments.
-[TOSCA-v1.0-cs01.pdf]
- A Topology Template (also referred to as the topology
-103 model of a service) defines the structure of a service
-A Topology Template consists of a set of Node Templates and Relationship Templates that together
-108 define the topology model of a service as a (not necessarily connected) directed graph. A node in this
-109 graph is represented by a Node Template. A Node Template specifies the occurrence of a Node Type as
-110 a component of a service. A Node Type defines the properties of such a component (via Node Type
-111 Properties) and the operations (via Interfaces) available to manipulate the component. Node Types are
-112 defined separately for reuse purposes and a Node Template references a Node Type and adds usage
-113 constraints, such as how many times the component can occur.
-A Relationship Template specifies the occurrence of a relationship between nodes in a Topology
-126 Template. Each Relationship Template refers to a Relationship Type that defines the semantics and any
-127 properties of the relationship. Relationship Types are defined separately for reuse purposes. The
-128 Relationship Template indicates the elements it connects and the direction of the relationship by defining
-129 one source and one target element (in nested SourceElement and TargetElement elements). The
-130 Relationship Template also defines any constraints with the OPTIONAL
-131 RelationshipConstraints element. 
-An artifact represents the content needed to realize a deployment such as an executable (e.g. a script, an
-217 executable program, an image), a configuration file or data file, or something that might be needed so that
-218 another executable can run (e.g. a library). Artifacts can be of different types, for example EJBs or python
-219 scripts. The content of an artifact depends on its type. Typically, descriptive metadata will also be
-220 provided along with the artifact. This metadata might be needed to properly process the artifact, for
-221 example by describing the appropriate execution environment.
-222 TOSCA distinguishes two kinds of artifacts: implementation artifacts and deployment artifacts. An
-223 implementation artifact represents the executable of an operation of a node type, and a deployment 
-artifact represents the executable for materializing instances of a node. For example, a REST operation
-225 to store an image can have an implementation artifact that is a WAR file. The node type this REST
-226 operation is associated with can have the image itself as a deployment artifact.
-227 The fundamental difference between implementation artifacts and deployment artifacts is twofold, namely
-228 1. the point in time when the artifact is deployed, and
-229 2. by what entity and to where the artifact is deployed.
+\subsection*{Definition}
+The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (TOSCA) standard provides new ways to enable portable automated deployment and management of composite applications.
+TOSCA describes the structure of composite applications as topologies containing their components and their relationships.
+Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
+TOSCA application is a cloud application described according to TOSCA standard.
+\subsection*{Usage}
+TOSCA can be used not only for describing all stages of a cloud application life-cycle, but alse serve as a layer between the cloud application and provider's interfaces, allowing to implement a single application suitable for working with different providers. 
+\subsection*{Structure}
+TOSCA specification provides a language to describe service components and their relationships using a service topology, and it provides for describing the management procedures that create or modify services using orchestration processes.
+The combination of topology and orchestration in a Service Template describes what is needed to be preserved across deployments in different environments to enable interoperable deployment of cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.) when the applications are ported over alternative cloud environments. \cite{TOSCA-v1.0_book} \\
+Descriptions of the main components of TOSCA used in this work will be provided.
+\begin{itemize}
+\item Service Template. 
+	This component contains an Information about structure (TopologyTemplate) and interface of cloud application.
+\item Topology Template describes topology of cloud application, instantiating nodes (Node Templates) and relations between them (Relationship Templates).
+\item Node Template specifies the occurrence of a Node Type as a component of a service.
+\item Node Type defines the properties of such a component and the operations available to manipulate the component.
+\item Relationship Template specifies the occurrence of a Relationship Type as a relationship between nodes in a Topology Template. 
+	The Relationship Template indicates the elements it connects and the direction of the relationship by defining one source and one target element (in nested Source Element and Target Element elements).
+\item Relationship Type defines the semantics and any properties of the relationship. 
+\item Artifact  represents the content needed to realize a deployment such as an executable (e.g. a script, an executable program, an image), a configuration file or data file, or something that might be needed so that another executable can run (e.g. a library).
+	Artifacts can be of different types, for example EJBs or python scripts.
+	The content of an artifact depends on its type. 
+	Typically, descriptive metadata will also be provided along with the artifact.
+	This metadata might be needed to properly process the artifact, for example by describing the appropriate execution environment.
+	TOSCA distinguishes two kinds of artifacts: implementation artifacts and deployment artifacts.
+\item Implementation Artifact represents the executable of an operation of a node type. An example will be provided in section \ref{sec:pm}
+\item Deployment Artifact represents the executable for materializing instances of a node.
+\item Artifact Type is describes an type of a artifact.
+\item Artifact Templates represents information about the artifact. 
+	Artifact location and other attendant data are stored here.
+\end{itemize}
+Types and Templates defining a TOSCA application are stored in definition documents.
+
 \section{CSAR} \label{sec:csar}
-Ein Cloud Service Archive (CSAR) wird zur Verteilung einer TOSCA-Anwendung
-eingesetzt. Es handelt sich um eine ZIP-Datei (üblicherweise komprimiert) mit der
-Dateiendung „csar“, die alle Artefakte enthält, die zur Instanziierung und zum
-Management der Cloud-Anwendung bzw. Service benötigt werden. Dazu gehören
-Definitions-Dokumente, Implementation Artifacts, Deployment Artifacts und Pläne.
-In dieser Form kann eine Cloud-Anwendung einer TOSCA-Laufzeitumgebung
-übergeben werden. [TOS13]
-Das Wurzelverzeichnis einer CSAR muss zumindest die Ordner „Definitions“ und
-„TOSCA-Metadata“ enthalten. In „Definitions“ liegen eine oder mehrere Definitions-
-Dokumente der Cloud-Anwendung. Beispielsweise wäre es denkbar, dass eine CSAR
-zur Wiederverwendung lediglich Node Types und Relationship Types spezifiziert. In
-weiteren CSARs könnten dann Node Templates bzw. Relationship Templates definiert
-sein, die auf diese Node Types bzw. Relationship Types referenzieren. In diesem
-Fall müssten die Definitions-Dokumente mit den Types importiert werden (siehe
-Abschnitt 2.2.1). Falls eine Cloud-Anwendung dagegen vollständig in einer CSAR
-verteilt wird, so muss mindestens ein Definitions-Dokument ein Service Template
-enthalten. [TOS13]
-Der Ordner „TOSCA-Metadata“ enthält die TOSCA Metadatei „TOSCA.meta“
-(auch CSAR Manifest genannt), in der Metadaten der CSAR als Schlüssel-Wert-Paare
-hinterlegt sind. Abbildung 2.1 veranschaulicht den Aufbau der TOSCA Metadatei.
-Die Datei teilt sich in Blöcken auf, die durch Leerzeilen voneinander getrennt sind. Im
-ersten Block („block_0“) stehen Metadaten über die CSAR selbst, wie z. B. der Autor
-der CSAR. Unter dem optionalen Attribut „Entry-Definitions“ kann der relative Pfad
-15
-2 Grundlagen
-zum Haupt-Definitions-Dokument definiert werden, um einem TOSCA-Container eine
-effizientere Verarbeitung der Definitions-Dokumente zu ermöglichen. Auch “Topology“
-ist optional und referenziert auf ein Bild, dass die Topologie der Cloud-Anwendung
-veranschaulicht. Letzteres Attribut ist dabei nicht durch TOSCA spezifiziert. Es wird
-lediglich vom TOSCA-Container OpenTOSCA (siehe Abschnitt 2.5) verstanden und
-verwendet.
-In weiteren Blöcken können Metadaten zu Dateien in der CSAR definiert werden,
-z. B. der Hash einer Datei. Falls Metadaten zu einer Datei definiert werden sollen, so
-muss neben dem relativen Pfad der Datei mindestens ihr Content-Type2 angegeben
-werden. Statt dem relativen Pfad der Datei können auch Pattern definiert werden,
-um Metadaten direkt mehreren Dateien zuzuweisen. [TOS13]
-Die übrige CSAR-Struktur ist dem Ersteller der CSAR überlassen [TOS13]. Abbildung
-2.2 zeigt ein Beispiel einer gültigen CSAR.
+A \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR) is used to store the TOSCA application.
+This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
+These include definition documents, artifacts and so on.
+In this form a TOSCA application can be processed by TOSCA runtime environment.
+\subsection*{Structure}
+The root folder must contain a "Definitions" and a "TOSCA-Metadata" folders.
+The "Definitions" folder contains definition documents, one of them must define Service Template.
+The "TOSCA-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
+This metafile consists of name/value pairs. 
+One line for each pair. 
+The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
+All other pairs represent metadata of files in the CSAR
+
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA [AI] ist eine am Institut für Architektur von Anwendungssystemen der Universität
 Stuttgart entwickelte Laufzeitumgebung für TOSCA Anwendungen.
