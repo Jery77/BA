@@ -78,7 +78,10 @@ The combination of topology and orchestration in a Service Template describes wh
 Descriptions of the main components of TOSCA used in this work will be provided.
 \begin{itemize}
 \item Service Template. 
-	This component contains an Information about structure (TopologyTemplate) and interface of cloud application.
+	This component contains an Information about structure (TopologyTemplate) and Plans of cloud application.
+\item Plans provides an interface to manage cloud application.
+These components combine management capabilities to create higher-level management tasks, which can then be executed fully automated to deploy, configure, manage, and operate the application.
+Plans are started by an external message and call management operations of the nodes in the topology.
 \item Topology Template describes topology of cloud application, instantiating nodes (Node Templates) and relations between them (Relationship Templates).
 \item Node Template specifies the occurrence of a Node Type as a component of a service.
 \item Node Type defines the properties of such a component and the operations available to manipulate the component.
@@ -114,33 +117,20 @@ The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creat
 All other pairs represent metadata of files in the CSAR
 
 \section{OpenTOSCA} \label{sec:opentosca}
-OpenTOSCA [AI] ist eine am Institut für Architektur von Anwendungssystemen der Universität
-Stuttgart entwickelte Laufzeitumgebung für TOSCA Anwendungen.
-Mittels OpenTOSCA können Cloud Service Archives (CSARs) [29] installiert
-werden.
-Abbildung 1 zeigt die Architektur von OpenTOSCA. Hauptkomponenten des
-Containers sind OpenTOSCAControl, IA-Engine und Plan-Engine.
-Aufgabe der OpenTOSCAControl Komponente ist es, den Ablauf der Bearbeitung
-einer CSAR-Datei zu dirigieren. Sie bietet zudem Funktionen an, die durch
-die OpenTOSCA Container API mittels einer REST-Schnittstelle nach außen hin,
-unter anderem einer grafischen Benutzerschnittstelle, zur Verfügung gestellt
-werden.
-Die IA-Engine ist für das Deployment von Implementation Artifacts
-zuständig, welche in der CSAR enthaltenen sind. Da Implementation
-Artifacts, wie in Kapitel 2.2 beschrieben, verschiedenster Art sein können,
-ist die IA-Engine mittels eines Plug-in-Systems realisiert. Dadurch können neue
-Plug-ins, welche das eigentliche Deployment der Implementation
-Artifacts ausführen, zur Laufzeit hinzugefügt werden. Die Endpunkte der
-erfolgreich deployten Implementation Artifacts werden in einer Endpunktdatenbank
-gespeichert. Aktuell wird das Deployment von Web Archives
-(WAR) auf Tomcat [6] sowie Axis Archives (AAR) auf Apache Axis [1] unterstützt.
-The OpenTOSCA ecosystem consists out of three parts, as shown in the figure above:
-
-OpenTOSCA Container, a TOSCA runtime environment
-Winery, a graphical modelling TOSCA tool
-Vinothek, a self-service portal for the applications available in the container
-
-Winery will be used to show results.
+OpenTOSCA provides an open source ecosystem for TOSCA applications. 
+The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
+\begin{itemize}
+	\item OpenTOSCA \textbf{Container}, a TOSCA runtime environment
+	\item \textbf{Winery}, a graphical modelling TOSCA tool.
+	\item \textbf{Vinothek}, a self-service portal for the applications available in the container
+\end{itemize}
+The runtime enables fully automated plan-based deployment and management of applications in the CSAR format. 
+Processing of a CSAR by the runtime will be provided in more detail. 
+First, the CSAR is unpacked and the files are put into the Files store.
+Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
+The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
+Finally, the Plan Engine binds and deploys the application’s management plans.
+The endpoints of the management plans are stored in the Plans database.\cite{INPROC-2013-45}
 \section{Packet management} \label{sec:pm}
 
 \if 0
