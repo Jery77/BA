@@ -99,6 +99,7 @@ Plans are started by an external message and call management operations of the n
 \item Artifact Type is describes an type of a artifact.
 \item Artifact Templates represents information about the artifact. 
 	Artifact location and other attendant data are stored here.
+\item Node Type Implementation defines the artifacts needed for implementing the corresponding Node Type.
 \end{itemize}
 Types and Templates defining a TOSCA application are stored in definition documents.
 
@@ -121,7 +122,7 @@ OpenTOSCA provides an open source ecosystem for TOSCA applications.
 The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
 \begin{itemize}
 	\item OpenTOSCA \textbf{Container}, a TOSCA runtime environment
-	\item \textbf{Winery}, a graphical modelling TOSCA tool.
+	\item \textbf{Winery} \label{tool:winery}, a graphical modelling TOSCA tool.
 	\item \textbf{Vinothek}, a self-service portal for the applications available in the container
 \end{itemize}
 The runtime enables fully automated plan-based deployment and management of applications in the CSAR format. 
@@ -130,31 +131,30 @@ First, the CSAR is unpacked and the files are put into the Files store.
 Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
-The endpoints of the management plans are stored in the Plans database.\cite{INPROC-2013-45}
-\section{Packet management} \label{sec:pm}
-
-\if 0
-Мэнеджер пактов
-мэнеждер пакетов это набор софтварных инструментов, которые автоматизируют процесс установки, обновления, конфигурации и удаления компьютерных программ. 
-Менеджеры пакетов работают с пакетами, расделёнными программами и данными в архивах. пакеты содержат метаданные, такими как имя программы, назначение, версия, производитель и список зависимостей. 
-Менеджеры пакетов служат для управления базой данных пакетов, их зависимостей и версий, для предотвращения ошибочной установки программ и отстутствующих зависимостей. 
-Менеджеры пакетов разработаны для устранения необходимости в ручную устанавливать и обновлять пакеты. Это очень полезно для больших систем с тысячами установленных программ и запутанной схемой зависимостей и необходимых версий
-
-пакеты
-Скаченный менеджерами пакеты, это архивные файлы, содержащие программу или исходный код для её компиляции и метаданные описывающие что необходимо для её равёртывания и работы 
-
-динамические библиотеки
-Computer systems which rely on dynamic library linking, instead of static library linking, share executable libraries of machine instructions across packages and applications. In these systems, complex relationships between different packages requiring different versions of libraries results in a challenge colloquially known as "dependency hell".  Good package management is vital on these systems.
-
-репозитории 
-To give users more control over the kinds of software that they are allowing to be installed on their system (and sometimes due to legal or convenience reasons on the distributors' side), software is often downloaded from a number of software repositories.[4]
-По умолчанию в юникс системах менеджер пакетов использует официальные репозитории, подходящие для данной операционной системы и архитектуры девайса, но пользователь может так же добавить сторонние репозитории, например репозитории стороннего производителя или репозитории с пакетами для другой архитектуры
-
-Зависимости
-Менеджеры пакетов различают 2 вида зависимостей в пакетах req and prereq
-зависимость  пакет1 рек пакет2, отображает необходимость наличия необходимого пакета2 для работы пакета1
-зависимость пакет1 пререк пакет2, отображает неоьходимость наличия пакета 2 для установки пакета1
-зависимоть первого типа, рек, приводит к наличию циклов в структуре зависимостей.
-\fi
+The endpoints of the management plans are stored in the Plans database.
+\cite{INPROC-2013-45}
+\section{Package management} \label{sec:pm}
+This section will describe the package management process and basic concepts from this area.
+\subsection*{Package managers}
+Package Manager is a set of software tools that automate the process of installing, updating, configuring and removing of computer programs.
+A package can describe and contain not only a whole program, but also a certain component of a large application, hereinafter both will be referred as program components.
+Package managers are used to manage the database of packages, their dependencies and versions, to prevent erroneous installation of programs and missing dependencies.
+\subsection*{Packages}
+A package is usually an archive containing both data for installation of the program component and a set of metadata like name, function, version, producer and dependencies.
+\subsection*{Dynamic libraries}
+Computer systems which rely on dynamic library linking, share executable libraries of machine instructions across packages and applications. 
+In these systems, complex relationships between different packages requiring different versions of libraries results in a challenge colloquially known as "dependency hell".
+Good package management is vital on these systems.
+\subsection*{Repository}
+To give users more control over the kinds of software that they are allowing to be installed on their system, software is often downloaded from a number of software repositories.
+By default in Unix systems a package manager uses official repositories appropriate for the operating system and the device architecture, but the user can also additional repositories, like third-party repositories or repositories for another architecture.
+\subsection*{Dependencies}
+Package managers distinguish between two types of dependencies: required and preRequired.
+Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
+Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
+\subsection*{Dependency tree}
+In the example above $package2$ is needed for $package1$, but $package2$ itself can require additional packages.
+A structure describing all needed packages and dependencies between them for given root-package is called a dependency tree. 
+Dependency type $required$ leads to the presence of cycles in dependency tree, which differs them from normal tree graph structures.
 
 

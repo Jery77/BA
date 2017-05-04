@@ -1,58 +1,39 @@
-% !TeX spellcheck = en_EN
+% !TeX spellcheck = en_US
 
 \chapter{Requirements}
 \label{chap:req}
-
-
-\if 0
-В рамках данной работы нужно разработать фреймворк, устраняющий внешние зависимости в CSAR. 
-Необходим инструмент, который может быстро находить и устранять внешние зависимости в тоска топологии. 
-Для начала необходимо разработать минимальную конфигурацию, находящую все баш скрипты использующие менеджер пакотов apt-get и удаляющую из них команды установки пакета(apt-get install.. )
-далее необходимо загрузить необходимый пакет, как и всё его дерево зависимостей. так же необходимо обновить топологию тоски, загрузив необходимые данные. 
-для каждого пакета необходимо создать node template в соответствующей Service Template, для этого необходимы NodeType, NodeTypeImplementation, содержащий пакет (deployment artifact) и скрипт для уго установки(implementation artifact). 
-Для поиска ServiceTemplate соответствующего определённому артефакту будет полезно использовать предобработку всей топологии тоски, находящую зависомости Скрипт-NodeType - Service Template для дальнейшего использования.
-
-ФРеймворк должен быть легко расширяем, кроме базового баша, необходимо иметь возможность легко добавить дополнительные скриптовые языки и обрабтчики менеджеров пакетов к ним. как пример - aptitude для же испольщуемого языка баша, или новый язык, вроде шефа или энсибл.
-
-Как доказательство правильности построенной топологии можно использовать winery, 
-это инструмент для опэнтоски, с помощью которго можно отображать и редактировать CSAR архивы.
-
-пример работа программы
-\fi
+Since the main purpose of the developed program is to Resolve References, further the RR will be used as an abbreviation. 
+A framework should be developed that eliminates external dependencies in TOSCA topology represented in CSAR file.
+The framework should be easy extendable to provide the ability to eliminate a large number of dependency types.
+At first a minimal configuration will be developed, that finds all the bash scripts which use the apt-get package manager. 
+All package installation commands should be removed (apt-get install package).
+Then both the package itself and all the packages from his dependency tree should be downloaded.
+It is also necessary to update the topology of the TOSCA, by adding nodes for downloaded packages and dependencies from nodes previously containing an external reference to the cells displaying the downloaded packages. Dependencies between downloaded packages, representing dependency tree should be added too.
+In the TOSCA language: new definitions for given package should be created, like Node Type, NodeType Implementation and Artifacts. 
+This definitions will be instantiated by adding Node Template and Relationship Template to the right Service Template.
+To find a Service Templates and Node Types corresponding to a certain artifact, it will be useful to use preprocessing of entire TOSCA topology. References chain can be build:\\
+$script$ $\rightarrow$ $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
+In additional to the bash, it should be easy to add additional script languages and package managers, like $aptitude$ for bash or new languages like $shef$ or $ansible$.
+To proof the correctness of the corresponding TOSCA topology a winery described in section \ref{tool:winery} can be used.
 \section*{Stages of CSAR processing}
+Here an example steps are provided, representing how the framework should work.
 \begin{itemize}  
 	\item Begin  \\
-	To start the work over program need to become input CSAR name, output CSAR name, and architecture of target hardware. 
+	To start the work our program need to became input CSAR name, output CSAR name, and architecture of target hardware. 
 	Then input CSAR need to be extracted.
 	\item Preprocessing\\
 	During preprocessing stage, RR need to analyze internal references and build dependency three.
 	Furthermore, common Tosca definitions for artifacts and  relations between packages need to be added.
 	\item Processing with Languages
-	Each file from CSAR need to be processed by each Language handler, described in RR, to determine belonging to this language.
+	Each file from CSAR need to be processed by each Language handler, described in RR.
 	\item Processing with Packet Managers
-	Each file belonging to the Language, must be processed by Packet Manager Handler to find and resolve external references.
+    If file belongs to the Language, he will be processed by Packet Manager Handler to find and resolve external references.
+    Package name from this reference will be provided to package handler.
 	\item Package handling
-	After Package Handler receives package name he must download the right package, create TOSCA Node, sends request to Topology Handler  and recursively repeats this actions for all dependent packages, creating Dependency Tree.
+	After Package Handler receives package name he must download the right package, create TOSCA definition, send request to Topology Handler  and recursively repeats this actions for all dependent packages, creating Dependency Tree.
 	\item Topology handling
-	Topology Handler use information about internal references and dependencies to update TOSCA Topology and add downloaded packages and created nodes. 
+	Topology Handler use information about internal references and dependencies to update TOSCA Topology by creating Node and Reference Templates. 
 	\item End
-	To complete the work we need to update Meta-file and pack Date back to the CSAR.
+	To complete processing Meta-file will be updated and Data packed back to the CSAR.
 	
 \end{itemize}
-\if 0
-3) обработка для менеджерами пакетов
-каждый файл принадлежащий определённому языку, необходимо пропустить через обработчики менеджеров пакетов для этого языка. 
-как пример, все файлы принадлежащие языку баш (имеющие расширение .sh), нужно пропустить через обработчик apt-get и через обработчик aptitude.
-обработчики менеджеров пакетов должны устранить внешние зависомости в файлах (удалить или закомментировать строки) и передать мэнеджеру пакетов данные о необходимом пакете и артефакте, его вызывающем
-
-4) мэнеджер пакетов
-Загружает пакет и создаёт скрипт для его установки. вызывает менеджер топологии для того пакета. рекурсивно повторяет для всех пакетов, необходимых для работы данного. 
-
-5) менеджер топологии, по имя пакета и источник (скрипт или другой пакет) 
-Создаёт соответствующие NodeType, NodeTypeImplementation, DeploymentArtifact, ImplementationArtifact. 
-по заранее построенным связям находит ServicTemplate, дополняет его NOdeTemplate и Reference. 
-
-6) завершение работы
-Обновление метаданных и упаковка архива
-	
-\fi
