@@ -3,36 +3,42 @@
 \chapter{Concept and Architecture}\label{chap:conarch}
 \section{Concept}
 In this section main concepts of this work will be described.
+\subsection*{Find external dependencies}
+Analysis for external references.
+Unfortunately it is impossible to identify all possible external dependencies, even within one language and one package manager (example in algorithm \ref{alg:unreadable}).
+\begin{Algorithmus} 
+	\caption{Unreadable bash script}
+	\label{alg:unreadable}
+	\begin{algorithmic}
+		\State	\#!/bin/bash
+		\State	$\textbf{set } line = $abcdefgijklmnoprst
+		\State	$\textbf{set } word1 = \$\{line:0:1\}\$\{line:14:1\}\$\{line:17:1\}$ 
+		\State  $\textbf{set } word2 = \$\{line:6:1\}\$\{line:4:1\}\$\{line:17:1\}$
+		\State  $\$word1\$-\$word2\$$ install package
+	\end{algorithmic}
+\end{Algorithmus}
+Since this work is aimed at creating a common tool that is easily expanded and supplemented, initially only basic usage of package managers will be considered, but complimented when necessary. 
+Ease of adding modules to framework will proof correctness of architecture.
+At the beginning, the most popular combination will be implemented, the $bash$ script with the $apt-get$ package manager.
+This simple and powerful tool allows to install, delete or update the set of packages by writing one line.
+When processing of this combination will reach an acceptable level, new languages and package managers will be added.
+\subsection{Representing downloaded packages in TOSCA-Topology}
+The adding of new nodes to TOSCA topology can be divided into several steps.
+\begin{itemize}
+	\item Add definitions for common elements, like artifacts or relations. This can be done once at preprocessing stage.
+	\item The package installation? will be represented by a Node Type. There will be described that this node must be installed.
+	\item Downloaded data and they installation script will be referenced by Artifact Template.
+	\item Node Type Implementation will combine all artifacts.
+	\item Node Template will instantiate a package in the corresponding Service Templates\footnote{\label{fussnote}
+		To determine corresponding Service Template a preprocessing described in ??? will be used.
+		Since a number of Node Types can use a script containing an external reference and these Nodes can by instantiated by number of service templates, it can be a number of Node Templates to create. This problem will be discussed in more details in chapter " \nameref{subs:analyse}"}.
+	\item Reference Template will provide topology information, allowing the observer (user or runtime environment) to determine, for which nodes the package must be installed\footnote{\label{fussnote}
+		References will be created both from origin Node Template to the package's Node Template and between Node Templates of created packages.}.
+\end{itemize}
+\subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
+To properly display new packages in TOSCA topology, the original nodes containing external references must be found.
+Besides Service Templates where those nodes are instantiated must be found, to instantiate there new nodes for packages.
 \if 0
-В этом разделе будет разъеснена концепция данной работы
-
-\fi
-\subsection*{Finding external dependencies}
-\if 0
-Анализ на внешние ссылки. 
-К несчас, тью невозможно выявить все возможные внешние зависимости даже в рамках одного языка, и одного менеджера пакетов (пример какой нить страшный, скрипт нечитаемый вставь), а так как данная работа направленна на создание общего инструмента, легко расширяемого и дополняемого, мы рассмотрим только базовые методы использования менеджеров пакетов, дополняя их по мере необходимости. Эта возможность легко расширять программу, так же будет являться свидетельством корректности её архитектуры в вопросе дополняемости.
-В начала логично реализован разбор самой простую и популярную комбинацию, баш скрипт с менеджером пактов apt-get 
-Этот простой и мощный инструмент позволяет в одну строчку устанавливать, удалять или обновлять заданный список пакетов.
-Когда обрабтка данной комбинации язык-менеджер пакетов будет производиться на приемлимом уровне, можно будет добавлять дополнительные языки и менеджеры пакетов
-
-\fi
-\subsection*{Representing packages in TOSCA-Topology}
-\if 0
-Отображение пакетов в топологии. Процесс добавления новых ячеек для устанавливаемых пакетов необходимых ячейке 1 в топологию тоски можно разделить на несколько шагов. 
-в начале необходимо создать nodetype для данных пакетов. 
-необходимо создать файы описания артефактов, implementation для скрипта и deployment для пакета
-Далее нужно имплементировать этот NodeType  создав nodetypeimplementation и добавив в него только что созданные артифакты
-обновить сервистэмплате, создержащий ячейку 1, (если таких темплэйтов несколько - нужно обновить каждый отдельно)
-добавить в него темплайт пакета и зависимости между ними, как было указано в разделе менеджеров пакетов, этих зависимостей может быть 2 вида. 
-для зависимостей между ячейками созданными дынным фреймворком будет использоваться зависимость заданная в метаданных пакетов.
-для зависимости между старыми и новыми ячейками всегда будет использована зависимость пререк.
-обе зависимости , как и артифакты необходимо добавить в топологию на этапе предобработки
-
-\fi
-\subsection*{Analysis existing TOSCA-Topology}
-\if 0
-Анализ топологии тоски
-для отображения новых пакетов в топологии, самых первых, придумай как это описать (предыдущий пункт) необходимо определить как нодетайпы, использующие заданный артефакт, так и сервис тэмплэйты, в которых эти нодетайпы используются.
 Прослеживается простая зависимоть, артифакты -имплементация - тип- темплайт. рассмотрев эти зависимости более подробно, получим  артефакт(1 - н) имплементация (н - 1) тип (1 - н) темплайт.
 вся сложность кроется в зависимости между имплементациями и типом. один тип может иметь несколько разных имплементаций. конкретная имплементация будет выбрана только во время работы в зависимости от окружения. В связи с тем что мы не можем определить какая именно имплементация будет запущена, и соотвтетственно, какие именно артефакты будут использованы, мы не можем определить конкретный артефакт для построения дерева зависимостей для данного типа. В связи с этим пока нет другого выхода кроме как анализировать дерево зависимостей для всех возможных артефактов данного типа и надеятся что это не приведёт к конфликтам. Необходимо обдумать варианты решения этой проблемы.
 В любом случае пока что получаем следующий вариант анализа структуры
@@ -42,7 +48,7 @@ In this section main concepts of this work will be described.
 построив на этапе предобработки эти 2 зависимости можно для каждого скрипта быстро определить как тип, от которого следует строить дерево зависимостей, так и сервис темплэйт, обозначающий место, где это дерево нужно построить
 
 \fi
-\subsection*{Determining architecture of final Platform}
+\subsection{Determining architecture of final Platform}
 \if 0
 Архитектура конечного устройства
 Самым острым образом стоит вопрос об архитектуре устройства, на котором будут выполняться команды установки. 
@@ -63,7 +69,7 @@ In this section main concepts of this work will be described.
 
 
 \fi
-\subsection*{Extensibility}
+\subsection{Extensibility}
 \if 0
 Проблема расширяемости
 Фреймоврк должен обрабатывать разные скриптовые языки, каждый из которых может использовать различные пакетные менеджеры.
@@ -71,7 +77,7 @@ In this section main concepts of this work will be described.
 Иллюстрация. программа, много языков, каждый язык включает менеджеры.
 
 \fi
-\subsection*{Result's checking}
+\subsection{Result's checking}
 \if 0
 Проверка результатов
 Проверка результатов работы является важным этапом разработки программы, необходимо удостовериться как в общей валидности выходного CSAR, так и в том что полученный архив будет корректно развёрнут. 
@@ -82,7 +88,7 @@ In this section main concepts of this work will be described.
 
 
 \fi
-\section{Architecture}
+\section{Architecture}\label{sec:arch}
 \if 0
 Архитектура
 В этом разделе будет описана архитектура фреймворка
@@ -90,14 +96,14 @@ In this section main concepts of this work will be described.
 
 
 \fi
-\subsection*{Preprocessing}
+\subsection{Preprocessing}
 \if 0
 В начале необходимо совершить процедуру предобработки для разархивации, добавления файлов и генерации зависимостей из пункта такого то
 хорошим примером предобработки может послужить картинка такая то
 картинка, на входе архив(облачком одна структура), на выходе -новая структура файлов с добавленными фаылами + зависимости
 
 \fi
-\subsection*{Search for references}
+\subsection{Search for references}
 \if 0
 Как уже было указанно выше, модули языков анализируют каждый файл и проверяют его принадлежность к заданному языку, в случае принадлежности файлы передаются всем менеджерам пакетов данного языка. 
 вставить картинку со стрелочками
@@ -106,14 +112,14 @@ In this section main concepts of this work will be described.
 
 
 \fi
-\subsection*{Package Handler}
+\subsection{Package Handler}
 \if 0
 Следующий логический модуль - обработчик пакетов, по заданному имени пакета, он должен закгрузить сам пакет для установки, обратиться к менеджеру топологии для добавления пакета в топологию и рекурсивно повториться для каждой зависимости
 картинка, не могу приудмать как это отобразить
 
 
 \fi
-\subsection*{Topology Handler}
+\subsection{Topology Handler}
 \if 0
 Менеджер топологии получив имя пакета добавляет его в топологию тоски. выполнив пункты из обновления топологии тоски
 отобразить его работу как генерацию новых файлов и обновление сервистэмплэйта
@@ -121,7 +127,7 @@ In this section main concepts of this work will be described.
 
 
 \fi
-\subsection*{Generalizing}
+\subsection{Generalizing}
 \if 0
 В завершении необходимо упаковать все полученные результаты обратно в архив.
 
