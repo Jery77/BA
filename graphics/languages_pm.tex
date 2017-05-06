@@ -1,0 +1,49 @@
+% !TeX spellcheck = en_US
+
+% We need layers to draw the block diagram
+\usetikzlibrary{calc,positioning}
+
+% Define a few styles and constants
+\tikzstyle{sensor}=[draw, fill=green!20, minimum height=2.5em]
+\tikzstyle{ann} = [above, text width=5em]
+\tikzstyle{naveqs} = [sensor, text width=35em, fill=red!20, 
+minimum height=18em, rounded corners]
+\tikzstyle{lang} = [sensor, text width=9em, fill=blue!20, 
+minimum height=15em, rounded corners]
+\def\blockdist{2.3}
+\def\edgedist{2.5}
+
+\begin{figure}
+	\centering
+\begin{tikzpicture}
+\node (rr) [naveqs] {};
+\node [xshift=+5mm, yshift=-2mm, below right] at (rr.north west) {\large References resolver Framework };
+
+
+\node (lang1) at ([xshift=-52mm,yshift=-4mm]rr) [lang] {};
+\node [xshift=+3mm, yshift=-2mm, below right] at (lang1.north west) {\large Language 1 };
+\node (lang2) at ([xshift=-7mm,yshift=-4mm]rr) [lang] {};
+\node [xshift=+3mm, yshift=-2mm, below right] at (lang2.north west) {\large Language 2 };
+\node (langn) at ([xshift=+52mm,yshift=-4mm]rr) [lang] {};
+\node [xshift=+3mm, yshift=-2mm, below right] at (langn.north west) {\large Language N };
+\node at ($(lang2)!.5!(langn)$) {\ldots};
+
+\node (l1pm1) at ([yshift=+15mm]lang1) [sensor] {Package manager 1};
+\node (l1pm2) at ([yshift=0mm]lang1) [sensor] {Package manager 2};
+\node (l1pmn) at ([yshift=-22mm]lang1) [sensor] {Package manager K};
+\node at ($(l1pm2)!.5!(l1pmn)$) {\vdots};
+
+\node (l2pm1) at ([yshift=+15mm]lang2) [sensor] {Package manager 1};
+\node (l2pm2) at ([yshift=0mm]lang2) [sensor] {Package manager 2};
+\node (l2pmn) at ([yshift=-22mm]lang2) [sensor] {Package manager L};
+\node at ($(l2pm2)!.5!(l2pmn)$) {\vdots};
+
+\node (lnpm1) at ([yshift=+15mm]langn) [sensor] {Package manager 1};
+\node (lnpm2) at ([yshift=0mm]langn) [sensor] {Package manager 2};
+\node (lnpmn) at ([yshift=-22mm]langn) [sensor] {Package manager M};
+\node at ($(lnpm2)!.5!(lnpmn)$) {\vdots};
+
+
+\end{tikzpicture} 
+\caption{Example scheme representing several languages and package managers} 	\label{fig:lang_pm}
+\end{figure}

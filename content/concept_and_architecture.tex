@@ -3,6 +3,37 @@
 \chapter{Concept and Architecture}\label{chap:conarch}
 \section{Concept}
 In this section main concepts of this work will be described.
+
+\subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
+To properly display new packages in \gls{tosca} topology, it is necessary to add to each node containing an external reference a reference to newly created node resolving the external reference. 
+Besides Service Templates must be found where those nodes are instantiated.
+As was already pointed, according to \gls{tosca} standard a simple sequence can be build:\\
+$script$ $\rightarrow$ $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
+Now consider this bindings in more detail. 
+\begin{itemize}
+	\item $script$ $\rightarrow$ $Artifact$ $Implementation$\\
+	A script can be referenced by several Artifact Implementations (Despite the fact that this is a bad practice).
+	\item  $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ \\
+	The same way an artifact can be used by several Node Type Implementations.
+	\item $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ \\
+	Node Type Implementation can describe implementation of only one Node Type
+	\item  $Node$ $Type$ $\rightarrow$ $Node$ $Template$\\
+	Each Node Type can have a lot of Node Templates
+	\item  $Node$ $Template$ $\rightarrow$ $Service$ $Template$
+	But each Node Template will be defined only in one Service Template.
+\end{itemize}
+Thus structure can be described not by a sequence, but by a tree with script as a root, and Service Templates as leaves (Example in figure \ref{fig:script_serv}). 
+\input{graphics/script_serv_tree}
+Of course it is possible to move in opposite direction, starting from a Node and moving toward scripts, but this method brings additional complexity. 
+Node Type can have several Node Type Implementations, but which one will be used can be determined only during deployment. 
+The method presented above can uniquely determine Node Templates and Service Template for a given script.
+Of course it is not guaranteed that found Node Type Implementation will be used during deployment, but we can't do anything with this. 
+The following steps can be executed during a preprocessing, to identify necessary dependencies.
+\begin{itemize}
+	\item Find all Artifact Implementations to build dependency from script name to Artifact Implementation.
+	\item Find all Node Type Implementation. Since those definitions contains both the Node Type and used Artifact Implementations, the dependency from script to Node Types can be build.
+	\item Find all Service Templates, and in them contained Node Templates. So the necessary dependencies can be achieved (script to Node Template and script to Service Template).
+\end{itemize}
 \subsection*{Find external dependencies}
 Analysis for external references.
 Unfortunately it is impossible to identify all possible external dependencies, even within one language and one package manager (example in algorithm \ref{alg:unreadable}).
@@ -23,71 +54,60 @@ At the beginning, the most popular combination will be implemented, the $bash$ s
 This simple and powerful tool allows to install, delete or update the set of packages by writing one line.
 When processing of this combination will reach an acceptable level, new languages and package managers will be added.
 \subsection{Representing downloaded packages in TOSCA-Topology}
-The adding of new nodes to TOSCA topology can be divided into several steps.
+A package node denote to defined and instantiated element of \gls{tosca} topology, the purpose of which is to install the package.
+The adding of new package nodes to TOSCA topology can be divided into several steps.
 \begin{itemize}
 	\item Add definitions for common elements, like artifacts or relations. This can be done once at preprocessing stage.
-	\item The package installation? will be represented by a Node Type. There will be described that this node must be installed.
+	\item The package node definition will be represented by a Node Type. There will be described that this node must be installed.
 	\item Downloaded data and they installation script will be referenced by Artifact Template.
 	\item Node Type Implementation will combine all artifacts.
-	\item Node Template will instantiate a package in the corresponding Service Templates\footnote{\label{fussnote}
-		To determine corresponding Service Template a preprocessing described in ??? will be used.
-		Since a number of Node Types can use a script containing an external reference and these Nodes can by instantiated by number of service templates, it can be a number of Node Templates to create. This problem will be discussed in more details in chapter " \nameref{subs:analyse}"}.
-	\item Reference Template will provide topology information, allowing the observer (user or runtime environment) to determine, for which nodes the package must be installed\footnote{\label{fussnote}
-		References will be created both from origin Node Template to the package's Node Template and between Node Templates of created packages.}.
+	\item Node Template will instantiate a package in the corresponding Service Templates.
+		To determine corresponding Service Template a preprocessing described in \nameref{subs:analyse} will be used.
+	\item Reference Template will provide topology information, allowing the observer (user or runtime environment) to determine, for which nodes the package must be installed.
+		References will be created both from origin Node Template to the package's Node Template and between Node Templates of created packages.
 \end{itemize}
-\subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
-To properly display new packages in TOSCA topology, the original nodes containing external references must be found.
-Besides Service Templates where those nodes are instantiated must be found, to instantiate there new nodes for packages.
-\if 0
-Прослеживается простая зависимоть, артифакты -имплементация - тип- темплайт. рассмотрев эти зависимости более подробно, получим  артефакт(1 - н) имплементация (н - 1) тип (1 - н) темплайт.
-вся сложность кроется в зависимости между имплементациями и типом. один тип может иметь несколько разных имплементаций. конкретная имплементация будет выбрана только во время работы в зависимости от окружения. В связи с тем что мы не можем определить какая именно имплементация будет запущена, и соотвтетственно, какие именно артефакты будут использованы, мы не можем определить конкретный артефакт для построения дерева зависимостей для данного типа. В связи с этим пока нет другого выхода кроме как анализировать дерево зависимостей для всех возможных артефактов данного типа и надеятся что это не приведёт к конфликтам. Необходимо обдумать варианты решения этой проблемы.
-В любом случае пока что получаем следующий вариант анализа структуры
-найти все импл артефакты, построить зависимость артефакт (1-1) имя исполняемого файла
-найти все имплементации типов, в них указаны как типы, так и артифакты, что позволяет построить зависимость тип (1 - н) имя исполняемого файла
-найти все сервистемплэйты и проверить наличие в них тмплэйтов найденных ранее типов для построения зависимости тип (1 - н) сервис тэмплэйт
-построив на этапе предобработки эти 2 зависимости можно для каждого скрипта быстро определить как тип, от которого следует строить дерево зависимостей, так и сервис темплэйт, обозначающий место, где это дерево нужно построить
+\subsection{Determining architecture of a final Platform}
+The most acute way is the question about the architecture of the device where deployment scripts will be executed.
+Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question, on which architecture which command will be executed.
+There are many pitfalls here.
+A single Service Template can use several physical devices with different architectures.
+The same Implementation Artifacts can refer to different Node Types, instantiated on different platforms.
+So one simple Implementation Artifact with bash script containing "$apt$-$get$ $install$ $python$" command when deployed on different devices (for example with arm, amd64 and i386 architectures) will result in the loading and installation of 3 different packages. 
+For an end user, the ability to use such a simple command is a huge relief, but for the framework it can greatly complicate analysis.
+The following methods of architecture selection were designed.
+\begin{itemize}
+	\item Deployment environment analysis\\
+	The script analyzing the system where it is running (for example using $uname$ $-a$ command) and depending on the result, installing the package corresponding to the architecture.
+	\item Unified architecture\\
+	An Unified architecture, predefined by the user at framework startup.
+	\item Artifact specific architectures\\
+	An architecture can be defined for each artifact.
+\end{itemize}
+\subsubsection*{Analysis of methods}
+Unfortunately, the Deployment environment analysis, which at first glance seems to be the most reliable solution, brings many additional problems.
+Packages for different platforms can differ not only by architecture, but also in the versions and the list of dependencies.
+As a consequence, a complete chaos will be produced when trying to display these different packages with different versions in the \gls{tosca}-topology.
+The only robust solution would be to create for each installed package a set of archives (one archive for each architecture), containing the entire dependency tree for the given package.
+But this approach contradicts one of the ideas of this work: each package should be mapped in topology.\\
+The Artifact specific architectures carries additional complexity to the user of the framework.
+The user will be obligate to analyze each artifact and decide on which architecture it will be executed. 
+This can be complicated by the fact that the same artifact can be executed on different architectures.\\
+The method of the unified architecture was chosen, as the most simple and easy to implement.
+If it will be necessary, this method can be easy expanded to Artifact specific architectures method (be replacing the user input to chose an unified architecture at start, by choosing an architecture for each artifact.) and to Deployment environment analysis (By downloading packages for all available architectures and adding the architecture determination to installation script.).
 
-\fi
-\subsection{Determining architecture of final Platform}
-\if 0
-Архитектура конечного устройства
-Самым острым образом стоит вопрос об архитектуре устройства, на котором будут выполняться команды установки. 
-К несчастью невозможно проанализировав структуру случайного CSAR, дать однозначный ответ на вопрос, на какой архитектуре какая команда будет выполнена. Здесь кроется множество подводных камней, как то что топология может использовать несколько физических устройств с разными архитектурами, так и то что одни и те же имплемент артифакты(команды установки) могут быть вызваны разными системами. таким образом одна простая команда apt-get install python при запуске на трёх разных устройствах с архитектурами arm, amd64 и i386 приведёт к загрузке и установке 3ёх разных пакетов. Для конечного пользователя это огромное упрощение, но в нашей ситуации это может сильно усложнить анализ.
-
-Были разработаны следующие методы выбора архитектуры. 
-(придумать названия)
-Скрипт анализирующий систему где он запущен (например с помощью команды унаме -а) и в зависимости от результата устанавливающий пакет соответствующий архитектуре. 
-
-Единая архитектура, заранее заданная пользователем при старте программы
-
-архитектура задаётся для каждого артифакта, устанавливающего что либо
-
-Анализ решений. К несчастью первый вариант, в начале кажущийся наиболее надёжным решением проблемы, несёт с собой множество дополнительных проблем. Так, пакеты для разных архитектур могут отличаться не только сборкой, но и версией, что несёт с собой отличие в зависимостях и как следствие полный хаос при попытке отобразить эти разные пакеты с разными зависимостями и разными версиями в топологии тоски. А попытка создать свободно устанавливаемый архив вполне может не увенчаться успехом. 
-Третий вариант, хоть и является более надёжным по сравнению со вторым, несёт в себе дополнительные сложности для пользователя программы, который будет обязан проанализировать каждый артефакт и решить на какой архитектуре он будет запущен, что может не принести результатов, так как уже было указано, что один и тот же артифакт может быть запущен на разных архитектурах.
-
-В результате был выбран второй метод, как самый простой и легкореализуемый. в случае необходимости его легко можно расширить как до третьего (просто заменив выбор единой архитектуры при старте, на выбор её для каждого отдельного артефакта) так и до первого, так как каждый артефакт это уже скрипт установки, который несложным образом можно заменить на более сложный скрипт, определяющий архитектуру, что тем не менее не решит вышеуказанных проблем.
-
-
-\fi
 \subsection{Extensibility}
-\if 0
-Проблема расширяемости
-Фреймоврк должен обрабатывать разные скриптовые языки, каждый из которых может использовать различные пакетные менеджеры.
-Для лучшего понимания логично привести малую иллюстрацию иллюстрацию архитектуры, которая будет дополнена и расширена в разделе архитектура
-Иллюстрация. программа, много языков, каждый язык включает менеджеры.
+Framework should handle different script languages, each of them should support a various package managers.
+This principle can be illustrated by a figure \ref{fig:lang_pm}.
+\input{graphics/languages_pm}
 
-\fi
 \subsection{Result's checking}
-\if 0
-Проверка результатов
-Проверка результатов работы является важным этапом разработки программы, необходимо удостовериться как в общей валидности выходного CSAR, так и в том что полученный архив будет корректно развёрнут. 
-Для проверки на общую правильность возможно использовать инструмент винэри, из комплекта опэнтоски. Этот инструмент для создания и редактирования архивов, также отлично подходит для визуализации результатов.
-Проверка развёртки архива это куда более сложная задача, для неё можно воспользоваться каким то там инструментом, но так же нужно создать необходимое окружение для разворачивания облачного приложения
- 
+Checking the results of the work is an important stage in the development of the program.
+It is necessary to verify both the overall validity of the output \gls{csar}, and the possibility to deploy the output \gls{csar}.
+To test for overall correctness, it is possible to use winery tool from OpenTOSCA.
+This tool for creating and editing archives is also great for visualizing results.
+Checking the deployment of the CSAR is a much more complicated task, for which OpenTOSCA runtime environment can be used. 
+But it's also necessary to create proper environment for deploying the cloud application.
 
-
-
-\fi
 \section{Architecture}\label{sec:arch}
 \if 0
 Архитектура

@@ -64,18 +64,18 @@ An interface provides a set of methods to communicate with cloud infrastructure.
 Each provider defines his own set of methods, depending on his area of specialization. 
 On the one hand this specialization makes it easier to work with the provider, on the other hand it becomes more difficult to switch to work with another provider.
 
-\section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)} \label{sec:tosca}
+\section{Topology and Orchestration Specification for Cloud	Applications (\gls{tosca})} \label{sec:tosca}
 \subsection*{Definition}
-The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (TOSCA) standard provides new ways to enable portable automated deployment and management of composite applications.
-TOSCA describes the structure of composite applications as topologies containing their components and their relationships.
+The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard provides new ways to enable portable automated deployment and management of composite applications.
+\gls{tosca} describes the structure of composite applications as topologies containing their components and their relationships.
 Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
-TOSCA application is a cloud application described according to TOSCA standard.
+\gls{tosca} application is a cloud application described according to TOSCA standard.
 \subsection*{Usage}
-TOSCA can be used not only for describing all stages of a cloud application life-cycle, but alse serve as a layer between the cloud application and provider's interfaces, allowing to implement a single application suitable for working with different providers. 
+\gls{tosca} can be used not only for describing all stages of a cloud application life-cycle, but alse serve as a layer between the cloud application and provider's interfaces, allowing to implement a single application suitable for working with different providers. 
 \subsection*{Structure}
 TOSCA specification provides a language to describe service components and their relationships using a service topology, and it provides for describing the management procedures that create or modify services using orchestration processes.
 The combination of topology and orchestration in a Service Template describes what is needed to be preserved across deployments in different environments to enable interoperable deployment of cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.) when the applications are ported over alternative cloud environments. \cite{TOSCA-v1.0_book} \\
-Descriptions of the main components of TOSCA used in this work will be provided.
+Descriptions of the main components of \gls{tosca} used in this work will be provided.
 \begin{itemize}
 \item Service Template. 
 	This component contains an Information about structure (TopologyTemplate) and Plans of cloud application.
@@ -109,19 +109,19 @@ This is a ZIP-file with ".csar" extension that contains all the data needed for 
 These include definition documents, artifacts and so on.
 In this form a TOSCA application can be processed by TOSCA runtime environment.
 \subsection*{Structure}
-The root folder must contain a "Definitions" and a "TOSCA-Metadata" folders.
+The root folder must contain a "Definitions" and a "\gls{tosca}-Metadata" folders.
 The "Definitions" folder contains definition documents, one of them must define Service Template.
-The "TOSCA-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
+The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
 This metafile consists of name/value pairs. 
 One line for each pair. 
 The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
 All other pairs represent metadata of files in the CSAR
 
 \section{OpenTOSCA} \label{sec:opentosca}
-OpenTOSCA provides an open source ecosystem for TOSCA applications. 
+OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 
 The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
 \begin{itemize}
-	\item OpenTOSCA \textbf{Container}, a TOSCA runtime environment
+	\item OpenTOSCA \textbf{Container}, a \gls{tosca} runtime environment
 	\item \textbf{Winery} \label{tool:winery}, a graphical modelling TOSCA tool.
 	\item \textbf{Vinothek}, a self-service portal for the applications available in the container
 \end{itemize}
@@ -152,6 +152,7 @@ By default in Unix systems a package manager uses official repositories appropri
 Package managers distinguish between two types of dependencies: required and preRequired.
 Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
 Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
+%TODO add example dependencies output
 \subsection*{Dependency tree}
 In the example above $package2$ is needed for $package1$, but $package2$ itself can require additional packages.
 A structure describing all needed packages and dependencies between them for given root-package is called a dependency tree. 
