@@ -1,97 +1,81 @@
 % !TeX spellcheck = en_US
 
 \chapter{Implementation}\label{chap:imp}
+This chapter provides implementation of the framework and his modules and stages, which was described in chapter \ref{chap:conarch}.
+For the implementation was chosen a Java language, because of his simplicity and strength. 
 
-\if 0
-В этой главе описана имплементация фреймворка. Указано поочерёдное описание каждого из модулей из главы такой то, и связей между ними. Так же будут описаны основые моменты и сложности возникшие при имплементизации.
-Для имплементации был выбран язык ява, потому что... хз
-\fi
-\section{Preprocessing}
-\if 0
-На этапе препроцессинга необходимо разархивировать архив, сгенерировать общие дефениции тоски и найти внутренние зависимости
-\fi
+\section{Preprocessing stage}
+At the \nameref{subs:archpp} stage a CSAR will be unarchived, common gls{tosca} definitions generated and internal dependencies found. 
+
 \subsection*{Unarchivating}
-\if 0
-Для работы с архивами было решено использовать стандартный пакет java.util.zip, его функционала достаточно для работы с архивами. Обе функции архивации и разархивации были вынесены в один ява класс zip представляющий функции архивировать и разархивировать. 
-\fi
+For working with archives it was decided to use common Java package $java$.$utils$.$zip$.
+The functions of archiving, unarchiving were implemented in one class $zip$ with public methods zipIt and unZipIt declared in listing \ref{lst:zip}.
+\begin{lstlisting}[caption={Methods to handle archive files}\label{lst:zip},captionpos=t] 
+
+/**
+* Unzip it
+* 
+* @param zipFile
+*            input zip file name
+* @param outputFolder
+*            output folder
+*/
+static public List<String> unZipIt(String zipFile, String outputFolder);
+
+/**
+* Zip all files in folder
+* 
+* @param zipFile
+*            output ZIP file name
+* @param folder
+*            folder with files for archivating
+*/
+static public void zipIt(String zipFile, String folder);
+\end{lstlisting}
+
 \subsection*{Generating TOSCA Definitions}
+For generating common gls{tosca} definitions a $javax$.$xml$.$bind$ package was chosen. 
+Descriptive descriptions for common definitions were created.
+\begin{itemize}
+	\item DependsOn and PreDependsOn definitions describe Relationship Types (gls{TOSCA} \nameref{subs:reltype}) for according relations between packages (\nameref{subs:dep}). 
+	\item Package Artifact Type defines a deployment Artifact Type for package installation data.
+	\item Script Artifact Type defines a implementation Artifact Type for package installation script.
+\end{itemize}
+example can be found in listing \ref{lst:scripttype}
 \if 0
-ТОска дефинитионс файлы это хмл файлы с заданной структурой, для их генерации  используется пакет javax.xml.bind. Для его работы были описаны дефиниции ТОСКИ в виде ява классов. 
-DependsOn зависимость depends смотри главу какую то там
-PreDependsOn зависимость предепендс
-PackageArtifactType определяет описание деплоймент артифактов содержащих ссылку на пакет для установки 
-ScriptArtifactType  определяет имплементатион артифакт содержащий ссылку на скрипт устанавливающий программу из пакета 
 AnsibleArtifactType  определяет имплементатион артифакт типа ансибле содержащий ссылку архив устанавливающий программу 
+\\need to add ansible chapter
 \fi
 \subsection*{Finding internal references}
-\if 0
-Модуль дополнения топологии ТОСКИ использует главным образом внутренние зависимости, в связи с этим эти два модуля были объединены в один ява класс "придумай красивое название". на этапе предобработки он анализирует все исходные данные и строить зависимости по принципу указанному в какой то главе. для чтения хмл файлов был использован пакет org.w3c.dom. может пример кода вставить?
+\nameref{subs:archtop} mainly uses internal references from \nameref{subs:analyse}.
+Therefore, this two modules were combined to one class $Topology$\_$Handler$.	
+At the preprocessing stage, he analyses all origin definitions to build internal relations, as was described in section \ref{subs:analyse}.
+To read origin definition a package $org$.$w3c$.$dom$ was used.
 
-\fi
 \section{Search for external references}
-\if 0
-В этой секции будет описан процесс поиска внешних зависимостей в артифактах архива.
-для этой цели служат языки и принадлежащие им обработчики менеджеров пакетов
-так как фреймворк изначально ориентирован на лёгкую расширяемость, необходимо описать базовые методы, имплементировав которые можно добавить новый язык или обработчик пакетов.
-для этой цели в яве существуют абстрактные классы
-\fi
+This section will describe the finding external dependencies in the original artifacts.
+For this purpose serve \nameref{subs:archlm} and \nameref{subs:archpmm}.
+Since the framework is initially oriented to easy extensibility, abstract classes for \nameref{subs:archlm} and \nameref{subs:archpmm} will be described.
+New language and package manager modules can be added by implementing these methods.
+
 \subsection*{Language Model}
-\if 0
-для описания модели поведения любово языка был прописан абстрактный класс Language. public abstract language
-общими для всех языков были выбраны такие параметры как имя, список обработчиков менеджеров пакетов и расширения файлов данного языка. 
+To describe common functionality of different language modules, the abstract class Language was defined in listing \ref{lst:langabst}.
+Common components for all language models are: 
+\begin{itemize}
+	\item Language name
+	\item set of package manager modules
+	\item Extensions of files
+\end{itemize}
+Common functions are: 
+\begin{itemize}
+	\item $getName$ returns this language's name.
+	\item $getExtensions$ returns this language's extensions.
+	\item $proceed$ checks all original files and transfer results to package manager modules.
+	\item $getNodeName$ returns how should TOSCA node installing package with this language be named.
+	\item $createTOSCA\_Node$ creates TOSCA definitions for new package. 
+	Since created TOSCA definitions depends from original script's language, these languages must provide method for creating the definitions.
+\end{itemize}
 
-// List of package managers supported by language
-protected List<PacketManager> packetManagers;
-
-// Extensions for this language
-protected List<String> extensions;
-
-// Language Name
-protected String Name;
-
-а общими публичные функции - получение имени, списка расширений и команда на обработку, имплементированая по принципу проверки на расширения и в случае совпадения - передачи файла обработчику менеджером пакетов, так как создаваемые в последствии ноды должы иметь тот же тип что и исходная нода, языки должны предоставить метод создания нод тоски
-
-/**
-* get Language name
-* 
-* @return
-*/
-public String getName() {
-	return Name;
-}
-
-/**
-* Get supported extensions
-* 
-* @return list with extensions
-*/
-public List<String> getExtensions() {
-	return extensions;
-}
-
-/**
-* Proceed file, transfer it to package managers
-* 
-* @param cr
-*            CSAR manager
-* @throws FileNotFoundException
-* @throws IOException
-* @throws JAXBException
-*/
-public void proceed(Control_references cr) throws FileNotFoundException,
-IOException, JAXBException {
-	
-	/**	Generate Node for TOSCA Topology
-	* @param packet
-	* @param source
-	* @return
-	* @throws IOException
-	* @throws JAXBException
-	*/
-	public abstract String createTOSCA_Node(String packet, String source) throws IOException, JAXBException;
-	
-	это самый простой вариант анализа файлов, в случае необходимости финальная имплементация языка может использовать более сложную конструкцию для проверки
-\fi
 \subsection*{Package Handler Model}
 \if 0
 абстрактное описание обработчика менеджера пакетов содержит только одну функцию - обработать. 

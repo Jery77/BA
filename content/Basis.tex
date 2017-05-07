@@ -87,7 +87,7 @@ Plans are started by an external message and call management operations of the n
 \item Node Type defines the properties of such a component and the operations available to manipulate the component.
 \item Relationship Template specifies the occurrence of a Relationship Type as a relationship between nodes in a Topology Template. 
 	The Relationship Template indicates the elements it connects and the direction of the relationship by defining one source and one target element (in nested Source Element and Target Element elements).
-\item Relationship Type defines the semantics and any properties of the relationship. 
+\item Relationship Type defines the semantics and any properties of the relationship. \label{subs:reltype}
 \item Artifact  represents the content needed to realize a deployment such as an executable (e.g. a script, an executable program, an image), a configuration file or data file, or something that might be needed so that another executable can run (e.g. a library).
 	Artifacts can be of different types, for example EJBs or python scripts.
 	The content of an artifact depends on its type. 
@@ -148,7 +148,7 @@ Good package management is vital on these systems.
 \subsection*{Repository}
 To give users more control over the kinds of software that they are allowing to be installed on their system, software is often downloaded from a number of software repositories.
 By default in Unix systems a package manager uses official repositories appropriate for the operating system and the device architecture, but the user can also additional repositories, like third-party repositories or repositories for another architecture.
-\subsection*{Dependencies}
+\subsection*{Dependencies} \label{subs:dep}
 Package managers distinguish between two types of dependencies: required and preRequired.
 Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
 Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.

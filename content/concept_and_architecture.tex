@@ -3,6 +3,9 @@
 \chapter{Concept and Architecture}\label{chap:conarch}
 \section{Concept}
 In this section main concepts of this work will be described.
+In general, the structure of framework can be described by the diagram \ref{fig:gen}.
+\input{graphics/general}
+
 
 \subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
 To properly display new packages in \gls{tosca} topology, it is necessary to add to each node containing an external reference a reference to newly created node resolving the external reference. 
@@ -112,31 +115,30 @@ But it's also necessary to create proper environment for deploying the cloud app
 This section will present the architecture of the framework and a description of its modules.
 The main modules of the Framework are: Language modules, Package manager modules, Package handler module and Topology handler module.
 
-\subsection{Preprocessing}
+\subsection{Preprocessing} \label{subs:archpp}
 At the beginning the preprocessing will be executed for decompression, adding files and generating dependencies (generation is described in section \ref{subs:analyse}).
 Figure \ref{fig:preproc} illustrates the stages of preprocessing.
 \input{graphics/preprocessing}
-\subsection{Language modules}
+\subsection{Language modules} \label{subs:archlm}
 As already mentioned above, language modules analyze each file and check its belonging to the specific language. 
 Files not belonging to the language are filtered out.
 The remaining files are transferred to this language's package manager modules.
 For example a $Bash$ module can pass through only files with ".sh" extension and starting with the "\#!/bin/bash" line.
-\subsection{Package manager modules}
+\subsection{Package manager modules} \label{subs:archpmm}
 Package managers modules should find external references, resolve them and transmit package name to package handler module, described in next section.
 Figure \ref{fig:lang_ph} illustrates data flow between languages, package managers and package handler.
 \input{graphics/lang_ph}
 
-\subsection{Package Handler}
+\subsection{Package Handler} \label{subs:archph}
 Package Handler fr a given package name should download installation package, transfer package name to Topology handler and recursively repeat actions for all depended packages.
 
-\subsection{Topology Handler}
+\subsection{Topology Handler} \label{subs:archtop}
 The Topology Handler adds package to the topology. 
 This includes adding new files and updating existing files. 
 Necessary steps was described in section \ref{subs:repres}.
 
-\subsection{Shutting down}
+\subsection{Shutting down} \label{subs:archend}
 At the end all results will be packed back to the archive.
-%TODO ? general figure ?
 \if 0
 В завершении необходимо упаковать все полученные результаты обратно в архив.
 

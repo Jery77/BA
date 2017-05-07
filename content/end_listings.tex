@@ -1,0 +1,148 @@
+% !TeX spellcheck = en_US
+
+\begin{lstlisting}[caption={Generate Script Artifact Type}\label{lst:scripttype},captionpos=t] 
+public class RR_ScriptArtifactType {
+
+/**
+* @author Yaroslav Script Artifact Type XML description
+*/
+@XmlRootElement(name = "tosca:Definitions")
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
+public static class Definitions {
+
+@XmlElement(name = "tosca:ArtifactType", required = true)
+public ArtifactType artifactType;
+
+@XmlAttribute(name = "xmlns:tosca", required = true)
+public static final String tosca="http://docs.oasis-open.org/tosca/ns/2011/12";
+@XmlAttribute(name = "xmlns:winery", required = true)
+public static final String winery="http://www.opentosca.org/winery/extensions/tosca/2013/02/12";
+@XmlAttribute(name = "xmlns:ns0", required = true)
+public static final String ns0="http://www.eclipse.org/winery/model/selfservice";
+@XmlAttribute(name = "id", required = true)
+public static final String id="winery-defs-for_tbt-RR_ScriptArtifact";
+@XmlAttribute(name = "targetNamespace", required = true)
+public static final String targetNamespace="http://docs.oasis-open.org/tosca/ns/2011/12/ToscaBaseTypes"; //TODO
+
+public Definitions() {
+artifactType = new ArtifactType();
+}
+
+public static class ArtifactType {
+@XmlAttribute(name = "name", required = true)
+public static final String name = "RR_ScriptArtifact";
+@XmlAttribute(name = "targetNamespace", required = true)
+public static final String targetNamespace="http://docs.oasis-open.org/tosca/ns/2011/12/ToscaBaseTypes"; //TODO
+
+ArtifactType() {
+}
+}
+}
+
+// output filename
+public static final String filename = "RR_ScriptArtifact.tosca";
+
+/**
+* Create ScriptType xml description
+* 
+* @param cr
+* @throws JAXBException
+* @throws IOException
+*/
+public static void init(Control_references cr) throws JAXBException,
+IOException {
+File dir = new File(cr.getFolder() + Control_references.Definitions);
+dir.mkdirs();
+File temp = new File(cr.getFolder() + Control_references.Definitions + filename);
+if (temp.exists())
+temp.delete();
+temp.createNewFile();
+OutputStream output = new FileOutputStream(cr.getFolder()
++ Control_references.Definitions + filename);
+
+JAXBContext jc = JAXBContext.newInstance(Definitions.class);
+
+Definitions shema = new Definitions();
+
+Marshaller marshaller = jc.createMarshaller();
+marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+marshaller.marshal(shema, output);
+cr.metaFile.addFileToMeta(Control_references.Definitions + filename, "application/vnd.oasis.tosca.definitions");
+}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Abstract language model}\label{lst:langabst},captionpos=t] 
+public abstract class Language {
+	
+	// List of package managers supported by language
+	protected List<PacketManager> packetManagers;
+	
+	// Extensions for this language
+	protected List<String> extensions;
+	
+	// Language Name
+	protected String Name;
+	
+	// To access package topology
+	protected Control_references cr;
+	
+	// List with already created packages
+	protected List <String> created_packages;
+	
+	/**
+	* get Language name
+	* 
+	* @return
+	*/
+	public String getName() {
+		return Name;
+	}
+	
+	/**
+	* Get supported extensions
+	* 
+	* @return list with extensions
+	*/
+	public List<String> getExtensions() {
+		return extensions;
+	}
+	
+	/**
+	* Proceed file, transfer it to package managers
+	* 
+	* @param cr
+	*            CSAR manager
+	* @throws FileNotFoundException
+	* @throws IOException
+	* @throws JAXBException
+	*/
+	public void proceed(Control_references cr) throws FileNotFoundException,
+	IOException, JAXBException {
+		if (cr == null)
+		throw new NullPointerException();
+		for (String f : cr.getFiles())
+		for (String suf : extensions)
+		if (f.toLowerCase().endsWith(suf.toLowerCase()))
+		for (PacketManager pm : packetManagers)
+		pm.proceed(cr.getFolder() + f, f);
+	}
+	
+	/**	Generate node name for specific packages
+	* @param packet
+	* @param source
+	* @return
+	*/
+	public abstract String getNodeName(String packet, String source);
+	
+	
+	/**	Generate Node for TOSCA Topology
+	* @param packet
+	* @param source
+	* @return
+	* @throws IOException
+	* @throws JAXBException
+	*/
+	public abstract String createTOSCA_Node(String packet, String source) throws IOException, JAXBException;
+}
+\end{lstlisting}
