@@ -53,7 +53,7 @@ Ease of adding modules to framework will proof correctness of architecture.
 At the beginning, the most popular combination will be implemented, the $bash$ script with the $apt-get$ package manager.
 This simple and powerful tool allows to install, delete or update the set of packages by writing one line.
 When processing of this combination will reach an acceptable level, new languages and package managers will be added.
-\subsection{Representing downloaded packages in TOSCA-Topology}
+\subsection{Representing downloaded packages in TOSCA-Topology} \label{subs:repres}
 A package node denote to defined and instantiated element of \gls{tosca} topology, the purpose of which is to install the package.
 The adding of new package nodes to TOSCA topology can be divided into several steps.
 \begin{itemize}
@@ -109,52 +109,36 @@ Checking the deployment of the CSAR is a much more complicated task, for which O
 But it's also necessary to create proper environment for deploying the cloud application.
 
 \section{Architecture}\label{sec:arch}
-\if 0
-Архитектура
-В этом разделе будет описана архитектура фреймворка
-Базовая концепция использования языков и обработчиков пакетов была представлена в главе ссылка на рисунке таком то, теперь опишем схему работы более подробно. 
+This section will present the architecture of the framework and a description of its modules.
+The main modules of the Framework are: Language modules, Package manager modules, Package handler module and Topology handler module.
 
-
-\fi
 \subsection{Preprocessing}
-\if 0
-В начале необходимо совершить процедуру предобработки для разархивации, добавления файлов и генерации зависимостей из пункта такого то
-хорошим примером предобработки может послужить картинка такая то
-картинка, на входе архив(облачком одна структура), на выходе -новая структура файлов с добавленными фаылами + зависимости
+At the beginning the preprocessing will be executed for decompression, adding files and generating dependencies (generation is described in section \ref{subs:analyse}).
+Figure \ref{fig:preproc} illustrates the stages of preprocessing.
+\input{graphics/preprocessing}
+\subsection{Language modules}
+As already mentioned above, language modules analyze each file and check its belonging to the specific language. 
+Files not belonging to the language are filtered out.
+The remaining files are transferred to this language's package manager modules.
+For example a $Bash$ module can pass through only files with ".sh" extension and starting with the "\#!/bin/bash" line.
+\subsection{Package manager modules}
+Package managers modules should find external references, resolve them and transmit package name to package handler module, described in next section.
+Figure \ref{fig:lang_ph} illustrates data flow between languages, package managers and package handler.
+\input{graphics/lang_ph}
 
-\fi
-\subsection{Search for references}
-\if 0
-Как уже было указанно выше, модули языков анализируют каждый файл и проверяют его принадлежность к заданному языку, в случае принадлежности файлы передаются всем менеджерам пакетов данного языка. 
-вставить картинку со стрелочками
-В качестве примера можно привести следующую схему.
-много разных фалов, язык баш отфильтровывает не скриптовые файлы, оставшийся поступает на анализ менеджеру пакетов апт-гет, который его изменяет и выдаёт на выходе имя пакета
-
-
-\fi
 \subsection{Package Handler}
-\if 0
-Следующий логический модуль - обработчик пакетов, по заданному имени пакета, он должен закгрузить сам пакет для установки, обратиться к менеджеру топологии для добавления пакета в топологию и рекурсивно повториться для каждой зависимости
-картинка, не могу приудмать как это отобразить
+Package Handler fr a given package name should download installation package, transfer package name to Topology handler and recursively repeat actions for all depended packages.
 
-
-\fi
 \subsection{Topology Handler}
-\if 0
-Менеджер топологии получив имя пакета добавляет его в топологию тоски. выполнив пункты из обновления топологии тоски
-отобразить его работу как генерацию новых файлов и обновление сервистэмплэйта
-в завершение работы стоит добавить в схему зависимостей новую зависимость, новый тип для созданного пакета - во все сервис тэмплэйты его использующие
+The Topology Handler adds package to the topology. 
+This includes adding new files and updating existing files. 
+Necessary steps was described in section \ref{subs:repres}.
 
-
-\fi
-\subsection{Generalizing}
+\subsection{Shutting down}
+At the end all results will be packed back to the archive.
+%TODO ? general figure ?
 \if 0
 В завершении необходимо упаковать все полученные результаты обратно в архив.
-
-объединив все элементы инфраструктуры приложения,  получим следующую архитектуру
-каринка с архитектурой, со всем элементами
-
-след
 
 
 

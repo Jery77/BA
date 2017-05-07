@@ -64,7 +64,7 @@ An interface provides a set of methods to communicate with cloud infrastructure.
 Each provider defines his own set of methods, depending on his area of specialization. 
 On the one hand this specialization makes it easier to work with the provider, on the other hand it becomes more difficult to switch to work with another provider.
 
-\section{Topology and Orchestration Specification for Cloud	Applications (\gls{tosca})} \label{sec:tosca}
+\section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)} \label{sec:tosca}
 \subsection*{Definition}
 The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard provides new ways to enable portable automated deployment and management of composite applications.
 \gls{tosca} describes the structure of composite applications as topologies containing their components and their relationships.
@@ -152,6 +152,19 @@ By default in Unix systems a package manager uses official repositories appropri
 Package managers distinguish between two types of dependencies: required and preRequired.
 Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
 Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
+An example of obtaining a dependency list is shown in listing \ref{lst:dep}.\\
+\begin{lstlisting}[caption={Example of using $apt$-$cache$ to obtain dependency list for package python}\label{lst:dep},captionpos=t] 
+user@user:~$ apt-cache depends python
+python
+PreDepends: python-minimal
+Depends: python2.7
+Depends: libpython-stdlib
+Conflicts: <python-central>
+Breaks: update-manager-core
+Suggests: python-doc
+Suggests: python-tk
+Replaces: python-dev
+\end{lstlisting}
 %TODO add example dependencies output
 \subsection*{Dependency tree}
 In the example above $package2$ is needed for $package1$, but $package2$ itself can require additional packages.
