@@ -146,3 +146,41 @@ public abstract class Language {
 	public abstract String createTOSCA_Node(String packet, String source) throws IOException, JAXBException;
 }
 \end{lstlisting}
+\begin{lstlisting}[caption={Abstract package manager model}\label{lst:pmabst},captionpos=t] 
+public abstract class PacketManager {
+
+// Name of manager
+static public String Name;
+
+protected Language language;
+
+protected Control_references cr;
+
+/**
+* Proceed given file with different source (like archive)
+* 
+* @param filename
+* @param cr
+* @param source
+* @throws FileNotFoundException
+* @throws IOException
+* @throws JAXBException
+*/
+public abstract void proceed(String filename, String source) throws FileNotFoundException, IOException,
+JAXBException;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Create TOSCA node for bash language}\label{lst:create_bash},captionpos=t] 
+	public String createTOSCA_Node(String packet, String source) throws IOException, JAXBException{
+if(created_packages.contains(packet+"+"+source))
+return packet;
+created_packages.add(packet+"+"+source);
+packet = getNodeName(packet, source);
+RR_NodeType.createNodeType(cr, packet);
+RR_ScriptArtifactTemplate.createScriptArtifact(cr, packet);
+RR_PackageArtifactTemplate.createPackageArtifact(cr, packet);
+RR_TypeImplementation.createNT_Impl(cr, packet);
+return packet;
+}
+\end{lstlisting}
