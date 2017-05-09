@@ -184,3 +184,115 @@ RR_TypeImplementation.createNT_Impl(cr, packet);
 return packet;
 }
 \end{lstlisting}
+%\begin{lstlisting}[caption={Create TOSCA node for bash language}\label{lst:create_bash},captionpos=t] 
+%\end{lstlisting}
+\begin{lstlisting}[caption={File parsing for Bash + apt-get }\label{lst:bash_apt_parse},captionpos=t] 
+public void proceed(String filename, String source)
+throws IOException, JAXBException {
+String prefix = "";
+for (int i = 0; i < Utils.getPathLength(filename) - 1; i++)
+prefix = prefix + "../";
+if (cr == null)
+throw new NullPointerException();
+System.out.println(Name + " proceed " + filename);
+BufferedReader br = new BufferedReader(new FileReader(filename));
+boolean isChanged = false;
+String line = null;
+String newFile = "";
+while ((line = br.readLine()) != null) {
+// split string to words
+String[] words = line.replaceAll("[;&]", "").split("\\s+");
+// skip space at the beginning of string
+int i = 0;
+if (words[i].equals(""))
+i = 1;
+// look for apt-get
+if (words.length >= 1 + i && words[i].equals("apt-get")) {
+// apt-get found
+if (words.length >= 3 + i && words[1 + i].equals("install")) {
+// replace "apt-get install" by "dpkg -i"
+System.out.println("apt-get found:" + line);
+isChanged = true;
+for (int packet = 2 + i; packet < words.length; packet++) {
+System.out.println("packet: " + words[packet]);
+//							cr.AddDependenciesScript(source, words[packet]);
+cr.getPacket(language, words[packet], source);
+}
+}
+newFile += "#//References resolver//" + line + '\n';
+} else
+newFile += line + '\n';
+}
+br.close();
+if (isChanged) {
+// references found, need to replace file
+// delete old
+File file = new File(filename);
+file.delete();
+
+// create new file
+FileWriter wScript = new FileWriter(file);
+wScript.write(newFile, 0, newFile.length());
+wScript.close();
+}
+}
+\end{lstlisting}
+\end{lstlisting}
+\begin{lstlisting}[caption={Ansible proceeding}\label{lst:ansible_proceed},captionpos=t] 
+	public void proceed(Control_references cr) throws FileNotFoundException,
+IOException, JAXBException {
+	if (cr == null)
+	throw new NullPointerException();
+	for (String f : cr.getFiles())
+	for (String suf : extensions)
+	if (f.toLowerCase().endsWith(suf.toLowerCase())) {
+		if (suf.equals(".zip")) {
+			proceedZIP(f);
+		} else
+		proceed(f, f);
+	}
+}
+
+/**
+* proceed given file
+* 
+* @param filename
+* @param cr
+* @param source
+*            of file, example - archive
+* @throws FileNotFoundException
+* @throws IOException
+* @throws JAXBException
+*/
+public void proceed(String filename, String source)
+throws FileNotFoundException, IOException, JAXBException {
+	for (PacketManager pm : packetManagers)
+	pm.proceed(filename, source);
+}
+
+/**
+* Handle ZIP package
+* 
+* @param zipfile
+* @throws FileNotFoundException
+* @throws IOException
+* @throws JAXBException
+*/
+private void proceedZIP(String zipfile) throws FileNotFoundException,
+IOException, JAXBException {
+	boolean isChanged = false;
+	// String filename = new File(f).getName();
+	String folder = new File(cr.getFolder() + zipfile).getParent()
+	+ File.separator + "temp_RR_ansible_folder" + File.separator;
+	List<String> files = zip.unZipIt(cr.getFolder() + zipfile, folder);
+	for (String file : files)
+	if (file.toLowerCase().endsWith("yml"))
+	proceed(folder + file, zipfile);
+	if (isChanged) {
+		new File(cr.getFolder() + zipfile).delete();
+		zip.zipIt(cr.getFolder() + zipfile, folder);
+	}
+	zip.delete(new File(folder));
+	
+}
+\end{lstlisting}
