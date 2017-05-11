@@ -26,12 +26,12 @@ This class provides useful methods, used by many other modules.
 \end{itemize}
 
 \section{Preprocessing stage}
-At the \nameref{subs:archpp} stage a CSAR will be unarchived, common gls{tosca} definitions generated and internal dependencies found. 
+At the \nameref{subs:archpp} stage a CSAR will be unarchived, common \gls{tosca} definitions generated and internal dependencies found. 
 
 \subsection*{Unarchivating}
 For working with archives it was decided to use common Java package $java$.$utils$.$zip$.
-The functions of archiving, unarchiving were implemented in one class $zip$ with public methods zipIt and unZipIt declared in listing \ref{lst:zip}.
-\begin{lstlisting}[caption={Methods to handle archive files}\label{lst:zip},captionpos=t] 
+The functions of archiving, unarchiving were implemented in one class $zip$ with public methods $zipIt$ and $unZipIt$. $zipIt$ is declared in the listing \ref{lst:unzip}.
+\begin{lstlisting}[caption={Method decompress files}\label{lst:unzip},captionpos=t] 
 
 /**
 * Unzip it
@@ -42,16 +42,6 @@ The functions of archiving, unarchiving were implemented in one class $zip$ with
 *            output folder
 */
 static public List<String> unZipIt(String zipFile, String outputFolder);
-
-/**
-* Zip all files in folder
-* 
-* @param zipFile
-*            output ZIP file name
-* @param folder
-*            folder with files for archivating
-*/
-static public void zipIt(String zipFile, String folder);
 \end{lstlisting}
 
 \subsection*{Generating TOSCA Definitions}
@@ -67,7 +57,7 @@ example can be found in listing \ref{lst:scripttype}
 AnsibleArtifactType  определяет имплементатион артифакт типа ансибле содержащий ссылку архив устанавливающий программу 
 \\need to add ansible chapter
 \fi
-\subsection*{Finding internal references}
+\subsection*{Finding internal references}\label{subs:imp_findintref}
 \nameref{subs:archtop} mainly uses internal references from \nameref{subs:analyse}.
 Therefore, this two modules were combined to one class $Topology$\_$Handler$.	
 At the preprocessing stage, he analyses all origin definitions to build internal relations, as was described in section \ref{subs:analyse}.
@@ -135,14 +125,13 @@ The basic moments are:
 Since the package installation using $ansible$ language and $apt$ package manager can be described in many different ways, the processing of is complicated too.
 It's worth mentioning that the processing uses a simple state machine and regular expression from $java$.$util$.$regex$.
 
-\section{Package Handling}
-\if 0
-Менеджер пакетов. Представляет из себя интерфейс для взаимодействия с менеджером пекетов операционной сисемы. 
-\fi
-\subsection*{Package downloading}
-\if 0
+\section{Package Handler}
+Package handler is an interface for interacting with the package manager of the operating system.
+Allows to load packages and to determine the type of dependency between them.
 
-Предоставляет 1 публичные функции, 
+\subsection*{Package downloading}
+This operation is performed using one recursive function $getPacket$ defined below in listing \ref{lst:getpack}.
+\begin{lstlisting}[caption={$getPackage$ definition}\label{lst:getpack},captionpos=t]
 /**
 * Download package and check its dependency
 * 
@@ -158,41 +147,49 @@ It's worth mentioning that the processing uses a simple state machine and regula
 * @throws JAXBException
 * @throws IOException
 */
-getPacket(Language language, String packet,
-List<String> listed, String source, String sourcefile)
-throws JAXBException, IOException 
-для загрузки дерева зависимостей и передачи их менеджеру топологии
-описание параметров
-в случае если это первый загружаемый пакет в дереве зависимостей, необходимо явно указать используемую архитектуру
-короткая вставка
-для загрузки используется команда такая то
-в случае неудачи используется юзеринпут, предоставляющий такие то опции решения проблемы
-после загрузки вызывается функции создания ноды от языка
-language.createTOSCA_Node(newName, sourcefile);
-и одна функция обновления сервистэмплэйта из менеджера топологии
-для создания зависимости от уже созданного нами пакета, или от пакета  из топологии... а это нужно?? посмотри код, может быть всё таки можно убрать?
+getPacket(Language language, String packet, List<String> listed, String source, String sourcefile);
+\end{lstlisting}
+This function downloads packages for full dependency three, calls corresponding Language to create nodes and Topology Handler to update topology.\\
+Arguments will be described shortly.
+\begin{itemize}
+	\item $Language$ is used to coll right $createTOSCA\_Node$ function.
+	\item $packet$ defines package-name to download.
+	\item $listed$ holds a list with packages already presented in the dependency tree. No need to download them, but dependencies will be created.
+	\item $source$ defines parent-element in dependency tree. For root package that will be a source script file, for other packages - depending package.
+	\item $sourcefile$ is source script file name. And is used to generate package name and by Languages to get additional information for node creating. 
+\end{itemize}
+For downloading the command $apt$-$get$ $download$ \emph{package} is used. 
+If download fails the command line user-input to solve the problem is used. 
 
-\fi
 \subsection*{Dependencies}
-\if 0
-для определения типа зависимости используется следующая команда, анализирующая вывод типа 
-вставь пример
-\fi
-\section{Topology Handling}
-\if 0
-Менеджер топололгии служит для актуализации сервистэмплейтов. для этого на этабе препроцессинга он создаёт что то там
-\fi
-\subsection*{Update ServiceTemplate}
-\if 0
-Для обновления сервистэмплейта представлена следующая функция 
-одна или 2 функции
+To determine the dependency type the command $apt$-$cache$ $depends$  \emph{package} is used.
+Example output was presented in section \ref{subs:dep}.
 
-описать ли что она делает??
+\section{Topology handling}
+Topology handler serves to update the Service Templates.
+For this purpose the \nameref{subs:imp_findintref} stage is executed during preprocessing stage.
 
-\fi
+\subsection*{Update Service Templates}
+To update Service Templates two functions are provided.
+\begin{itemize}
+	\item $addDependencyToPacket$ generates dependency between two package nodes generated by the framework.
+	\item $addDependencyToScript$ generates dependency between original node and package node generated by the framework.
+	 
+\end{itemize} 
+To update existing TOSCA definition the $org$.$w3c$.$dom$ and $org$.$xml$.$sax$ packages are used.
+
 \section{Finishing}
-\if 0
-Для завершения необходимо упаковать все изменённые данный обратно в Csar архив
-используется функция архивировать из класса зип
+To finish the work changed data should be packed back to \gls{csar}.
+Function $zipIt$ from class $zip$, defined in listing \ref{lst:zip} is used.
 
-\fi
+\begin{lstlisting}[caption={Method to archive files}\label{lst:zip},captionpos=t] 
+/**
+* Unzip it
+* 
+* @param zipFile
+*            input zip file name
+* @param outputFolder
+*            output folder
+*/
+static public List<String> unZipIt(String zipFile, String outputFolder);
+\end{lstlisting}
