@@ -115,10 +115,17 @@ But it's also necessary to create proper environment for deploying the cloud app
 This section will present the architecture of the framework and a description of its modules.
 The main modules of the Framework are: Language modules, Package manager modules, Package handler module and Topology handler module.
 
-\subsection{Preprocessing} \label{subs:archpp}
-At the beginning the preprocessing will be executed for decompression, adding files and generating dependencies (generation is described in section \ref{subs:analyse}).
+\subsection{CSAR handler} \label{subs:casr_h}
+\gls{ch} is a module to provide access to \gls{csar} and to maintain CSAR consistency. 
+It describes process of adding new files (to handle the matadata), decompression, architecture processing, etcetera.
+
+\subsection{References resolver} \label{subs:RR}
+This is a main module, which execution can be divided into three stages: preprocessing, processing, finish. \\
+At the begin the preprocessing will be executed for decompression, adding files and generating dependencies (generation is described in section \ref{subs:analyse}).
 Figure \ref{fig:preproc} illustrates the stages of preprocessing.
 \input{graphics/preprocessing}
+Then during the processing, any language modules will be activated, which are described in the next section. \\
+To finish the work  all results will be packed back to the archive during the finish stage..
 \subsection{Language modules} \label{subs:archlm}
 As already mentioned above, language modules analyze each file and check its belonging to the specific language. 
 Files not belonging to the language are filtered out.
@@ -130,18 +137,9 @@ Figure \ref{fig:lang_ph} illustrates data flow between languages, package manage
 \input{graphics/lang_ph}
 
 \subsection{Package Handler} \label{subs:archph}
-Package Handler fr a given package name should download installation package, transfer package name to Topology handler and recursively repeat actions for all depended packages.
+Package Handler become package name and should download installation package, transfer package name to Topology handler and recursively repeat the actions for all depended packages.
 
 \subsection{Topology Handler} \label{subs:archtop}
 The Topology Handler adds package to the topology. 
 This includes adding new files and updating existing files. 
-Necessary steps was described in section \ref{subs:repres}.
-
-\subsection{Shutting down} \label{subs:archend}
-At the end all results will be packed back to the archive.
-\if 0
-В завершении необходимо упаковать все полученные результаты обратно в архив.
-
-
-
-\fi
+Necessary steps were described in section \ref{subs:repres}.

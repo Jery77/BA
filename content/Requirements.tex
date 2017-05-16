@@ -31,16 +31,16 @@ Here example steps are provided, representing how the framework should work.
 	\item Preprocessing\\
 	During preprocessing stage, RR need to analyze internal references and build dependency three.
 	Furthermore, common Tosca definitions for artifacts and  relations between packages need to be added.
-	\item Processing with Languages
+	\item Processing with Languages\\
 	Each file from CSAR need to be processed for each described Language.
-	\item Processing with Packet Managers
+	\item Processing with Packet Managers\\
     If file belongs to the Language, he will be processed by Packet Manager Handler to find and resolve external references.
     Package name from this reference will be provided forward.
-	\item Package handling
+	\item Package handling\\
 	Using a package name the right package must download, TOSCA definitions created and recursively repeats for all dependent packages, creating Dependency Tree.
-	\item Topology handling
+	\item Topology handling\\
 	Using information about internal references and dependencies TOSCA Topology will be updated by creating Node and Reference Templates. 
-	\item End
+	\item End\\
 	Meta-file should be updated and all data packed back to the CSAR.
 \end{itemize}
 These steps will be represented by modules described in section \ref{sec:arch} and implemented in chapter \ref{chap:imp}.

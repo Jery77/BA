@@ -117,6 +117,10 @@ One line for each pair.
 The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
 All other pairs represent metadata of files in the CSAR
 
+\subsection*{Terms}
+Input \gls{csar} is a \gls{csar}, which can contain external references and will be processed by the framework.\\
+Output CSAR is a SCAR, which was processed by the framework and doesn't contain external references.
+
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 
 The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
@@ -134,14 +138,28 @@ The Implementation Artifact Engine deploys the referenced Implementation Artifac
 Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.
 \cite{INPROC-2013-45}
-\subsection*{Vinery}\label{subs:vine}
-Vinery works under the Tomcat runtime and therefore visual interface is available in browser, example in figure \ref{fig:vinery_gui}. Vinery provides a complete set of functions for creating, editing and deleting all elements of the TOSCA topology. 
+\subsection*{Winery}\label{subs:wine}
+Winery works under the Tomcat runtime and therefore visual interface is available in browser, example in figure \ref{fig:winery_gui}.
+Winery provides a complete set of functions for creating, editing and deleting all elements of the TOSCA topology. 
+An example of TOSCA topology is presented on figure \ref{fig:winery_source}.
 \begin{figure}[ht]   
 	\centering
-	\includegraphics[width=0.7\textwidth]{Screenshot_vinery_gui.png}
-	\caption{Visual interface for $Vinery$.}
-	\label{fig:vinery_gui}
+	\includegraphics[width=0.7\textwidth]{Screenshot_winery_gui.png}
+	\caption{Visual interface for $Winery$.}
+	\label{fig:winery_gui}
 \end{figure}
+\begin{figure}[ht]   
+\centering
+\includegraphics[width=0.7\textwidth]{Screenshot_winery_source.png}
+\caption{TOSCA topology presented by $Winery$.}
+\label{fig:winery_source}
+\end{figure}
+
+\section{Bash}
+%TODO
+\section{Ansible}
+%TODO
+
 \section{Package management} \label{sec:pm}
 This section will describe the package management process and basic concepts from this area.
 \subsection*{Package managers}

@@ -7,8 +7,8 @@ For the implementation was chosen a Java language, because of his simplicity and
 \section{Global modules}
 This section describes modules, used throughout the whole framework's execution.
 
-\subsection{CSAR handler}
-gls{ch} handle common information about CSAR content.
+\subsection*{CSAR handler}
+\gls{ch} handle common information about CSAR content.
 It handles:
 \begin{itemize}
 	\item Temp extraction folder.
@@ -16,23 +16,34 @@ It handles:
 	\item Meta-file entry.
 	\item Architecture of target platform.
 \end{itemize}
+All this data are encapsulated into \gls{ch}, to access them public function of this class should be used.
 
-\subsection{Utils}
+\subsection*{Utils}
 This class provides useful methods, used by many other modules.
 \begin{itemize}
 	\item Create file with content.
 	\item Get path deep.
 	\item Adapt name for OpenTOSCA.
 \end{itemize}
+This functions doesn't belong to specific module and can be used in many cases.
 
-\section{Preprocessing stage}
-At the \nameref{subs:archpp} stage a CSAR will be unarchived, common \gls{tosca} definitions generated and internal dependencies found. 
+\subsection*{Zip handler}
+This is a small module with strait functionality. It serves to pack-unpack zip archives, which are used by CSARs.
+For handle with archives it was decided to use common Java package $java$.$utils$.$zip$.
+The functions of archiving, unarchiving were implemented in one class $zip$ with public methods $zipIt$ and $unZipIt$, which are provided in listing \ref{lst:zip}
+\begin{lstlisting}[caption={Common functions to handle zip archives}\label{lst:zip},captionpos=t] 
 
-\subsection*{Unarchivating}
-For working with archives it was decided to use common Java package $java$.$utils$.$zip$.
-The functions of archiving, unarchiving were implemented in one class $zip$ with public methods $zipIt$ and $unZipIt$. $zipIt$ is declared in the listing \ref{lst:unzip}.
-\begin{lstlisting}[caption={Method decompress files}\label{lst:unzip},captionpos=t] 
+/**
+* Unzip it
+* 
+* @param zipFile
+*            input zip file name
+* @param outputFolder
+*            output folder
+*/ 
 
+
+static public List<String> unZipIt(String zipFile, String outputFolder);
 /**
 * Unzip it
 * 
@@ -44,7 +55,14 @@ The functions of archiving, unarchiving were implemented in one class $zip$ with
 static public List<String> unZipIt(String zipFile, String outputFolder);
 \end{lstlisting}
 
-\subsection*{Generating TOSCA Definitions}
+\section{References resolver}
+This module is executed into three stages.
+
+\subsection*{Preprocessing}
+At the preprocessing stage a CSAR will be unarchived, common \gls{tosca} definitions generated and internal dependencies found. 
+
+
+\subsubsection*{Generating TOSCA Definitions}
 For generating common gls{tosca} definitions a $javax$.$xml$.$bind$ package was chosen. 
 Descriptive descriptions for common definitions were created.
 \begin{itemize}
@@ -54,14 +72,29 @@ Descriptive descriptions for common definitions were created.
 \end{itemize}
 example can be found in listing \ref{lst:scripttype}
 \if 0
+%TODO
 AnsibleArtifactType  определяет имплементатион артифакт типа ансибле содержащий ссылку архив устанавливающий программу 
 \\need to add ansible chapter
 \fi
-\subsection*{Finding internal references}\label{subs:imp_findintref}
+
+\subsubsection*{Finding internal references}\label{subs:imp_findintref}
 \nameref{subs:archtop} mainly uses internal references from \nameref{subs:analyse}.
 Therefore, this two modules were combined to one class $Topology$\_$Handler$.	
 At the preprocessing stage, he analyses all origin definitions to build internal relations, as was described in section \ref{subs:analyse}.
 To read origin definition a package $org$.$w3c$.$dom$ was used.
+
+\subsection*{processing}
+During this stage all described language modules are started.
+\begin{lstlisting}[caption={Processing stage of references resolver}\label{lst:start_lang},captionpos=t] 
+for (Language l : languages)
+	l.proceed(cr);
+\end{lstlisting}
+
+
+\subsection*{Finishing}
+To finish the work changed data should be packed back to \gls{csar}.
+Function $zipIt$ from class $zip$, defined in listing \ref{lst:zip} is used.
+
 
 \section{Search for external references}
 This section will describe the finding external dependencies in the original artifacts.
@@ -177,19 +210,3 @@ To update Service Templates two functions are provided.
 	 
 \end{itemize} 
 To update existing TOSCA definition the $org$.$w3c$.$dom$ and $org$.$xml$.$sax$ packages are used.
-
-\section{Finishing}
-To finish the work changed data should be packed back to \gls{csar}.
-Function $zipIt$ from class $zip$, defined in listing \ref{lst:zip} is used.
-
-\begin{lstlisting}[caption={Method to archive files}\label{lst:zip},captionpos=t] 
-/**
-* Unzip it
-* 
-* @param zipFile
-*            input zip file name
-* @param outputFolder
-*            output folder
-*/
-static public List<String> unZipIt(String zipFile, String outputFolder);
-\end{lstlisting}
