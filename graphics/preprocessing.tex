@@ -33,7 +33,7 @@ minimum height=14em, rounded corners]
 \node (l2pmn) at ([yshift=-22mm]csar_content) [entry] {Artifacts\\};
 \node at ($(l2pm2)!.5!(l2pmn)$) {\vdots};
     
-\node [right=of csar_frame, node distance=10mm](dc_frame) [csar_content] {};
+\node [right of=csar_frame, xshift=30mm](dc_frame) [csar_content] {};
 \node [xshift=+1mm, yshift=-2mm, below right] at (dc_frame.north west) {\large Decompressed};
 \draw [->] (csar_frame) -- (dc_frame);
 \node (2pm1) at ([yshift=+15mm]dc_frame) [entry] {Definitions\\};
@@ -41,7 +41,7 @@ minimum height=14em, rounded corners]
 \node (2pmn) at ([yshift=-22mm]dc_frame) [entry] {Artifacts\\};
 \node at ($(2pm2)!.5!(2pmn)$) {\vdots};
 
-\node [right=of dc_frame, node distance=10mm](my_frame) [frame] {};
+\node [right of=dc_frame, xshift=30mm](my_frame) [frame] {};
 \node [xshift=+5mm, yshift=-2mm, below right] at (my_frame.north west) {\large With my files};
 \draw [->] (dc_frame) -- (my_frame);
 \node (3pmd) at ([yshift=+20mm]my_frame) [myentry] {My definitions\\};
@@ -51,19 +51,19 @@ minimum height=14em, rounded corners]
 \node at ($(3pm2)!.5!(3pmn)$) {\vdots};
 
 
-\node[below=of dc_frame,main node, node distance=10mm, xshift=-4mm, yshift=+5mm] (11) {Script 2}
-child { node[main node]  (n21) {Node Template 1} 
+\node[below=of dc_frame,main node, node distance=10mm, xshift=-4mm, yshift=+7mm] (11) {Script 2}
+child { node[main node, yshift=-10mm]  (n21) {Node Template 1} 
 		child { node[main node] (s31) {Service Template 1}}  
 }
-child { node[main node]  (n22) {Node Template N} 
+child { node[main node, yshift=-10mm]  (n22) {Node Template N} 
 	child { node[main node] (s32) {Service Template N}}  
 };
 \draw [dashed,->] (dc_frame) -- (11);
-\node[below left=of dc_frame,main node, node distance=20mm, xshift=-7mm] (12) {Script 1}
+\node[below left=of dc_frame,main node,xshift=+10mm] (12) {Script 1}
 child { node  {\ldots} 
 };
 \draw [dashed,->] (dc_frame) -- (12);
-\node[below right=of dc_frame,main node, node distance=20mm, xshift=+5mm] (13) {Script K}
+\node[below right=of dc_frame,main node, xshift=-10mm] (13) {Script K}
 child { node  {\ldots} 
 };
 \draw [dashed,->] (dc_frame) -- (13);

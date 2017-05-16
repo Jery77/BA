@@ -21,7 +21,7 @@ Also the are no generally accepted definitions of cloud application, but it can 
 	Cloud application is an application that is executed according to a cloud computing model. \cite*{cloudapp}
 \end{definition} 
 \subsubsection*{Service models}
-NIST distinguishes between three types of service models.\\
+NIST distinguishes between three types of service models.
 \begin{itemize}
 	\item Software as a Service (SaaS). 
 	The capability provided to the consumer is to use the provider’s applications running on a cloud infrastructure. 
@@ -37,7 +37,7 @@ NIST distinguishes between three types of service models.\\
 \end{itemize}
 
 \subsubsection*{Deployment models}
-Similarly, NIST distinguishes between four types of deployment models.\\
+Similarly, NIST distinguishes between four types of deployment models.
 \begin{itemize}
 	\item Private cloud. 
 	The cloud infrastructure is provisioned for exclusive use by a single organization comprising multiple consumers (e.g., business units). It may be owned, managed, and operated by the organization, a third party, or some combination of them, and it may exist on or off premises.
@@ -58,7 +58,7 @@ They are used for test and development, big data analyses, file storage and so o
 Cloud computing allows you to effectively use resources, distributing the load to a system from several physical servers and shifting the maintenance to the providers. 
 If your service uses a single one physical server and this server will be disabled, then entire service will be completely unavailable too.
 But if you use cloud computing with a hundred of physical servers, then disabling one of them will not carry such serious consequences.
-In addition, the user does not need to maintain a team of administrators for the event of various problems.\\\\ 
+In addition, the user does not need to maintain a team of administrators for the event of various problems.\\
 Usually the user does not have direct access to the infrastructure (servers and operating systems), he uses only provided interface.
 An interface provides a set of methods to communicate with cloud infrastructure. 
 Each provider defines his own set of methods, depending on his area of specialization. 
@@ -125,14 +125,23 @@ The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
 	\item \textbf{Winery} \label{tool:winery}, a graphical modelling TOSCA tool.
 	\item \textbf{Vinothek}, a self-service portal for the applications available in the container
 \end{itemize}
+The runtime environment ant Winery will be provided in more details. 
+\subsection*{Runtime environment}
 The runtime enables fully automated plan-based deployment and management of applications in the CSAR format. 
-Processing of a CSAR by the runtime will be provided in more detail. 
 First, the CSAR is unpacked and the files are put into the Files store.
 Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.
 \cite{INPROC-2013-45}
+\subsection*{Vinery}\label{subs:vine}
+Vinery works under the Tomcat runtime and therefore visual interface is available in browser, example in figure \ref{fig:vinery_gui}. Vinery provides a complete set of functions for creating, editing and deleting all elements of the TOSCA topology. 
+\begin{figure}[ht]   
+	\centering
+	\includegraphics[width=0.7\textwidth]{Screenshot_vinery_gui.png}
+	\caption{Visual interface for $Vinery$.}
+	\label{fig:vinery_gui}
+\end{figure}
 \section{Package management} \label{sec:pm}
 This section will describe the package management process and basic concepts from this area.
 \subsection*{Package managers}
@@ -152,7 +161,7 @@ By default in Unix systems a package manager uses official repositories appropri
 Package managers distinguish between two types of dependencies: required and preRequired.
 Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
 Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
-An example of obtaining a dependency list is shown in listing \ref{lst:dep}.\\
+An example of obtaining a dependency list is shown in listing \ref{lst:dep}.
 \begin{lstlisting}[caption={Example of using $apt$-$cache$ to obtain dependency list for package python}\label{lst:dep},captionpos=t] 
 user@user:~$ apt-cache depends python
 python
