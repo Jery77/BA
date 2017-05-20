@@ -3,24 +3,41 @@
 \chapter{Check}\label{chap:check}
 In this chapter, the developed framework will be tested.
 The resulting CSAR will be added to \nameref{subs:wine} and displayed by the program.
-\if 0
+\if 0 
+%TODO
+надо прописать какой именно архив использовался и какие в нём зависимости
 потом установить как то хз как
 \fi
 \section{Check by Winery}
  \nameref{subs:wine} was installed to test the correctness of output CSAR. 
  This is an environment for development TOSCA systems and will be useful for checking results. \\
- Output CSARs where added to winery. 
+ The source CSAR is displayed on figure 
+ %TODO
+ This CSAR has a purely simple structure.
+ THen the output CSAR was added to winery. 
  Due to significant increase in size, this can be a fairly lengthy procedure.
-\if 0
+ There where 10 nodes in source CSAR, then after processing bz the framework, there are already more then 100 of nodes.
+ During the addition, a CSAR's syntax is tested.
+ In case of errors, messages will be displayed.
+ Then Service Template will be displayed.
+ Again, due to high number of nodes, preprocessing can take a long time. But at the time, the correctness of the links will be checked.
+ If something was defined not properly, the nodes or links between them will not be displayed.
+ After removing of external references and integrating python's dependency tree, the CSAR has acquired the following form (figure ).
+ %TODO
+ It's pretty beloved.
+ To verify the TOSCA's structure some nodes was moved manually. 
+ By checking several nodes with $apt$-$cache$ $depends$ command, the correctness of dependencies can be verified.
+ By opening the content of the new nodes, it can be verified, that the are scripts and packages for installation.
 
-если в изначальном архиве было 10 нод, то после построения дерева зависимостей для пакета питон, их уже стало больше скольки то.
-во время добавления проходит проверка на синтаксис ССАР. в случае ошибок будут выведены соответствующие предупреждения.
-далее необходимо отобразить сервис темплэйт. Опять таки, из за количества нод предобработка может занять некоторое время, но в то же премя будет выполнена проверка на правильность связей внутри ССАР, если что то было дефинировано неверно, то ячейки или связи между ними не будут отображены.
-обработанная тоска система под названием таким то, ранее отображенная на картинке такой то. удаления внешней зависимости по установке питона из ячейки такой то, приобрела следующий вид.
-это довольно ненеаглядно, вручную переместив несколько ячеек схема стала несколько проще. проверив несколько ячеек вручную, с помощью команды апт-кэш дэп, можно убедится что связи в тпологии ТОСКИ соотвтетствуют связям в топологии менеджера пакетов.
-открыв содержимое ячеек можно убедится что там находятся скрипты для установки пакетов, и сами пакеты для установки.
- 
+\section{Check installation}
+Also is is necessary to check whether it is possible to install new packages using the generated installation scripts.
+First bash scripts will be tested, then ansible playbooks.
+\subsection{Check bash scripts}
+\if 0
+Проверка сгенерированных баш скриптов это просто. 
+Баш является стандартной средой командной строки в линукс, поэтому нужно просто выполнить эти скрипты и проверить корректность установки.
 \fi
-\section{Check installation scripts}
+\subsection{Check ansible playbooks}
+
 \if 0
 \fi

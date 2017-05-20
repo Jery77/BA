@@ -31,7 +31,10 @@ This functions doesn't belong to specific module and can be used in many cases.
 This is a small module with strait functionality. It serves to pack-unpack zip archives, which are used by CSARs.
 For handle with archives it was decided to use common Java package $java$.$utils$.$zip$.
 The functions of archiving, unarchiving were implemented in one class $zip$ with public methods $zipIt$ and $unZipIt$, which are provided in listing \ref{lst:zip}
-\begin{lstlisting}[caption={Common functions to handle zip archives}\label{lst:zip},captionpos=t] 
+\begin{Listing}
+\caption{Common functions to handle zip archives}
+\label{lst:zip}
+\begin{lstlisting}
 
 /**
 * Unzip it
@@ -54,6 +57,7 @@ static public List<String> unZipIt(String zipFile, String outputFolder);
 */
 static public List<String> unZipIt(String zipFile, String outputFolder);
 \end{lstlisting}
+\end{Listing}
 
 \section{References resolver}
 This module is executed into three stages.
@@ -69,13 +73,9 @@ Descriptive descriptions for common definitions were created.
 	\item DependsOn and PreDependsOn definitions describe Relationship Types (gls{TOSCA} \nameref{subs:reltype}) for according relations between packages (\nameref{subs:dep}). 
 	\item Package Artifact Type defines a deployment Artifact Type for package installation data.
 	\item Script Artifact Type defines a implementation Artifact Type for package installation script.
+	\item Ansible Playbook Type defines a implementation Artifact Type for package installation via Ansible playbook.
 \end{itemize}
 example can be found in listing \ref{lst:scripttype}
-\if 0
-%TODO
-AnsibleArtifactType  определяет имплементатион артифакт типа ансибле содержащий ссылку архив устанавливающий программу 
-\\need to add ansible chapter
-\fi
 
 \subsubsection*{Finding internal references}\label{subs:imp_findintref}
 \nameref{subs:archtop} mainly uses internal references from \nameref{subs:analyse}.
@@ -85,10 +85,14 @@ To read origin definition a package $org$.$w3c$.$dom$ was used.
 
 \subsection*{processing}
 During this stage all described language modules are started.
-\begin{lstlisting}[caption={Processing stage of references resolver}\label{lst:start_lang},captionpos=t] 
+\begin{Listing}
+\caption{Processing stage of references resolver}
+\label{lst:start_lang}
+\begin{lstlisting}
 for (Language l : languages)
 	l.proceed(cr);
 \end{lstlisting}
+\end{Listing}
 
 
 \subsection*{Finishing}
@@ -138,13 +142,12 @@ Then language specific node name is generated and TOSCA definitions for this nam
 The apt-get package manager module processing is fairly simple line-by-line file parser that searches for lines starting with the "$apt$-$get$ $install$" string and passes this command's arguments to package handler's public function $getPackage$ described later. 
 The code can be found in the listing \ref{lst:bash_apt_parse}.
 \subsection*{Ansible implementation}
-To test the extensibility of the framework, the Ansible language was added.
-Ansible is oft used for cloud application administration too.
-Since ansible files are often packed to archives, it may be necessary to unpack them first and  then analyze the content.
+To test the extensibility of the framework, the \nameref{lang:ansible} language was added.
+Since ansible playbooks are oft packed to archives, it may be necessary to unpack them first and  then analyze the content.
 Thus, the files are either immediately transferred to the package handler, or they are unzipped first.
 Listing \ref{lst:ansible_proceed} presents this operations.
 As a sign of the ansible language, the ".$yml$" extension is used, since this files doesn't contain specific header.\\
-Creating a \gls{tosca} node for this language is a long operation. 
+Creating a \gls{tosca} node for this language is a complicated operation. 
 The basic moments are:
 \begin{itemize}
 	\item Analyze original files to determine an ansible configuration (set of options like username or proxy).
@@ -164,7 +167,10 @@ Allows to load packages and to determine the type of dependency between them.
 
 \subsection*{Package downloading}
 This operation is performed using one recursive function $getPacket$ defined below in listing \ref{lst:getpack}.
-\begin{lstlisting}[caption={$getPackage$ definition}\label{lst:getpack},captionpos=t]
+\begin{Listing}
+\caption{$getPackage$ definition}
+\label{lst:getpack}
+\begin{lstlisting}
 /**
 * Download package and check its dependency
 * 
@@ -182,6 +188,7 @@ This operation is performed using one recursive function $getPacket$ defined bel
 */
 getPacket(Language language, String packet, List<String> listed, String source, String sourcefile);
 \end{lstlisting}
+\end{Listing}
 This function downloads packages for full dependency three, calls corresponding Language to create nodes and Topology Handler to update topology.\\
 Arguments will be described shortly.
 \begin{itemize}

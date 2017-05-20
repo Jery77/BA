@@ -145,17 +145,17 @@
 \else
 \section*{Abstract}
 \fi
-In recent years, cloud computing are gaining even more popularity. 
+In recent years, cloud computing is gaining even more popularity. 
 \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) provides a whole range of tools for managing and automation of cloud application.
 The TOSCA standard adds an additional level of abstraction to the Cloud Systems, in other words, a layer between the external operations of cloud systems and Cloud Service provider's API.
-With the help of TOSCA it's possible to describe several methods of interaction with different APIs, what allows to automate the rapid deployment/roll-up on the sites of different providers.
+With the help of TOSCA, it's possible to describe several methods of interaction with different APIs, what allows to automate the rapid deployment/roll-up on the sites of different providers.
 The University of Stuttgart implemented this Specification in the Runtime Environment named OpenTOSCA.
 Description of a Cloud System is stored in the \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for a cloud system life-cycle.\\
-Often, cloud system are described so that during they deployment, additional packages and programs need to be downloaded vie the Internet.
+Often, cloud systems are described so that during they deployment, additional packages and programs need to be downloaded via the Internet.
 Even with a single platform, this can significantly slow down the deployment of cloud system, and if it's necessary to deploy a large number of servers, each of them will download a large amount of data during the deployment, this can significantly increase both time and money consumption.\\
 During this work an framework will be implemented, which will eliminate external dependencies in a CSAR, resupply they with all necessary for deployment packages and also change the internal structure to display the achieved self-containment.
-For example all commonly used "apt-get" commands, which download packages over the Internet during deployment, must be removed. Appropriate package must be downloaded and integrated into CSAR structure.
-Furthermore all dependencies needed for that package must be resolved too.\\
+For example, all commonly used "apt-get" commands, which download and install packages, must be removed. Appropriate package must be downloaded and integrated into CSAR structure.
+Furthermore, all dependencies needed for that package must be resolved too.\\
 This Document concern about Concept and Architecture for mentioned framework.
 Besides some aspects of implementation will be described.
 \cleardoublepage

@@ -103,12 +103,12 @@ Plans are started by an external message and call management operations of the n
 \end{itemize}
 Types and Templates defining a TOSCA application are stored in definition documents.
 
-\section{CSAR} \label{sec:csar}
+\subsection{CSAR} \label{sec:csar}
 A \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR) is used to store the TOSCA application.
 This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
 These include definition documents, artifacts and so on.
 In this form a TOSCA application can be processed by TOSCA runtime environment.
-\subsection*{Structure}
+\subsubsection*{Structure}
 The root folder must contain a "Definitions" and a "\gls{tosca}-Metadata" folders.
 The "Definitions" folder contains definition documents, one of them must define Service Template.
 The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
@@ -117,7 +117,7 @@ One line for each pair.
 The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
 All other pairs represent metadata of files in the CSAR
 
-\subsection*{Terms}
+\subsubsection*{Terms}
 Input \gls{csar} is a \gls{csar}, which can contain external references and will be processed by the framework.\\
 Output CSAR is a SCAR, which was processed by the framework and doesn't contain external references.
 
@@ -155,10 +155,6 @@ An example of TOSCA topology is presented on figure \ref{fig:winery_source}.
 \label{fig:winery_source}
 \end{figure}
 
-\section{Bash}
-%TODO
-\section{Ansible}
-%TODO
 
 \section{Package management} \label{sec:pm}
 This section will describe the package management process and basic concepts from this area.
@@ -176,7 +172,7 @@ Good package management is vital on these systems.
 To give users more control over the kinds of software that they are allowing to be installed on their system, software is often downloaded from a number of software repositories.
 By default in Unix systems a package manager uses official repositories appropriate for the operating system and the device architecture, but the user can also additional repositories, like third-party repositories or repositories for another architecture.
 \subsection*{Dependencies} \label{subs:dep}
-Package managers distinguish between two types of dependencies: required and preRequired.
+Package managers distinguish between two types of dependencies: $required$ and $preRequired$.
 Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
 Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
 An example of obtaining a dependency list is shown in listing \ref{lst:dep}.
@@ -192,10 +188,26 @@ Suggests: python-doc
 Suggests: python-tk
 Replaces: python-dev
 \end{lstlisting}
-%TODO add example dependencies output
 \subsection*{Dependency tree}
 In the example above $package2$ is needed for $package1$, but $package2$ itself can require additional packages.
 A structure describing all needed packages and dependencies between them for given root-package is called a dependency tree. 
 Dependency type $required$ leads to the presence of cycles in dependency tree, which differs them from normal tree graph structures.
 
-
+\section{Package management automation}
+To automate the package management, various environment are used. 
+Those environments will be described, which will be used in the framework.
+\subsection{Bash} \label{lang:bash}
+Bash is a Unix shell and command language written as a free software.
+Bash is a command processor that typically runs in a text window, where the user types commands that cause actions.
+Bash can also read and execute commands from a file, called a script. \cite{bash}
+\subsection{Ansible} \label{lang:ansible}
+Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
+As with most configuration management software, Ansible has two types of servers: controlling machines and nodes.
+First, there is a single controlling machine which is where orchestration begins.
+Nodes are managed by a controlling machine over SSH.
+The controlling machine describes the location of nodes through its inventory.
+Ansible playbooks express configurations, deployment, and orchestration in Ansible.
+The playbook format is YAML. 
+Each playbook maps a group of hosts to a set of roles.
+Each role is represented by calls to Ansible tasks.
+ \cite{ansible} 
