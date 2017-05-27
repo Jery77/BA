@@ -2,25 +2,33 @@
 
 \chapter{Basis}
 \label{chap:basis}
-
+In this chapter, the common terms will be explained.
 \section{Cloud Computing and Cloud application} \label{sec:cloud}
 
 \subsection{Definitions}
-Unfortunately, the is no generally accepted definition of cloud computing that describes all possible situations. 
-But in scientific community the definition put forward by \textbf{N}ational \textbf{I}nstitute of \textbf{S}tandards and \textbf{T}echnology (NIST) is often used. 
+Unfortunately, generally accepted definition of cloud computing that describes all possible situations doesn't exist. 
+But in the scientific community, the definition put forward by \textbf{N}ational \textbf{I}nstitute of \textbf{S}tandards and \textbf{T}echnology (NIST) is commonly used. 
 This definition appropriately describes the concept of cloud computing used in this paper, and therefore this definition will be used and presented below.
 \begin{definition}[Cloud computing]
 	\label{def:nist}
-Cloud computing is a model for enabling ubiquitous, convenient, on-demand network access to a shared
+$Cloud$ $computing$ is a model for enabling ubiquitous, convenient, on-demand network access to a shared
 pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that
 can be rapidly provisioned and released with minimal management effort or service provider interaction. \cite*{nist}
 \end{definition}
-Also the are no generally accepted definitions of cloud application, but it can be obtained from the definition of cloud computing.
+Also, the are no generally accepted definitions of cloud application, but it can be obtained from the definition of cloud computing.
 \begin{definition}[Cloud application] 
 	\label{def:capp}
-	Cloud application is an application that is executed according to a cloud computing model. \cite*{cloudapp}
+	A $Cloud$ $application$ is an application that is executed according to a cloud computing model. \cite*{cloudapp}
 \end{definition} 
-\subsubsection*{Service models}
+In addition, a short definition of cloud system will be provided.
+\begin{definition}[Cloud system] 
+	\label{def:csys}
+Composite cloud applications which consists of multiple small application will ba called a $cloud$ $system$.
+\end{definition} 
+%\subsubsection{Sides}
+An owner of physical platform, where cloud computing takes place is called a $provider$.
+An owner of cloud application, renting a provider's platform is called a $user$.
+\subsubsection*{Service models}\label{def:servmod}
 NIST distinguishes between three types of service models.
 \begin{itemize}
 	\item Software as a Service (SaaS). 
@@ -55,71 +63,71 @@ Similarly, NIST distinguishes between four types of deployment models.
 \subsection{Usage}
 Now cloud computing and application can be found everywhere, and they number constantly grows. \cite*{cloud_stat}
 They are used for test and development, big data analyses, file storage and so on.
-Cloud computing allows you to effectively use resources, distributing the load to a system from several physical servers and shifting the maintenance to the providers. 
-If your service uses a single one physical server and this server will be disabled, then entire service will be completely unavailable too.
-But if you use cloud computing with a hundred of physical servers, then disabling one of them will not carry such serious consequences.
-In addition, the user does not need to maintain a team of administrators for the event of various problems.\\
-Usually the user does not have direct access to the infrastructure (servers and operating systems), he uses only provided interface.
-An interface provides a set of methods to communicate with cloud infrastructure. 
+Cloud computing allows using resources effectively, to distribute the load to a system from several physical servers and to shift the maintenance to the providers. 
+If service uses a single one physical server and this server will be disabled, then entire service will be completely unavailable too.
+But if cloud application uses a hundred of physical servers, then disabling of one will not carry such serious consequences.
+In addition, a user doesn't need to maintain a team of administrators for the event of various problems.\\
+Usually, a user doesn't have direct access to the infrastructure (servers and operating systems), he uses only provided Application Programming Interface (API).
+An API provides a set of methods to communicate with provider's infrastructure. 
 Each provider defines his own set of methods, depending on his area of specialization. 
-On the one hand this specialization makes it easier to work with the provider, on the other hand it becomes more difficult to switch to work with another provider.
+On the one hand, this specialization makes easier to work with the provider, on the other hand, it becomes more difficult to redeploy an application to another provider.
 
 \section{Topology and Orchestration Specification for Cloud	Applications (TOSCA)} \label{sec:tosca}
 \subsection*{Definition}
-The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard provides new ways to enable portable automated deployment and management of composite applications.
-\gls{tosca} describes the structure of composite applications as topologies containing their components and their relationships.
-Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
+The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard provides a new way to enable portable automated deployment and management of a cloud applications.
+\gls{tosca} describes the structure of applications as topology containing their components and relationships between them.
+%Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
 \gls{tosca} application is a cloud application described according to TOSCA standard.
-\subsection*{Usage}
-\gls{tosca} can be used not only for describing all stages of a cloud application life-cycle, but alse serve as a layer between the cloud application and provider's interfaces, allowing to implement a single application suitable for working with different providers. 
+\gls{tosca} can be used not only for describing all stages of a cloud application life-cycle but also serve as a layer between the cloud application and provider's API, allowing to implement a single application suitable for working with different providers. 
 \subsection*{Structure}
-TOSCA specification provides a language to describe service components and their relationships using a service topology, and it provides for describing the management procedures that create or modify services using orchestration processes.
-The combination of topology and orchestration in a Service Template describes what is needed to be preserved across deployments in different environments to enable interoperable deployment of cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.) when the applications are ported over alternative cloud environments. \cite{TOSCA-v1.0_book} \\
-Descriptions of the main components of \gls{tosca} used in this work will be provided.
+TOSCA specification provides a language to describe service components (described in section \nameref{def:servmod}) and relationships between them using a Service Topology. 
+In additional it defines the management procedures which create or modify services using orchestration processes.\\
+Descriptions of the \gls{tosca}'s main components used in this work is provided below.
 \begin{itemize}
-\item Service Template. 
-	This component contains an Information about structure (TopologyTemplate) and Plans of cloud application.
-\item Plans provides an interface to manage cloud application.
+\item $Service$ $Template$ is the main component in \gls{tosca} structure. 
+It contains an information about structure (Topology Template) and interfaces (Plans) of the cloud application.
+\item A $Plan$ provides an interface to manage cloud application.
 These components combine management capabilities to create higher-level management tasks, which can then be executed fully automated to deploy, configure, manage, and operate the application.
 Plans are started by an external message and call management operations of the nodes in the topology.
-\item Topology Template describes topology of cloud application, instantiating nodes (Node Templates) and relations between them (Relationship Templates).
-\item Node Template specifies the occurrence of a Node Type as a component of a service.
-\item Node Type defines the properties of such a component and the operations available to manipulate the component.
-\item Relationship Template specifies the occurrence of a Relationship Type as a relationship between nodes in a Topology Template. 
-	The Relationship Template indicates the elements it connects and the direction of the relationship by defining one source and one target element (in nested Source Element and Target Element elements).
-\item Relationship Type defines the semantics and any properties of the relationship. \label{subs:reltype}
-\item Artifact  represents the content needed to realize a deployment such as an executable (e.g. a script, an executable program, an image), a configuration file or data file, or something that might be needed so that another executable can run (e.g. a library).
-	Artifacts can be of different types, for example EJBs or python scripts.
-	The content of an artifact depends on its type. 
-	Typically, descriptive metadata will also be provided along with the artifact.
-	This metadata might be needed to properly process the artifact, for example by describing the appropriate execution environment.
-	TOSCA distinguishes two kinds of artifacts: implementation artifacts and deployment artifacts.
-\item Implementation Artifact represents the executable of an operation of a node type. An example will be provided in section \ref{sec:pm}
-\item Deployment Artifact represents the executable for materializing instances of a node.
-\item Artifact Type is describes an type of a artifact.
-\item Artifact Templates represents information about the artifact. 
+\item $Topology$ $Template$ describes the topology of cloud application, instantiating nodes (Node Templates) and relations between them (Relationship Templates).
+\item $Node$ $Template$ specifies the occurrence of a Node Type as a component of a service.
+\item $Node$ $Type$ defines the properties of such a component and the operations available to manipulate the component.
+\item $Relationship$ $Template$ specifies the occurrence of a Relationship Type as a relationship between Node Templates in a Topology Template. 
+	The Relationship Template indicates the elements it connects and the direction of the relationship by defining one source and one target element (in further Source Element and Target Element).
+\item $Relationship$ $Type$ defines the semantics and any properties of the relationship. \label{subs:reltype}
+\item $Artifact$ represents the content needed for a management such as executables (e.g. a script, an executable program, an image), a configuration file or data file, or something that might be needed for other executables (e.g. libraries).
+	TOSCA distinguishes two kinds of artifacts: Implementation Artifacts and Deployment Artifacts.
+\item $Implementation$ $Artifact$ represents the executable of an operation described by Node Type.
+\item $Deployment$ $Artifact$ represents the executable for materializing instances of a node.
+\item $Artifact$ $Type$ describes a common type of an artifact: python script, installation package and so on.
+\item $Artifact$ $Templates$ represents information about the artifact. 
 	Artifact location and other attendant data are stored here.
-\item Node Type Implementation defines the artifacts needed for implementing the corresponding Node Type.
+\item $Node$ $Type$ $Implementation$ defines the artifacts needed for implementing the corresponding Node Type.
+For example, if Node Type contains $deploy$ and $shutdown$ operations, then Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data needed for the deployment.
 \end{itemize}
-Types and Templates defining a TOSCA application are stored in definition documents.
+Types and Templates defining a TOSCA application are stored in definition documents, which have the XML structure.\\
+\subsection*{Usage}
+The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
+This is useful when an application is ported to alternative cloud environments. \cite{TOSCA-v1.0_book} \\
 
 \subsection{CSAR} \label{sec:csar}
-A \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR) is used to store the TOSCA application.
-This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
+A \gls{csar} is used to store the TOSCA application.
+It is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
 These include definition documents, artifacts and so on.
-In this form a TOSCA application can be processed by TOSCA runtime environment.
+In this form, a TOSCA application can be processed by a TOSCA runtime environment.
 \subsubsection*{Structure}
 The root folder must contain a "Definitions" and a "\gls{tosca}-Metadata" folders.
-The "Definitions" folder contains definition documents, one of them must define Service Template.
+The "Definitions" folder contains definition documents and one of them must define Service Template.
 The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
 This metafile consists of name/value pairs. 
 One line for each pair. 
 The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
-All other pairs represent metadata of files in the CSAR
+All other pairs represent metadata of files in the CSAR. 
+The metadata is used by TOSCA runtime environment to correctly proceed given files.
 
 \subsubsection*{Terms}
 Input \gls{csar} is a \gls{csar}, which can contain external references and will be processed by the framework.\\
-Output CSAR is a SCAR, which was processed by the framework and doesn't contain external references.
+Output CSAR is a CSAR, which was processed by the framework and doesn't contain external references (at least those that are implemented in the framework).
 
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 

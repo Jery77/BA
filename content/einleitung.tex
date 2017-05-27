@@ -36,7 +36,7 @@ To solve these problems a software solution for resolving external dependencies 
 This software will analyze the CSAR, identify dependencies to external packages and resolve them by downloading the necessary data to install the package (as well as data for all depended packages) and adding them to the CSAR's structure.
 The simplest example is to find in given CSAR all the commands like "apt-get install package", delete this command, download the package and all depended packages and add them to the CSAR.\\
 This software must be easily expanded (in other words - that will be a framework) since it is impossible to predict and describe all possible types of external dependencies.
-The output of the framework is a CSAR, which contains addition to original structure, like all the packages necessary for the deployment of the cloud application, with the minimum possible level of access to the Internet during operation.
+The output of the framework is a CSAR, which contains additions to original structure, like all the packages necessary for the deployment of the cloud application, with the minimum possible level of access to the Internet during operation.
 \clearpage 
 \section*{Structure}
 The work is structured as follows:

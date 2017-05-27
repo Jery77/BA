@@ -2,12 +2,12 @@
 
 \chapter{Requirements}
 \label{chap:req}
-Since the main purpose of the developed program is to Resolve References, further the RR will be used as an abbreviation. 
-A framework should be developed to eliminate external dependencies in TOSCA topology represented in CSAR file.
+Since the main purpose of the developed framework is to Resolve References, further the $RR$ can be used as an abbreviation. 
+A framework should be able to eliminate external dependencies in TOSCA topology represented by a CSAR file.
 The framework should be easy extendable to provide the ability to eliminate a large number of dependency types.
-At first a minimal configuration will be developed, that finds all the bash scripts which use the apt-get package manager. 
-All package installation commands should be removed (apt-get install package).
-Then both the package itself and all the packages from his dependency tree should be downloaded.
+As a first step a minimal configuration will be developed, which finds all bash scripts which use the apt-get package manager. 
+All package installation commands should be removed ($apt$-$get$ $install$ $package$).
+Then both the package itself and all the depended packages will be downloaded.
 It is also necessary to update the topology of the TOSCA, by adding nodes and dependencies.
 Common definitions should be added, like Relationship Types and Artifact Types.
  % for downloaded packages and dependencies from nodes previously containing an external reference to the node displaying the downloaded packages. 
