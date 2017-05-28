@@ -131,25 +131,25 @@ Output CSAR is a CSAR, which was processed by the framework and doesn't contain 
 
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 
-The OpenTOSCA ecosystem consists out of three parts: \cite*{OpenTOSCA}
+This ecosystem consists of three parts: \cite*{OpenTOSCA}
 \begin{itemize}
 	\item OpenTOSCA \textbf{Container}, a \gls{tosca} runtime environment
-	\item \textbf{Winery} \label{tool:winery}, a graphical modelling TOSCA tool.
-	\item \textbf{Vinothek}, a self-service portal for the applications available in the container
+	\item \textbf{Winery}, a graphical modeling TOSCA tool.
+	\item \textbf{Vinothek}, a self-service portal for the applications available in the container.
 \end{itemize}
-The runtime environment ant Winery will be provided in more details. 
+Description for the runtime environment and Winery will be provided in more details. 
 \subsection*{Runtime environment}
-The runtime enables fully automated plan-based deployment and management of applications in the CSAR format. 
+The runtime environment enables fully automated plan-based deployment and management of cloud applications in the CSAR container. 
 First, the CSAR is unpacked and the files are put into the Files store.
 Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.
 \cite{INPROC-2013-45}
-\subsection*{Winery}\label{subs:wine}
-Winery works under the Tomcat runtime and therefore visual interface is available in browser, example in figure \ref{fig:winery_gui}.
+\subsection*{Winery}\label{subs:wine}\label{tool:winery}
+Winery works under the Tomcat server and therefore visual interface is available in a	 browser, example in figure \ref{fig:winery_gui}.
 Winery provides a complete set of functions for creating, editing and deleting all elements of the TOSCA topology. 
-An example of TOSCA topology is presented on figure \ref{fig:winery_source}.
+An example of TOSCA topology is presented in figure \ref{fig:winery_source}.
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_winery_gui.png}
@@ -165,25 +165,25 @@ An example of TOSCA topology is presented on figure \ref{fig:winery_source}.
 
 
 \section{Package management} \label{sec:pm}
-This section will describe the package management process and basic concepts from this area.
+This section will describe the package management process and basic concepts for this area.
 \subsection*{Package managers}
-Package Manager is a set of software tools that automate the process of installing, updating, configuring and removing of computer programs.
-A package can describe and contain not only a whole program, but also a certain component of a large application, hereinafter both will be referred as program components.
-Package managers are used to manage the database of packages, their dependencies and versions, to prevent erroneous installation of programs and missing dependencies.
+Package Manager is a set of software tools that automate the process of installing, updating, configuring and removing of program components.
+A package can describe and contain not only a whole program but also a certain component of a large application, hereinafter both will be referred as program components.
+Package managers are used to managing the database of packages, their dependencies and versions, to prevent erroneous installation of programs and missing dependencies.
 \subsection*{Packages}
-A package is usually an archive containing both data for installation of the program component and a set of metadata like name, function, version, producer and dependencies.
+A package is usually an archive containing both data for installation of the program component and a set of metadata like name, function, version, producer and list of dependencies.
 \subsection*{Dynamic libraries}
 Computer systems which rely on dynamic library linking, share executable libraries of machine instructions across packages and applications. 
-In these systems, complex relationships between different packages requiring different versions of libraries results in a challenge colloquially known as "dependency hell".
+In these systems, complex relationships between different packages requiring different versions of libraries result in a challenge colloquially known as "dependency hell".
 Good package management is vital on these systems.
 \subsection*{Repository}
 To give users more control over the kinds of software that they are allowing to be installed on their system, software is often downloaded from a number of software repositories.
-By default in Unix systems a package manager uses official repositories appropriate for the operating system and the device architecture, but the user can also additional repositories, like third-party repositories or repositories for another architecture.
+By default in Unix systems, a package manager uses official repositories appropriate for the operating system and the device architecture, but it's possible to use additional repositories, like third-party repositories or repositories for another architecture.
 \subsection*{Dependencies} \label{subs:dep}
-Package managers distinguish between two types of dependencies: $required$ and $preRequired$.
-Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.
-Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.
-An example of obtaining a dependency list is shown in listing \ref{lst:dep}.
+Package managers distinguish between two types of dependencies: $required$ and $preRequired$.\\
+Dependency $package1$ $required$ $package2$ indicates that $package2$ must be installed for proper operation of $package1$.\\
+Dependency $package1$ $preRequired$ $package2$ indicates that $package2$ must be installed for proper installation of $package1$.\\
+An example for obtaining the dependency list for the Python package is shown in Listing \ref{lst:dep}.
 \begin{lstlisting}[caption={Example of using $apt$-$cache$ to obtain dependency list for package python}\label{lst:dep},captionpos=t] 
 user@user:~$ apt-cache depends python
 python
@@ -199,10 +199,10 @@ Replaces: python-dev
 \subsection*{Dependency tree}
 In the example above $package2$ is needed for $package1$, but $package2$ itself can require additional packages.
 A structure describing all needed packages and dependencies between them for given root-package is called a dependency tree. 
-Dependency type $required$ leads to the presence of cycles in dependency tree, which differs them from normal tree graph structures.
+Dependency type $required$ can lead to cycles in a dependency tree, which differs them from the normal tree graph structures.
 
 \section{Package management automation}
-To automate the package management, various environment are used. 
+To automate the package management, various environments are used. 
 Those environments will be described, which will be used in the framework.
 \subsection{Bash} \label{lang:bash}
 Bash is a Unix shell and command language written as a free software.
