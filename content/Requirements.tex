@@ -3,44 +3,50 @@
 \chapter{Requirements}
 \label{chap:req}
 Since the main purpose of the developed framework is to Resolve References, further the $RR$ can be used as an abbreviation. 
-A framework should be able to eliminate external dependencies in TOSCA topology represented by a CSAR file.
-The framework should be easy extendable to provide the ability to eliminate a large number of dependency types.
-As a first step a minimal configuration will be developed, which finds all bash scripts which use the apt-get package manager. 
-All package installation commands should be removed ($apt$-$get$ $install$ $package$).
-Then both the package itself and all the depended packages will be downloaded.
-It is also necessary to update the topology of the TOSCA, by adding nodes and dependencies.
-Common definitions should be added, like Relationship Types and Artifact Types.
+$RR$ should eliminate external dependencies in a TOSCA topology represented by a CSAR file.
+$RR$ must be easily extendable to provide the ability to eliminate a large number of dependency types.\\
+As a first step, a minimal configuration which handles $Bash$ language with the $apt$-$get$ package manager and $Ansible$ language with the $apt$ package manager will be developed. 
+These software handlers of languages and package managers will be called language modules and package manager modules.
+As an example, the $Bash$ and $apt$-$get$ modules will remove package installation commands from bash-scripts ($apt$-$get$ $install$ \textbf{$package$}).
+Then both the \textbf{$package$} itself and all the depended packages from his dependencies tree will be downloaded.
+It is also necessary to update the topology of the TOSCA, by adding new nodes and dependencies.
+To do so, common definitions will be added, like Relationship Types and Artifact Types.
  % for downloaded packages and dependencies from nodes previously containing an external reference to the node displaying the downloaded packages. 
-In the TOSCA language new nodes can be defined by Node Types, Node Type Implementations and Artifacts, and then instantiated by Node Templates. 
-Relations will be instantiated by  Relationship Templates.
-These Templates must be added to right Service template, where nodes containing external references are instantiated.
+Then new nodes will be defined by Node Types, Node Type Implementations, Artifacts Templates, and instantiated by Node Templates. 
+Relations between nodes will be instantiated by Relationship Templates.
+These Templates must be added to the right Service templates, where the nodes containing external references are instantiated.
 %Dependencies between downloaded packages, representing dependency tree should be added too.
-%In the TOSCA language: new definitions for given package should be created, like Node Type, NodeType Implementation and Artifacts. 
-%This definitions will be instantiated by adding Node Template and Relationship Template to the right Service Template.
-To find the Service Templates and Node Types corresponding to a certain artifact, it will be useful to use preprocessing of entire TOSCA topology. 
-References chain can be build:\\
-$script$ $\rightarrow$ $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
-After implementing a bash language, it should be easy to add additional script languages and package managers, like $aptitude$ for bash or new languages like $shef$ or $ansible$.
-To proof the correctness of the corresponding TOSCA topology a winery described in section \ref{tool:winery} can be used.
-\section*{Stages of CSAR processing}
-Here example steps are provided, representing how the framework should work.
+To find the Service Templates and Node Types corresponding to a certain artifact, it can be useful to apply preprocessing to the entire TOSCA topology. \\
+%References chain can be build:\\
+%$script$ $\rightarrow$ $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
+After implementing the minimal configuration, it should be easy to add more language modules and package manager modules, like $Aptitude$ for Bash or completely new language like $Chef$.
+In order to proof the correctness of the corresponding TOSCA topology, Winery described in section \ref{tool:winery} will be used.
+\section*{Stages of the processing}
+Here an example is provided, representing how the framework should work.
 \begin{itemize}  
 	\item Begin  \\
-	To start the work our program need to became input CSAR name, output CSAR name, and architecture of target hardware. 
-	Then input CSAR need to be extracted.
+%	To start the work $RR$ needs input CSAR name, output CSAR name, and architecture of target hardware. 
+%	This will be done using user input.
+	An input CSAR will be extracted.
 	\item Preprocessing\\
-	During preprocessing stage, RR need to analyze internal references and build dependency three.
-	Furthermore, common Tosca definitions for artifacts and  relations between packages need to be added.
-	\item Processing with Languages\\
-	Each file from CSAR need to be processed for each described Language.
-	\item Processing with Packet Managers\\
-    If file belongs to the Language, he will be processed by Packet Manager Handler to find and resolve external references.
-    Package name from this reference will be provided forward.
+	During preprocessing stage, RR needs to analyze internal references.
+	In additional, common Tosca definitions for artifacts and relations between packages will be added.
+	\item Processing with language modules\\
+	Each file from the input CSAR will be processed by Language modules.
+	\item Processing with packet manager modules\\
+    If the file belongs to an Language, it will be processed by the packet manager module belonging to the Language to find and resolve external references.
+    Package name from this reference will be moved forward.
 	\item Package handling\\
-	Using a package name the right package must download, TOSCA definitions created and recursively repeats for all dependent packages, creating Dependency Tree.
+	Using the package name the package will be downloaded and TOSCA definitions created. These actions will be recursively repeated for all dependent packages, creating the dependency tree in the TOSCA topology.
 	\item Topology handling\\
-	Using information about internal references and dependencies TOSCA Topology will be updated by creating Node and Reference Templates. 
+	Using information about internal references and dependencies the TOSCA Topology will be updated by creating new Node and Reference Templates. 
 	\item End\\
 	Meta-file should be updated and all data packed back to the CSAR.
 \end{itemize}
-These steps will be represented by modules described in section \ref{sec:arch} and implemented in chapter \ref{chap:imp}.
+These steps will be represented by the modules described in section \ref{sec:arch} and implemented in chapter \ref{chap:imp}.
+
+\section*{Result}
+As a result of the work, an output CSAR will be received. 
+This CSAR must have the same functionality as the input CSAR, but all external references to additional packages must be resolved.
+The output CSAR must be able to be deployed properly without downloading these packages over the Internet. 
+In additional, the topology for the packages must be mirrored from the package manager's database to the TOSCA topology.
