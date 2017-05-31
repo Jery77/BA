@@ -10,25 +10,25 @@
 \begin{figure}
 	\centering
 \begin{tikzpicture}[sibling distance=14em,->,>={Stealth[round,sep]},shorten >=1pt,auto,node distance=25mm]
-    \node[main node] (1) {Script}
-    child { node[main node](3) {Artifact Implementation 1} 
-    	child { node[main node] (6) {Node Type Implementation 1} 
+    \node[main node] (1) {Artifact}
+    child { node[main node](3) {Artifact Template 1} 
+    	child { node[main node] (6) {Node Type Template 1} 
     			child { node[main node] (8) {Node Type 1} 
     				child { node[main node]  (11) {Node Template 1} 
     					child { node[main node] (13) {Service Template 1}}  
     				}
     				child { node[main node]  (12) {Node Template N} 
-    					child { node[main node] (14) {Service Template N}}
+    					child { node[main node] (14) {Service Template K}}
     				}
     			}
     	}
-    	child { node[main node] (7) {Node Type Implementation N} 
-    		child { node[main node] (9) {Node Type N} 
+    	child { node[main node] (7) {Node Type Implementation M} 
+    		child { node[main node] (9) {Node Type L} 
     			child { node  (10) {\ldots} }
     		}
     	}
     }
-    child { node[main node] (4) {Artifact Implementation N}  
+    child { node[main node] (4) {Artifact Implementation T}  
     child { node (5) [below =of 4]{\ldots}}
 	};
 
