@@ -8,17 +8,18 @@ The general structure of framework is represented in diagram \ref{fig:gen}.
 
 
 \subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
-To properly update the \gls{tosca} topology, it is necessary to add the references from nodes where external references were to newly created nodes, which resolve the external references. 
-Artifacts belong to Node Types, but only Node Templates in the same Service Template can be referenced.  
-It means that  Service Templates where the Node Templates with external references are instantiated must be found.
+To properly update the \gls{tosca} topology, it is necessary to add references from the nodes where external references were to newly created nodes, which resolve the external references. 
+According to the TOSCA standard, only references between Node Templates in the same Service Template can be created.  
+That means that each Node Template, which uses artifacts with external references must be found.
+Furthermore, Service Template where the Node Templates are instantiated must be found to create there a Node Template for the new nodes and reference them to the Node Templates with external references.
 The Pointers to Artifacts are contained by Artifact Templates, which are used by Node Type Implementations.
 By composing all the information a simple references chain can be built:\\
-$Artifact$ $\rightarrow$ $Artifact$ $Template$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$\\ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
+$Artifact$ $\rightarrow$ $Artifact$~$Template$ $\rightarrow$ $Node$~$Type$~$Implementation$ $\rightarrow$ $Node$~$Type$ $\rightarrow$ $Node$~$Template$ $\rightarrow$ $Service$~$Template$\\
 Now consider the references in more detail. 
 \begin{itemize}
 	\item $Artifact$ $\rightarrow$ $Artifact$ $Template$\\
-	An Artifact can be referenced by several Artifact Implementations. (Despite the fact that this is a bad practice.)
-	\item  $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ \\
+	An Artifact can be referenced by several Artifact Templates. (Despite the fact that this is a bad practice.)
+	\item  $Artifact$ $Template$ $\rightarrow$ $Node$ $Type$ $Implementation$ \\
 	The same way an Artifact Template can be used by several Node Type Implementations.
 	\item $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ \\
 	A Node Type Implementation can describe an implementation of only one Node Type.
@@ -31,20 +32,19 @@ Thus structure can be described by a tree with an Artifact as the root, and Serv
 \input{graphics/script_serv_tree}
 %Of course it is possible to move in opposite direction, starting from a Node and moving toward scripts, but this method brings additional complexity. 
 An additional problem is in the reference between a Node Type and a Node Type Implementation.
-Node Type can have several Node Type Implementations, but which one will be used will be determined only during the deployment. 
+Node Type can have several implementations, but which one will be used will be determined only during the deployment. 
 The chosen solution to this problem is to use each Node Type Implementation in hope, that they will not conflict.\\
 %The method presented above can uniquely determine Node Templates and Service Template for a given script.
 %Of course it is not guaranteed that found Node Type Implementation will be used during deployment, but we can't do anything with this. 
-The following steps can be executed during the preprocessing, to identify the necessary dependencies.
+The following steps can be executed during the preprocessing, to build the internal dependencies tree.
 \begin{itemize}
 	\item Find all Artifact Templates to build references from Artifacts to Artifact Templates.
-	\item Find all Node Type Implementations. Because they contain both the Node Type and Artifact Templates, then the dependency from Artifact to Node Types can be built.
-	\item Find all Service Templates and in them contained Node Templates. Any Node Template contains a reference to Node Type, what is useful for building a dependency from Artifact to Node Template.
+	\item Find all Node Type Implementations. Because they contain references both to the Node Type and to the Artifact Templates, then the dependency from Artifact to Node Types can be built.
+	\item Find all Service Templates and in them contained Node Templates. Each Node Template contains a reference to Node Type, what is useful for building a dependency from Artifact to Node Template.
 \end{itemize} 
-In this way, the required internal dependencies tree can be built (script $\rightarrow$ Node Template and script $\rightarrow$ Service Template).
-\subsection{Find external dependencies}
-Analysis for external references.
-Unfortunately, it is impossible to identify all possible external dependencies, even when one language and one package manager are used (example in algorithm \ref{alg:unreadable}).
+In this way, the required internal dependencies tree can be built (with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$).
+\subsection{Analysis for external references}
+Unfortunately, it is impossible to identify all possible external references, even when one language and one package manager are used (example in algorithm \ref{alg:unreadable}).
 \begin{Algorithmus} 
 	\caption{Unreadable bash script}
 	\label{alg:unreadable}
@@ -58,7 +58,7 @@ Unfortunately, it is impossible to identify all possible external dependencies, 
 \end{Algorithmus}   
 Since this work is aimed at creating of the easily expanded and supplemented tool, initially only basic usage of package managers will be considered.
 % and complimented only when it will be necessary. 
-Ease of adding modules to the framework will proof the correctness of architecture.
+Ease of adding modules to the framework will proof the correctness of architecture.\\
 At the beginning, the most popular combination will be implemented: the $bash$ script with the $apt-get$ package manager.
 This simple and powerful tool allows to install, delete or update the set of packages in one line.
 After the modules for this combination will be implemented, new languages and package managers should be added.
@@ -72,22 +72,22 @@ The adding of new package nodes to TOSCA topology can be divided into several st
 		%There will be described that this node must be installed.
 	\item Artifacts (The downloaded data and the installation script) will be referenced by Artifact Templates.
 	\item Node Type Implementation will combine the artifacts.
-	\item Node Template will instantiate a package in the corresponding Service Templates.
+	\item Node Template will instantiate the package node in the corresponding Service Templates.
 		To determine corresponding Service Template the preprocessing described in the section \nameref{subs:analyse} will be used.
 	\item Reference Template will provide topology information, allowing the observer (a user or a runtime environment) to determine, for which nodes the package must be installed.
-		References will be created from nodes needing the package to Node Templates of created package nodes.
+		References will be created from the Node Template needing the package to Node Template of created package nodes.
 \end{itemize}
 \subsection{Determining architecture of a final platform}
 An another problem appears during choosing the architecture of the device where packages will be installed.
 Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question, on which architecture which node will be deployed.
 There are many pitfalls here.\\
 A single Service Template can use several physical devices with different architectures.
-One Implementation Artifacts can be referred by different Node Types and Node Templates and instantiated on different platforms.
+One Implementation Artifacts can be referred by different Node Types and Node Templates, instantiated on different platforms.
 This way one simple Implementation Artifact with a bash script containing "$apt$-$get$ $install$ $python$" command can be deployed on different devices within one Service Template (for example with the arm, amd64 and i386 architectures) and will result in the loading and installation of three different packages. 
 For an end user, the ability to use such a simple command is a huge advantage, but for the framework, it can greatly complicate analysis.
 The following methods of architecture selection were designed.
 \begin{itemize}
-	\item $Deployment$ $environment$ analysis\\
+	\item $Deployment$ $environment$ $analysis$\\
 	The script can analyze the system where it was started (for example using the "$uname$~$-a$" command) and depending on the result, it will install the package corresponding to the system's architecture.
 	\item $Unified$ $architecture$\\
 	The architecture will be defined by the user for a whole CSAR.
@@ -98,7 +98,7 @@ The following methods of architecture selection were designed.
 Unfortunately, the $deployment$ $environment$ $analysis$, which at first sight seems to be the most reliable solution, brings many additional problems.
 Packages for different platforms can differ not only by architecture but also by the version and the list of dependencies.
 As a consequence, a chaos can be produced by mirroring these different packages with different versions to the \gls{tosca}-topology.
-The only robust solution seems to be to create for each installed package a set of archives (one archive for each architecture), containing the entire dependency tree for the given package.
+The only robust solution seems to be to create for each installed package a set of archives (one archive for one architecture), containing the entire dependency tree for the given package.
 But this approach contradicts one of the main ideas of this work: the dependencies trees should be mapped to the topology.\\
 The $artifact$ $specific$ $architecture$ method carries an additional complexity to the user of the framework.
 It will obligate a user to analyze each artifact and decide on which architecture it will be executed. 
@@ -113,10 +113,10 @@ This principle can be illustrated by a figure \ref{fig:lang_pm}.
 
 \subsection{Result's checking}
 Checking the output of the framework is an important stage in the development of the program.
-It is necessary to verify both the overall validity of the output \gls{csar} and the possibility to deploy the output \gls{csar}.
+It is necessary to verify both the overall validity of the output \gls{csar} and the possibility to deploy generated package nodes.
 To test for overall correctness it is possible to use $winery$ tool from OpenTOSCA.
-This tool for creating and editing archives is also great for visualizing results.
-Checking the deployment of the CSAR can be dome manual by starting corresponding commands.
+This tool for creating and editing CSAR archives is also great for visualizing the results.
+Checking the deployment of the generated package nodes can be done manual by starting corresponding commands.
 
 \section{Architecture}\label{sec:arch}
 This section will present the architecture of the framework and a description of its elements.
