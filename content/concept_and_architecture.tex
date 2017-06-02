@@ -123,29 +123,29 @@ This section will present the architecture of the framework and a description of
 The main elements are $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, $package$ $handler$ and $topology$ $handler$.
 
 \subsection{CSAR handler} \label{subs:casr_h}
-\gls{ch} provides access to \gls{csar} and maintains CSAR consistency. 
+The \gls{ch} provides access to \gls{csar} and maintains it's consistency. 
 It describes the process of adding new files (to handle the metadata), decompression, architecture processing, etcetera.
 
 \subsection{References resolver} \label{subs:RR}
 This is the main element, the execution of which can be divided into three stages: $preprocessing$, $processing$, $finish$. \\
-At the begin the $preprocessing$ will be executed for decompression, adding files (The list with common files, which are added during preprocessing is described in the section \ref{subs:repres}) and generating internal dependencies trees (the generation is described in the section \ref{subs:analyse}).
-Figure \ref{fig:preproc} illustrates the stages of the preprocessing.
+At the begin the $preprocessing$ will be executed for decompression, adding files (The list of common files, which are added during preprocessing is described in the section \ref{subs:repres}) and generating internal dependencies trees (the generation is described in the section \ref{subs:analyse}).
+Figure \ref{fig:preproc} illustrates the stages of the preprocessing.\\
 \input{graphics/preprocessing}
 During the $processing$, all $language$ $modules$ will be activated, which are described in the next section. \\
 To finish the work  all results will be packed back to the archive during the $finish$ stage.
 \subsection{Language modules} \label{subs:archlm}
 Each $language$ $module$ describes one language and helps to choose files written in the language.
-As already mentioned above, during $processing$ stage $language$ $module$ analyzes all files one by one and checks its belonging to the specified language. 
+As already mentioned above, during $processing$ stage a $language$ $module$ analyzes all files one by one and checks its belonging to the specified language. 
 Any files not belonging to the described language are filtered out.
-The remaining files are transferred to this $language$ $module$'s $package$ $manager$ $modules$.
+The remaining files are transferred to the $language$ $module$'s $package$ $manager$ $modules$.
 For example, a $Bash$ module can pass through only files with $".sh"$ extension and starting with the $"\#!/bin/bash"$ line.
 \subsection{Package manager modules} \label{subs:archpmm}
-$Package$ $managers$ $module$ finds external references, resolve them and transmit the package name to the package handler module, described in the next section.
-Figure \ref{fig:lang_ph} illustrates data flow between languages, package managers, and package handler.
+The $Package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$, described in the next section.
+Figure \ref{fig:lang_ph} illustrates data flow between language modules, package manager modules, and package handler.
 \input{graphics/lang_ph}
 
 \subsection{Package Handler} \label{subs:archph}
-$Package$ $handler$ becomes a package name, downloads a data for the package installation, transfer the package name to the $topology$ $handler$ and recursively repeats the actions for all depended packages.
+The $package$ $handler$ becomes a package name, downloads a data for the package installation, transfers the package name to the $topology$ $handler$ and recursively repeats the actions for all depended packages.
 
 \subsection{Topology Handler} \label{subs:archtop}
 $Topology$ $handler$ adds a package to the topology. 
