@@ -44,18 +44,19 @@ The following steps can be executed during the preprocessing, to build the inter
 \end{itemize} 
 In this way, the required internal dependencies tree can be built (with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$).
 \subsection{Analysis for external references}
-Unfortunately, it is impossible to identify all possible external references, even when one language and one package manager are used (example in algorithm \ref{alg:unreadable}).
-\begin{Algorithmus} 
+Unfortunately, it is impossible to identify all possible external references, even when one language and one package manager are used (example in the listing \ref{alg:unreadable}).
+
+\begin{Listing} 
 	\caption{Unreadable bash script}
 	\label{alg:unreadable}
-	\begin{algorithmic}
-		\State	\#!/bin/bash
-		\State	$\textbf{set } line = $abcdefgijklmnoprst
-		\State	$\textbf{set } word1 = \$\{line:0:1\}\$\{line:14:1\}\$\{line:17:1\}$ 
-		\State  $\textbf{set } word2 = \$\{line:6:1\}\$\{line:4:1\}\$\{line:17:1\}$
-		\State  $\$word1\$-\$word2\$$ install package
-	\end{algorithmic}
-\end{Algorithmus}   
+\begin{lstlisting}
+#!/bin/bash
+set  line = abcdefgijklmnoprst
+set  word1 = ${line:0:1}${line:14:1}${line:17:1} 
+set  word2 = ${line:6:1}${line:4:1}${line:17:1}
+$word1-$word2 install package
+\end{lstlisting}
+\end{Listing}
 Since this work is aimed at creating of the easily expanded and supplemented tool, initially only basic usage of package managers will be considered.
 % and complimented only when it will be necessary. 
 Ease of adding modules to the framework will proof the correctness of architecture.\\
@@ -123,7 +124,7 @@ This section will present the architecture of the framework and a description of
 The main elements are $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, $package$ $handler$ and $topology$ $handler$.
 
 \subsection{CSAR handler} \label{subs:casr_h}
-The \gls{ch} provides access to \gls{csar} and maintains it's consistency. 
+The CSAR handler provides access to \gls{csar} and maintains it's consistency. 
 It describes the process of adding new files (to handle the metadata), decompression, architecture processing, etcetera.
 
 \subsection{References resolver} \label{subs:RR}
@@ -140,7 +141,7 @@ Any files not belonging to the described language are filtered out.
 The remaining files are transferred to the $language$ $module$'s $package$ $manager$ $modules$.
 For example, a $Bash$ module can pass through only files with $".sh"$ extension and starting with the $"\#!/bin/bash"$ line.
 \subsection{Package manager modules} \label{subs:archpmm}
-The $Package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$, described in the next section.
+A $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$, described in the next section.
 Figure \ref{fig:lang_ph} illustrates data flow between language modules, package manager modules, and package handler.
 \input{graphics/lang_ph}
 
