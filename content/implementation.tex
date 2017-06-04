@@ -197,7 +197,7 @@ This operation is performed using one recursive function $getPacket$ defined in 
 public void getPacket(Language language, String packet, List<String> listed, String source, String sourcefile)
 \end{lstlisting}
 \end{Listing}
-This function downloads packages for the dependency three, calls the language's function $createTOSCA\_Node$ to create package nodes and the topology handler's functions $addDependencyToPacket$ and $addDependencyToArtifact$ to update the topology.\\
+This function downloads packages for the dependency three, calls the language's function $createTOSCA\_Node$ to create package nodes and the topology handler's functions $addDependencyToPacket$ or $addDependencyToArtifact$ to update the topology.\\
 The Arguments of the $getPacket$ function will be described shortly.
 \begin{itemize}
 	\item $language$ is used to call the right $createTOSCA\_Node$ function.
