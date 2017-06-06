@@ -1,44 +1,62 @@
 % !TeX spellcheck = en_US
 
-\chapter{Check}\label{chap:check}
-In this chapter, the developed framework will be checked.
-The output CSAR will be added to and displayed by \nameref{subs:wine}.
-Generated Artifacts will be checked in command line.
-\if 0 
-%TODO
-надо прописать какой именно архив использовался и какие в нём зависимости
-потом установить как то хз как
-\fi
-\section{Check by Winery}
- \nameref{subs:wine} was installed to test the correctness of output CSAR. 
- This is an environment for development TOSCA systems and is useful for checking results. \\
- The INSERT NAME from INSERT ADDRESS will be used as a source CSAR. 
- His representation in winery is displayed on figure \ref{fig:winery_source2}.
+\chapter{Test}\label{chap:check}
+In this chapter, the developed framework will be tested.
+An input CSAR will be described in the section~\ref{sec:inputcsar}.
+The processing by the framework is described in the section~\ref{sec:process}.
+The output CSAR will be added to and displayed by \nameref{subs:wine} in the section~\ref{sec:checkwin}.
+Generated Artifacts will be tested in the section~\ref{sec:checkart}.
+\section{Input CSAR}\label{sec:inputcsar}
+In this test an CSAR from the OpenTOSCA Demos is used. 
+The CSAR provides a service for Automating the Provisioning of Analytics Tools based on Apache Flink.~\cite{csar_test}
+The structure of the service is provided in the figure~\ref{fig:winery_source2}. 
+The service uses a server virtualization environment named $vSphere$ (The $VSphere\_5.5$ node from the structure.). 
+In the environment works the $Ubuntu$ virtual server (The $Ubuntu-14.04-VM$ node).
+$Ubuntu$ hosts two applications: the $Python$ ($Python_2.7$) and the $Flink$ $Simple$ ($Flink\_Simple\_1.0.3$).
+An analyze shows the external references here: the $Python$ node installs the python package and $Flink$ $Simple$ node - the Java package.
+The CSAR has a two submodules: a Data Prediction and a Data Delivery, both a hosted on the $Flink$ $Simple$ node and require the Python node. 
+
+\section{Processing}\label{sec:process}
+Since the framework is written in the Java, to start it an Java jdk (version 1.8 or above) is necessary.
+Additionally an operating system must contain an apt-get program. 
+For Linux systems it can be easily installed.
+To start the framework an Java environment is used.
+After the start, user should enter the input CSAR name, the output CSAR name, and the architecture.
+After that, the framework should work fully automatically, analyzing the artifacts and resolving any external references.
+Figure \ref{fig:process} provides an example.
+\begin{figure}[ht]   
+	\centering
+	\includegraphics[width=0.7\textwidth]{Screenshot_processing}
+	\caption{Processing by the framework.}
+	\label{fig:process}
+\end{figure}
+
+\section{Displaying with the winery}\label{sec:checkwin}
+ The \nameref{subs:wine} was installed to test the correctness of the output CSAR. 
+ This is an environment for the development of TOSCA systems and is useful for checking the results. \\
+ The CSAR's representation by the winery is displayed in the figure~\ref{fig:winery_source2}.
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_winery_source2}
 	\caption{Source CSAR represented by $Winery$.}
 	\label{fig:winery_source2}
 \end{figure}
- This CSAR has a purely simple structure.
- Flink Simple Application has a two submodules: Data Prediction and DataDelivery, both a hosted on Flink Simple Platform and require Python2.7. 
- That all runs over Ubuntu 14.
- Deep analysis shows that Flink Simple Platform installs java and node Python2.7 installs program python2.7.
- Those external references are resolved during processing by the framework and exchanged by new nodes in output CSAR.
+ Those external references are resolved by the framework and exchanged by new nodes in output CSAR. \subsection{Add to winery}
  This output CSAR will be added to Winery.
  Due to significant increase in size, this can be a fairly lengthy procedure.
- There where 10 nodes in source CSAR, then after processing bz the framework, there are already more then 100 of nodes.
- During the addition, a CSAR's syntax is tested.
+ There where only six nodes in the input CSAR, but after the processing, it contains more then 100 of nodes.
+ During the addition to the winery, the CSAR's syntax is tested.
  In case of errors, messages will be displayed.
- Then Service Template will be displayed.
- Again, due to high number of nodes, preprocessing can take a long time. 
- But at the time, the correctness of the links will be checked.
- If something was defined not properly, the nodes or links between them will not be displayed.
-Representation of the output CSAR in the winery is shown on figure \ref{fig:winery_output} (Only a part of CSAR is visible).
+ \subsection{Display by winery}
+ The output CSAR will be displayed.
+ Again, due to the high number of nodes, the processing can take a long time. 
+ At the time, the correctness of the internal references will be checked.
+ If something was defined not properly, these erroneous nodes or links between them will not be displayed.
+The representation of the output CSAR by the winery is shown on the figure~\ref{fig:winery_output} (Only the part of the CSAR is visible).
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_winery_output}  
-	\caption{Output CSAR represented by $Winery$.}
+	\caption{The output CSAR represented by the $winery$.}
 	\label{fig:winery_output}
 \end{figure}
  It seems pretty beloved.
@@ -46,23 +64,23 @@ Representation of the output CSAR in the winery is shown on figure \ref{fig:wine
  \begin{figure}[ht]   
  	\centering
  	\includegraphics[width=0.7\textwidth]{Screenshot_winery_output2}
- 	\caption{Output CSAR represented by $Winery$, nodes manually moved.}
+ 	\caption{The output CSAR represented by the $winery$, some nodes moved manually.}
  	\label{fig:winery_output2}
  \end{figure}
- By checking several nodes with $apt$-$cache$ $depends$ command, the correctness of dependencies can be verified.
- By opening the content of the new nodes, it can be verified, that the are scripts and packages for installation.
+ By checking several nodes with $apt$-$cache$ $depends$ command, the correctness of dependencies was verified.
+ By opening the content of the new nodes, it was verified, that there are artifacts.
 
-\section{Check installations}
-Also is is necessary to check whether it is possible to install new packages using the generated installation scripts.
-First bash scripts will be tested, then ansible playbooks.
+\section{Check artifacts}\label{sec:checkart}
+Also it is necessary to check whether it is possible to install new packages using the generated Artifacts.
+At first bash scripts will be tested, then ansible playbooks.
 \subsection{Check bash scripts}
-Since bash is used in Linux's command line it will be pretty easy to check bash installation scripts by starting them (of course that must be done having necessary privileges).
-Example of python2.7 installation is presented in Listing \ref{lst:check_bash_script}.\\
+Since the bash is used in the Linux's command line, it will be pretty easy to check bash installation scripts by starting them (of course that must be done with the necessary privileges).
+An example of the $python2.7$ installation is presented in the listing~\ref{lst:check_bash_script}.\\
 \begin{Listing}
 \caption{Check bash installation script}
 \label{lst:check_bash_script}
 \begin{lstlisting}
-user@user:~$ sudo ./RR_python2_7-minimal.sh 
+user@user:~$ sudo RR_python2_7-minimal.sh 
 (Reading database ... 286091 files and directories currently installed.)
 Preparing to unpack python2_7-minimal.deb ...
 Unpacking python2.7-minimal (2.7.12-1ubuntu0~16.04.1) over (2.7.12-1ubuntu0~16.04.1) ...
@@ -70,18 +88,18 @@ Setting up python2.7-minimal (2.7.12-1ubuntu0~16.04.1) ...
 Processing triggers for man-db (2.7.5-1) ...
 \end{lstlisting}
 \end{Listing}
-Since the process ended without warnings and errors, it was completed successfully.
-This way every bash installation script can be checked.
+Since the process ended without any warnings or errors, it was completed successfully.
+This way any bash installation script can be checked.
 
 \subsection{Check ansible playbooks}
-To check ansible playbook manually we need to extract zip file containing playbook. 
-During regular execution this work must be done by runtime environment.
-Calling ansible runtime to proceed the playbook is a simple procedure too.
-Example is provided on figure \ref{fig:ansible_output2}.\\
+To check an ansible playbook manually we need to extract the zip file containing the playbook. 
+During the regular execution this work will be done by the runtime environment.
+The call of the ansible runtime to proceed the playbook is a simple procedure too.
+Example is provided on figure~\ref{fig:ansible_output2}.\\
  \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_ansible_output}
-	\caption{Ansible playbook execution process}
+	\caption{An ansible playbook's execution process}
 	\label{fig:ansible_output2}
 \end{figure}
-$Ok$ signals that the installation was successfully completed.
+$Ok$ signals that the installation was completed successfully.

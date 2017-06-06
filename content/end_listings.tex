@@ -233,61 +233,40 @@ wScript.close();
 \caption{Ansible proceeding}
 \label{lst:ansible_proceed}
 \begin{lstlisting}
-	public void proceed(Control_references cr) throws FileNotFoundException,
-IOException, JAXBException {
-	if (cr == null)
-	throw new NullPointerException();
+public void proceed() throws FileNotFoundException,
+	IOException, JAXBException {
+	if (ch == null)
+		throw new NullPointerException();
 	for (String f : cr.getFiles())
-	for (String suf : extensions)
-	if (f.toLowerCase().endsWith(suf.toLowerCase())) {
-		if (suf.equals(".zip")) {
-			proceedZIP(f);
-		} else
-		proceed(f, f);
+		for (String suf : extensions)
+			if (f.toLowerCase().endsWith(suf.toLowerCase())) {
+				if (suf.equals(".zip")) {
+					proceedZIP(f);
+				} else
+					proceed(f, f);
 	}
 }
 
-/**
-* proceed given file
-* 
-* @param filename
-* @param cr
-* @param source
-*            of file, example - archive
-* @throws FileNotFoundException
-* @throws IOException
-* @throws JAXBException
-*/
 public void proceed(String filename, String source)
-throws FileNotFoundException, IOException, JAXBException {
+	throws FileNotFoundException, IOException, JAXBException {
 	for (PacketManager pm : packetManagers)
-	pm.proceed(filename, source);
-}
+		pm.proceed(filename, source);
+} 
 
-/**
-* Handle ZIP package
-* 
-* @param zipfile
-* @throws FileNotFoundException
-* @throws IOException
-* @throws JAXBException
-*/
 private void proceedZIP(String zipfile) throws FileNotFoundException,
-IOException, JAXBException {
+	IOException, JAXBException {
 	boolean isChanged = false;
-	// String filename = new File(f).getName();
 	String folder = new File(cr.getFolder() + zipfile).getParent()
-	+ File.separator + "temp_RR_ansible_folder" + File.separator;
+		+ File.separator + "temp_RR_ansible_folder" + File.separator;
 	List<String> files = zip.unZipIt(cr.getFolder() + zipfile, folder);
 	for (String file : files)
-	if (file.toLowerCase().endsWith("yml"))
-	proceed(folder + file, zipfile);
+		if (file.toLowerCase().endsWith("yml"))
+			proceed(folder + file, zipfile);
 	if (isChanged) {
 		new File(cr.getFolder() + zipfile).delete();
 		zip.zipIt(cr.getFolder() + zipfile, folder);
 	}
 	zip.delete(new File(folder));
-	
 }
 \end{lstlisting}
 \end{Listing}
