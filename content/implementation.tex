@@ -116,38 +116,36 @@ New language module must be inherited from the language model and then can be ad
 
 \subsection*{Bash module implementation}
 The processing of popular Bash language was implemented. 
-the bash module should accept only files, written on the bash language.
-To chose such file signs can be used. 
-As the signs of belonging to the Bash language, the file extension (".sh" and ".bash") and the first line ("\#!/bin/bash") are used. 
-Each file, which satisfies those conditions will be passed to supported package managers modules, in our case - to the $apt$-$get$ module described later. \\
-The bash module must provide capability to create definition for TOSCA nodes, which are using th bash language to install packages.
-A Bash package node is defined by Node Type, Node Type Implementation, Package Artifact, and Script Artifact.
-The Node Type is a simple definition which describes a TOSCA node with an "$install$" operation.
-The Node Type Implementation reference the  Package Artifact and the Script Artifact to implement the Node Type's "$install$" operation.
+The bash module should accept only files, written on the bash language.
+To chose such file some signs inherent to all bash scripts can be used. 
+As the signs, the file extension (".sh" and ".bash") and the first line ("\#!/bin/bash") are used. 
+Each file, which contains those signs will be passed to supported package managers modules, in our case - to the $apt$-$get$ module described later. \\
+The bash module must provide capability to create definition for TOSCA node, which use the bash language to install a package.
+A Bash TOSCA node is defined by Package Type, Package Implementation, Package Artifact, and Script Artifact.
+The Package Type is a simple definition of a Node Type with an "$install$" operation and a name built from the name of the package.
+The Package Implementation is a Node Type Implementation, which references the Package Artifact and the Script Artifact to implement the Package Type's "$install$" operation.
 The Package Artifact and the Script Artifact are Artifact Templates referencing the installation data and a bash installation script respectively.
-The installation script contains the bash header and a installation command, like "$dpkg$ -$i$ \textbf{data}".
+The installation script contains the bash header and a installation command, like "$dpkg$ -$i$ \textbf{installation\_data}".
 This package node will be instantiated with a Node Template later by the topology handler.
-The definitions are created by $createTOSCA\_Node$ method presented in the listing~\ref{lst:create_bash}.
-Consider it in more details.
-To avoid creating of the same nodes, the names of created nodes are stored in the $created\_packages$ list.
-Then the node name is generated using $getNodeName$ and TOSCA definitions for this name are created.
+Those definitions and the installation command are created by the $createTOSCA\_Node$ function.
+%To avoid creating of the same nodes, the names of created nodes are stored in the $created\_packages$ list.
+%Then the node name is generated using $getNodeName$ and TOSCA definitions for this name are created.
 
 \subsection*{Ansible implementation}
 To test the extensibility of the framework, the \nameref{lang:ansible} language was added.
 Since ansible playbooks are often packed to archives, therefore it may be necessary to unpack them first and then analyze the content.
-Thus, the files are either immediately transferred to the package handler, or they are unzipped first.
+Thus, the files are either immediately transferred to package handlers, or they are unzipped first.
 Listing~\ref{lst:ansible_proceed} presents these operations.
 As a sign of the ansible language, the ".$yml$" extension is used, since its playbooks don't contain any specific header.\\
-Creating a \gls{tosca} node for this language is a complicated operation. 
-The basic moments are:
-\begin{itemize}
-	\item Analyze original files to determine the ansible configuration (the set of options like username or proxy).
-	\item It can be necessary to complement the configuration using a user input.
-	\item Create the folder with necessary files (the executable $.yml$ file and a subfolder with the installation data).
-	\item Pack these files to the Zip file.
-	\item Create TOSCA definitions of the package node. The ansible package node is defined by Node Type, Node Type Implementation, and Ansible Artifact.
-\end{itemize} 
-
+Creating an ansible \gls{tosca} node for a package is a complicated operation. 
+As a first step the original files should be analyzed to determine the configuration (the set of options like a username or a proxyserver).
+When implementer analyzer is unable to set all necessary options, a user interface will be provided to fulfill any missing parameters.
+Having all those options a playbook and a configuration file can be created in a temporary folded.
+After adding the installation data to the folder, it can be packed to a zip archive.
+This archive is a implementation artifact, for which the Artifact Template should be created.
+A Node Type with an "$install$" operation and a name built from the name of the package should be defined.
+And finally a Node Type Implementation linking the operation and the Artifact Templates should be defined.
+A Node Template will be added by the topology handler.
 
 \section{Package handler modules}
  and \nameref{subs:archpmm}

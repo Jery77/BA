@@ -114,82 +114,82 @@ JAXBException;
 \end{lstlisting}
 \end{Listing}
 
-\begin{Listing}
-\caption{Create TOSCA node for bash language}
-\label{lst:create_bash}
-\begin{lstlisting}
-	public String createTOSCA_Node(String packet, String source) throws IOException, JAXBException{
-if(created_packages.contains(packet+"+"+source))
-return packet;
-created_packages.add(packet+"+"+source);
-packet = getNodeName(packet, source);
-RR_NodeType.createNodeType(cr, packet);
-RR_ScriptArtifactTemplate.createScriptArtifact(cr, packet);
-RR_PackageArtifactTemplate.createPackageArtifact(cr, packet);
-RR_TypeImplementation.createNT_Impl(cr, packet);
-return packet;
-}
-\end{lstlisting}
-\end{Listing}
+%\begin{Listing}
+%\caption{Create TOSCA node for bash language}
+%\label{lst:create_bash}
+%\begin{lstlisting}
+%	public String createTOSCA_Node(String packet, String source) throws IOException, JAXBException{
+%if(created_packages.contains(packet+"+"+source))
+%return packet;
+%created_packages.add(packet+"+"+source);
+%packet = getNodeName(packet, source);
+%RR_NodeType.createNodeType(cr, packet);
+%RR_ScriptArtifactTemplate.createScriptArtifact(cr, packet);
+%RR_PackageArtifactTemplate.createPackageArtifact(cr, packet);
+%RR_TypeImplementation.createNT_Impl(cr, packet);
+%return packet;
+%}
+%\end{lstlisting}
+%\end{Listing}
 
 %\begin{Listing}
 %\begin{lstlisting}[caption={Create TOSCA node for bash language}\label{lst:create_bash},captionpos=t] 
 %\end{lstlisting}
 %\end{Listing}
 
-\begin{Listing}
-\caption{File parsing for Bash + apt-get }
-\label{lst:bash_apt_parse}
-\begin{lstlisting}
-public void proceed(String filename, String source)
-throws IOException, JAXBException {
-String prefix = "";
-for (int i = 0; i < Utils.getPathLength(filename) - 1; i++)
-prefix = prefix + "../";
-if (cr == null)
-throw new NullPointerException();
-System.out.println(Name + " proceed " + filename);
-BufferedReader br = new BufferedReader(new FileReader(filename));
-boolean isChanged = false;
-String line = null;
-String newFile = "";
-while ((line = br.readLine()) != null) {
-// split string to words
-String[] words = line.replaceAll("[;&]", "").split("\\s+");
-// skip space at the beginning of string
-int i = 0;
-if (words[i].equals(""))
-i = 1;
-// look for apt-get
-if (words.length >= 1 + i && words[i].equals("apt-get")) {
-// apt-get found
-if (words.length >= 3 + i && words[1 + i].equals("install")) {
-System.out.println("apt-get found:" + line);
-isChanged = true;
-for (int packet = 2 + i; packet < words.length; packet++) {
-System.out.println("packet: " + words[packet]);
-cr.getPacket(language, words[packet], source);
-}
-}
-newFile += "#//References resolver//" + line + '\n';
-} else
-newFile += line + '\n';
-}
-br.close();
-if (isChanged) {
-// references found, need to replace file
-// delete old
-File file = new File(filename);
-file.delete();
-
-// create new file
-FileWriter wScript = new FileWriter(file);
-wScript.write(newFile, 0, newFile.length());
-wScript.close();
-}
-}
-\end{lstlisting}
-\end{Listing}
+%\begin{Listing}
+%\caption{File parsing for Bash + apt-get }
+%\label{lst:bash_apt_parse}
+%\begin{lstlisting}
+%public void proceed(String filename, String source)
+%throws IOException, JAXBException {
+%String prefix = "";
+%for (int i = 0; i < Utils.getPathLength(filename) - 1; i++)
+%prefix = prefix + "../";
+%if (cr == null)
+%throw new NullPointerException();
+%System.out.println(Name + " proceed " + filename);
+%BufferedReader br = new BufferedReader(new FileReader(filename));
+%boolean isChanged = false;
+%String line = null;
+%String newFile = "";
+%while ((line = br.readLine()) != null) {
+%// split string to words
+%String[] words = line.replaceAll("[;&]", "").split("\\s+");
+%// skip space at the beginning of string
+%int i = 0;
+%if (words[i].equals(""))
+%i = 1;
+%// look for apt-get
+%if (words.length >= 1 + i && words[i].equals("apt-get")) {
+%// apt-get found
+%if (words.length >= 3 + i && words[1 + i].equals("install")) {
+%System.out.println("apt-get found:" + line);
+%isChanged = true;
+%for (int packet = 2 + i; packet < words.length; packet++) {
+%System.out.println("packet: " + words[packet]);
+%cr.getPacket(language, words[packet], source);
+%}
+%}
+%newFile += "#//References resolver//" + line + '\n';
+%} else
+%newFile += line + '\n';
+%}
+%br.close();
+%if (isChanged) {
+%// references found, need to replace file
+%// delete old
+%File file = new File(filename);
+%file.delete();
+%
+%// create new file
+%FileWriter wScript = new FileWriter(file);
+%wScript.write(newFile, 0, newFile.length());
+%wScript.close();
+%}
+%}
+%\end{lstlisting}
+%\end{Listing}
 
 \begin{Listing}
 \caption{Ansible proceeding}
