@@ -3,7 +3,7 @@
 \chapter*{Listings}\label{chap:listing}
 %TODO correct listings
 \begin{Listing} 
-	\caption{Generate the Artifact Type definition for scripts}
+	\caption{Description for the script Artifact Type definition}
 	\label{lst:scripttype}
 \begin{lstlisting}
 public class RR_ScriptArtifactType {
@@ -44,42 +44,6 @@ ArtifactType() {}
 \end{lstlisting}
 \end{Listing}
 
-\begin{Listing} 
-	\caption{Generate definition for Script Artifact Type}
-	\label{lst:scripttype_create}
-	\begin{lstlisting}
-// output filename
-public static final String filename = "RR_ScriptArtifact.tosca";
-
-/**
-* Create ScriptType xml description
-* 
-* @param cr
-* @throws JAXBException
-* @throws IOException
-*/
-public static void init(Control_references cr) throws JAXBException,
-IOException {
-	File dir = new File(cr.getFolder() + Control_references.Definitions);
-	dir.mkdirs();
-	File temp = new File(cr.getFolder() + Control_references.Definitions + filename);
-	if (temp.exists())
-	temp.delete();
-	temp.createNewFile();
-	OutputStream output = new FileOutputStream(cr.getFolder()
-	+ Control_references.Definitions + filename);
-	
-	JAXBContext jc = JAXBContext.newInstance(Definitions.class);
-	
-	Definitions shema = new Definitions();
-	
-	Marshaller marshaller = jc.createMarshaller();
-	marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	marshaller.marshal(shema, output);
-	cr.metaFile.addFileToMeta(Control_references.Definitions + filename, "application/vnd.oasis.tosca.definitions");
-}
-\end{lstlisting}
-\end{Listing}
 \begin{Listing}
 \caption{Abstract language model}
 \label{lst:langabst}
@@ -200,12 +164,10 @@ i = 1;
 if (words.length >= 1 + i && words[i].equals("apt-get")) {
 // apt-get found
 if (words.length >= 3 + i && words[1 + i].equals("install")) {
-// replace "apt-get install" by "dpkg -i"
 System.out.println("apt-get found:" + line);
 isChanged = true;
 for (int packet = 2 + i; packet < words.length; packet++) {
 System.out.println("packet: " + words[packet]);
-//							cr.AddDependenciesScript(source, words[packet]);
 cr.getPacket(language, words[packet], source);
 }
 }

@@ -167,17 +167,17 @@ Since ansible playbooks don't contain specific header or marker, the single sigh
 A $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$, described in the next section.
 Figure \ref{fig:lang_ph} illustrates data flow between language modules, package manager modules, and the package handler.\\
 To resolve an external reference a package manager module will parse a given file. 
-In case of the apt-get module for bash, the module will read a file line-by-line searching for the strings starting by "apt-get install".
+In the case of the apt-get module for bash, the module will read a file line-by-line searching for the strings starting with "apt-get install".
 Such strings must be commented out and those ends should be divided to separate package names, which will be transferred to the package handler. 
 \input{graphics/lang_ph}
 
 \subsection{Package Handler} \label{subs:archph}
 The $package$ $handler$ becomes a package name, downloads an installation data for an architecture specified by the CSAR handler, transfers the package name to the $topology$ $handler$ and recursively repeats the actions for all depended packages. 
 To download an installation data the command "apt-get download \textbf{package}" can be used. 
-The architecture can be specified by a ":$architecture$" suffix, for example a "package:$arm$" mean the package of the $arm$ architecture.
+The architecture can be specified by a ":$architecture$" suffix, for example, a "package:$arm$" mean the package of the $arm$ architecture.
 The list of dependencies will be obtained using the "apt-cache depends \textbf{package}" command. 
 The output of such command should be parsed in order to extract names of depended packages.
-Of course in case of fault during a download of a package, an user interface should be provided, to find a solution.
+Of course, in a case of a fault during a download of a package, a user interface should be provided, to find a solution.
 That can be: retry the download, ignore the package, rename the package, or even break the framework's execution.
 
 \subsection{Topology Handler} \label{subs:archtop}
