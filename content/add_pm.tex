@@ -1,7 +1,7 @@
 % !TeX spellcheck = en_US
 
 \chapter{Add new package manager module}\label{chap:add}
-This chapter shows the extensibility of the framework by adding a new package manager module for the $bash$ the $aptitude$.\\
+This chapter shows the extensibility of the framework by adding a new $aptitude$ package manager module for the $bash$ language.\\
 Section \ref{sec:aptitude} provides a common information about the $aptitude$.\\
 In section \ref{sec:aptitude_imp} the module is implemented and in section \ref{sec:aptitude_int} is integrated into the $bash$ language module.
 
@@ -17,7 +17,7 @@ In additional, it can be started in a pseudo-graphical mode to provide a visual 
 \end{figure}
 An another advantage compared to the $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
 \section{Implementing the new package manager module}\label{sec:aptitude_imp}
-The process of the implementing of the $aptitude$ module will be described here.
+The implementation of the $aptitude$ module will be described here.
 At first, the $aptitude$ class will be inherited from the abstract class $PackageManager$. 
 This is presented in the listing \ref{lst:aptit_inher}.\\
 \begin{Listing} 
@@ -34,7 +34,7 @@ public final class PM_aptitude extends PackageManager {
 \end{lstlisting}
 \end{Listing} 
 After that, the $aptitude$ class can be used as a regular package manager module (but it lacking functionality).
-Need to add the common code, like the constructor and the manager's name.
+It is necessary to add the common code, like the constructor and the manager's name.
 After these operations, the $ansible$ module can be presented in the listing \ref{lst:aptit_common}.\\
 \begin{Listing} 
 \caption{The $aptitude$ module with some common elements}
@@ -61,7 +61,7 @@ public final class PM_aptitude extends PackageManager {
 }
 \end{lstlisting}
 \end{Listing} 
-Since the package manager will read files, the CSAR handler is stored by the constructor to the $ch$ variable for a further use.
+Since the package manager will read files from an input CSAR, the CSAR handler is stored by the constructor to the $ch$ variable for a further use.
 In addition, the language ($bash$ in this case) is stored too, to be propagated later to the package handler.\\
 Now focus on the $proceed$ function.
 A line-by-line file analyzer is needed, which can modify the data and in the case of a modification, the entire file should be rewritten.
@@ -90,10 +90,10 @@ public void proceed(String filename, String source)
 }	 
 \end{lstlisting}
 \end{Listing} 
-The $isChanged$ value indicates that the file must be rewritten with the new content from the $newFile$ variable.
+The $isChanged$ variable indicates that the file must be rewritten with a new content from the $newFile$ variable.
 Now an $aptitude$ line parser will be implemented, which reads a line from the $line$ variable and stores it or it's changed version to the $newFile$ variable.
 If the data is changed, then the $isChanged$ variable must be set to true.
-Any $ansible$ package installation calls should be detected, commented out and its arguments (package names) should be propagated one by one to the Package Handler's function $getPackage$.
+Any $ansible$ package installation calls should be detected, commented out and its arguments (package names) should be propagated one by one to the package handler's function $getPackage$.\\
 \begin{Listing} 
 \caption{The aptitude line parser}
 \label{lst:aptit_parse}
@@ -120,11 +120,12 @@ else
 	newFile += line + '\n';
 \end{lstlisting}
 \end{Listing} 
-For the parsing, the line is divided into words. 
-The packet handler's  $getPackage$ function takes the language, the package name, and the source artifact name as the arguments.
+During the parsing which is described in the listing \ref{lst:aptit_parse}, the line is divided into words. 
+Each found package name is transmitted to the packet handler as an argument of its public function $getPackage$.
+In additional, this function must take the language and the source artifact's name as the arguments.
 
 \section{Integrating Aptitude into the Bash module}\label{sec:aptitude_int}
 Now the $aptitude$ module can be added to the bash module.
-The only thing to do is to add the $aptitude$ to the bash's list of package manager modules.
-This is done by the bash's constructor with the sting: \emph{"packetManagers.add(new PM\_aptitude(this, ch));"}.\\
+The only thing to do is to add the $aptitude$ to the bash's list of package manager modules (the list is stored in the \emph{packetManagers} variable).
+This is done by the bash's constructor with the command: \emph{"packetManagers.add(new PM\_aptitude(this, ch));"}.\\
 The new package manager module is ready to work.
