@@ -74,69 +74,68 @@ On the one hand, this specialization makes easier to work with the provider, but
 \section{Topology and Orchestration Specification for Cloud	Applications} \label{sec:tosca}
 %\subsection*{Definition}
 The OASIS \cite{oasis} Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard provides a new way to enable portable automated deployment and management of cloud applications.
-\gls{tosca} describes the structure of an application as a topology containing their components and relationships between them.
+\gls{tosca} describes the structure of an application as a topology containing components and relationships between them.
 %Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
 \gls{tosca} application is a cloud application described according to the TOSCA standard.
-This standard can be used not only for describing all stages of a cloud application life-cycle but also serve as a layer between the cloud application and provider's API, allowing to implement a single application suitable for working with different providers. 
+This standard can be used not only to describe all stages of a cloud application life-cycle but also to serve as a layer between the cloud application and provider's API, allowing to implement a single application suitable for working with different providers. 
 \subsection*{Structure}
 TOSCA specification provides a language to define services (described in section \nameref{def:servmod}) and relationships between them using $Service$ $Templates$. 
-In additional it describes the management procedures which create or modify services using orchestration processes.
-Descriptions of the \gls{tosca}'s components used in this work is provided. \\
-$Service$ $Template$ is the main component in \gls{tosca} structure. 
+In addition it describes the management procedures which create or modify services using orchestration processes.
+The description of the \gls{tosca} components used in this work is provided. \\
+A $Service$ $Template$ is the main component in a \gls{tosca} structure. 
 It contains an information about the structure (Topology Template) and interfaces (Plans) of the service. 
-It can be many Service Templates within one TOSCA application. %\\
-$Plans$ provide interfaces to manage the cloud application.
-These components combine management capabilities to create higher-level management tasks, which can then be executed fully automated to deploy, configure, manage, and operate the application.
+There can be many Service Templates within one TOSCA application. %\\
+$Plans$ provide interfaces to manage cloud applications.
+These components combine management capabilities to create high-level management tasks which can then be executed for fully automated deployment, configuration, management, and operation of the application.
 Plans are started by external messages and call management operations of the nodes in the topology. %\\
-$Topology$ $Template$ describes the topology of cloud application, defining nodes (Node Templates) and relations between them (Relationship Templates). %\\
-$Node$ $Template$ instantiates a Node Type as a component of a service. 
-$Node$ $Type$ defines the properties of such component and the operations available to manipulate the component.
-$Relationship$ $Template$ instantiates a Relationship Type as a relationship between Node Templates in a Topology Template. 
-The Relationship Template indicates that two nodes are connected and define the direction of the connection.
-$Relationship$ $Type$ defines the semantics and any properties of the relationship.\label{subs:reltype} %\\
+A $Topology$ $Template$ describes the topology of a cloud application, defining nodes (Node Templates) and relations between them (Relationship Templates). %\\
+A $Node$ $Template$ instantiates a Node Type as a component of a service. 
+A $Node$ $Type$ defines the properties of such a component and the operations available to manipulate the component.
+A $Relationship$ $Template$ instantiates a Relationship Type as a relationship between Node Templates in a Topology Template. 
+The Relationship Template indicates that two nodes are connected and defines the direction of the connection.
+A $Relationship$ $Type$ defines semantics and properties of the relationship.\label{subs:reltype} %\\
 Any Node Types and Relationship Types can by instantiated multiple times.
 Those types are like abstract classes in high-level programming languages and Templates are objects of those classes.\\
-$Artifact$ represents the content needed for a management such as executables (e.g. a script, an executable program, an image), a configuration file, a data file, or something that might be needed for other executables (e.g. libraries).
-TOSCA distinguishes two kinds of artifacts: Implementation Artifacts and Deployment Artifacts.
-$Implementation$ $Artifact$ represents the executable of an operation described by a Node Type.
-$Deployment$ $Artifact$ represents the executable for materializing instances of a node.
-$Artifact$ $Type$ describes a common type of an artifact: python script, installation package and so on.
-$Artifact$ $Templates$ represents information about the artifact. 
+$Artifact$ represents the content necessary for a management such as executables (e.g. a script, an executable program, an image), a configuration file, a data file, or something that might be needed for other executables (e.g. libraries).
+The TOSCA distinguishes two kinds of artifacts: Implementation Artifacts and Deployment Artifacts.
+An $Implementation$ $Artifact$ represents the executable of an operation described by a Node Type.
+An $Deployment$ $Artifact$ represents the executable for materializing instances of a node.
+An $Artifact$ $Type$ describes a common type of an artifact: python script, installation package and so on.
+An $Artifact$ $Template$ represents information about the artifact. 
 The location of the artifact and other attendant data are stored here. 
-Again, types are classes, templates - objects, and artifacts represent a content or a value of an object, but these values of objects can not be changed. %\\
+Again, types are classes, templates are objects, and artifacts represent content or a value of an object, but these values of objects can not be changed. %\\
 $Node$ $Type$ $Implementation$ defines the artifacts needed for implementing the corresponding Node Type.
-For example, if Node Type contains $deploy$ and $shutdown$ operations, then Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data needed for the deployment. %\\
-Implementations are like final classes between Node Types and Node Templates, but in the TOSCA standard, an Implementation will be chosen only during execution.
-Types, Templates, and Implementations defining a TOSCA application are stored in definition documents, which have the XML format. %\\
+For example, if Node Type contains $deploy$ and $shutdown$ operations, then Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data necessary for the deployment. %\\
+Implementations are like final classes between Node Types and Node Templates, but in the TOSCA standard, the Implementation will be chosen only during execution.
+Types, Templates, and Implementations defining a TOSCA application are stored in definition document which have the XML format. %\\
 \subsection*{Usage}
 The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
 This is useful when an application is ported to alternative cloud environments.~\cite{TOSCA-v1.0_book} \\
 %
 %%\subsection*{CSAR} 
 %
-To store the TOSCA application a \gls{csar}\label{sec:csar} is used.
+To store a TOSCA application a \gls{csar}\label{sec:csar} is used.
 This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
-These include definition documents, artifacts and so on.
+They include definition documents, artifacts and so on.
 In this form, a TOSCA application can be processed by a TOSCA runtime environment.\\
 %\subsubsection*{Structure}
-The root folder of any CSAR must contain a "Definitions" and a "\gls{tosca}-Metadata" folders.
-The "Definitions" folder contains definition documents and one of them must define Service Template.
-The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in form of file with the "TOSCA.meta" name.
-This metafile consists of name/value pairs. 
-One line for each pair. 
+The root folder of any CSAR must contain the "Definitions" and "\gls{tosca}-Metadata" folders.
+The "Definitions" folder contains definition documents and one of them must define a Service Template.
+The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in the form of a file with the "TOSCA.meta" name.
+This metafile consists of name/value pairs, one line for each pair. 
 The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
-All other pairs represent metadata of files in the CSAR. 
-The metadata is used by TOSCA runtime environment to correctly proceed given files.\\
+All other pairs represent metadata of files from the CSAR. 
+The metadata is used by TOSCA runtime environment to process given files correctly.\\
 %
 %\subsubsection*{Terms}
-During this work, the terms an input CSAR and an output CSAR will be used.
-Input \gls{csar} is a \gls{csar}, which can contain external references and will be processed by the framework. %\\
-Output CSAR is a CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
+During this work, such terms as input CSAR and output CSAR will be used.
+The input \gls{csar} is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
+The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
 
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 
 This ecosystem consists of three parts: a \gls{tosca} \textbf{runtime environment}, a graphical modeling TOSCA tool \textbf{Winery}, and a self-service portal for the applications available in the container \textbf{Vinothek}.~\cite*{OpenTOSCA}
-Descriptions of the runtime environment and the winery will be provided in more details. 
+Descriptions of the runtime environment and the winery will be provided in more detail. 
 \subsection*{Runtime environment}
 The runtime environment enables a fully automated plan-based deployment and management of cloud applications in the CSAR container. 
 First, the CSAR is unpacked and the files are put into the Files store.
@@ -146,7 +145,7 @@ Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.~\cite{INPROC-2013-45}
 \subsection*{Winery}\label{subs:wine}\label{tool:winery}
 The winery works under a Tomcat server and therefore visual interface is available in a browser. %, example in figure \ref{fig:winery_gui}.
-The winery provides a complete set of functions for creating, editing and deleting of elements in the TOSCA topology. 
+The winery provides a complete set of functions for creating, editing and deleting elements in the TOSCA topology. 
 An example of the TOSCA topology is presented in the figure~\ref{fig:winery_source}.
 %\begin{figure}[ht]   
 %	\centering
@@ -157,7 +156,7 @@ An example of the TOSCA topology is presented in the figure~\ref{fig:winery_sour
 \begin{figure}[ht]   
 \centering
 \includegraphics[width=0.7\textwidth]{Screenshot_winery_source.png}
-\caption{TOSCA topology presented by $Winery$.}
+\caption{TOSCA topology presented by the $Winery$.}
 \label{fig:winery_source}
 \end{figure}
 
@@ -165,18 +164,18 @@ An example of the TOSCA topology is presented in the figure~\ref{fig:winery_sour
 \section{Package management} \label{sec:pm}
 %This section will describe the package management process and basic concepts for this area.
 %\subsection*{Package managers}
-A \textbf{package} is an archive file containing both data for installation of the program component and a set of metadata like name, function, version, producer, and a list of dependencies on other packages. 
-Those program components can present not only a single program but also a certain component of a large application. % or libraries, a packages which can be used only by other programs.
-For a user, a \textbf{package manager} is a set of software tools that automate the process of installing, updating, configuring and removing of packages.
-But on operating system site, a package manager is used for managing the database of packages, their dependencies, and versions, to prevent erroneous installation of programs and missing dependencies.
+A \textbf{package} is an archive file containing both data for installation of the program component and a set of metadata like name, function, version, producer, and a list of dependencies to other packages. 
+Those program components can present not only a complete program but also a certain component of a large application. % or libraries, a packages which can be used only by other programs.
+For a user, a \textbf{package manager} is a set of software tools that automate the process of installing, updating, configuring and removing packages.
+But from the operating system side, a package manager is used for managing the database of packages, their dependencies, and versions, to prevent erroneous installation of programs and missing dependencies.
 %\subsection*{Packages}
 %\subsection*{Dynamic libraries}
-This task is especially complex for computer systems which rely on dynamic library linking, which share executable libraries of machine instructions across packages and applications. 
+This task is especially complex in computer systems relying on dynamic library linking. Those systems share executable libraries of machine instructions across packages and applications. 
 In these systems, complex relationships between different packages requiring different versions of libraries result in a challenge colloquially known as "dependency hell".
-Good package management is vital on these systems.\\
+Good package management is vital to these systems.\\
 %\subsection*{Repository}
-To give users more control over the kinds of software that they are allowing to be installed on their system, software is often downloaded by package managers only from a number of software repositories.
-By default in Unix systems, a package manager uses official repositories appropriate for the operating system and the device architecture, but it's possible to use additional repositories, like third-party repositories or repositories for another architecture.\\
+To give users more control over the kinds of programs that they allow to install on their systems, packages are often downloaded only from a number of software repositories.
+In Unix systems, a package manager uses official repositories appropriate for the operating system and the device architecture by default, but it's possible to use additional repositories, like third-party repositories or repositories for another architecture.\\
 %\subsection*{Dependencies} \label{subs:dep}
 Package managers distinguish between two types of dependencies: $required$ and $preRequired$. %\\
 Dependency $package1$ \textbf{$required$} $package2$ indicates that the $package2$ must be installed for a proper \textbf{operation} of the $package1$. %\\
@@ -196,18 +195,18 @@ Dependency $package1$ \textbf{$preRequired$} $package2$ indicates that the $pack
 %\end{lstlisting}
 %\subsection*{Dependency tree}
 In these examples, the $package2$ is needed for the $package1$, but the $package2$ itself can require additional packages.
-A structure describing all needed packages and dependencies between them for given root-package is called a dependency tree. 
-The dependency type $required$ can lead to cycles in a dependency tree, which differs them from the normal tree graph structures.
+A structure describing all necessary packages and dependencies between them for the given root-package is called a dependency tree. 
+The dependency type $required$ can lead to cycles in a dependency tree what differs it from the normal tree graph structures.
 
 \section{Languages for package management automation}
 To automate the package management, various languages are used. 
-Those languages will be described, which will be used in the framework.
+The languages used in the framework will be described.
 \subsection*{Bash} \label{lang:bash}
 Bash is a Unix command language written as a free software.
-In additional bash denotes to a command processor that typically runs in a text window, where the user types commands that cause actions.
-Instead of typing commands direct to a command line, a file containing some commands can be executed.~\cite{bash}
+In addition bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
+Instead of typing commands direct into a command line, a file containing some commands can be executed.~\cite{bash}
 This file is called a script.
-Scripts are often used to automatically install programs.
+Scripts are often used to install programs automatically.
 \subsection*{Ansible} \label{lang:ansible}
 Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
 As with most configuration management software, Ansible has two types of servers: controlling machines and nodes.

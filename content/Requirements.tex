@@ -1,34 +1,35 @@
 % !TeX spellcheck = en_US
 
 \chapter{Requirements}\label{chap:req}
-A new software should be developed, which will resolve external references and complement the TOSCA topology to represent the changes to in a given CSAR file.
+It's necessary to develop new software, which will resolve external references and complement the TOSCA topology to represent the changes in a given CSAR file.
 Since the main purpose of the software is to Resolve References, further the $RR$ can be used as an abbreviation. 
-A primary type of external references is an artifact represented by a bash script, which uses an apt-get package manager to install new packages.
+A primary type of external references is an artifact represented by a bash script which uses an apt-get package manager to install new packages.
 The exact command for this type of references is "$apt$-$get$~$install$ \textbf{package}".
 In this example, the $RR$ should comment out such commands and add the installation of the \textbf{package} and installations of all packages from its dependencies tree as new separate nodes to the TOSCA topology. \\
-To do this a system package manager can be used. 
-An example for the $apt$-$get$ package manager. Using the "$apt$-$get$~$download$ \textbf{package}" command, the installation data for the \textbf{package} can be downloaded, and using the "$apt$-$cache$ $depends$ \textbf{package}" command, the list of dependencies for the \textbf{package} can be obtained. 
+A system package manager can be used for this purpose. 
+An example for the $apt$-$get$ package manager is provided. 
+Using the "$apt$-$get$~$download$ \textbf{package}" command, the installation data for the \textbf{package} can be downloaded, and using the "$apt$-$cache$ $depends$ \textbf{package}" command, the list of dependencies for the \textbf{package} can be obtained. 
 To install a package from the installation \textbf{data} the simple command "$dpkg$~$-i$~\textbf{data}" can be used.\\
 An installation data should be integrated into the TOSCA topology. 
-To do this a new node should be created for each package. 
+A new node should be created for each package. 
 During this, step a set of definitions will be created.
 A common description of a new node is provided via a Node Type, which contains the "install" operation. 
 This operation will be implemented by a Node Type Implementation, which uses Artifact Templates.
 Created nodes should install packages using the same language, as the original node contained the external reference.
 In the example with the Bash language, the Artifact Templates will be represented by the deployment artifact with the installation data and by the implementation artifact with the script containing the installation command. \\
 Then nodes should be instantiated and referenced.
-For each Node Template, which uses an artifact with external references to a \textbf{package}, a separate Node Template of the \textbf{package}'s Node Type should be defined and referenced.
+For each Node Template which uses an artifact with external references to a \textbf{package}, a separate Node Template of the \textbf{package}'s Node Type should be defined and referenced.
 Then for each \textbf{package}'s Node Template additional Node Templates for packages from its dependencies tree should be defined and referenced.
 To define a reference between nodes a Relationship Template will be used and to find out which Node Template uses which artifact the CSAR will be preprocessed.
 During the preprocessing the topology of the SCAR will be analyzed and internal references found.\\
-To distinguish between languages, package managers, and those software handlers, a program component handling a language will be called the language module, and handling a package manager - the package manager module.
+To distinguish between languages, package managers and they software handlers, a program component handling a language will be called the language module, and the one handling a package manager - the package manager module.
 The Bash module with the apt-get module will be implemented first. 
-The goal is to develop extendable software, where new modules can be easily added later.
+The goal is to develop extendable software where new modules can easily be added later.
 This type of a software is called a framework.\\
 %$RR$ must be  to provide the ability to eliminate a large number of dependency types.\\
-After the minimal configuration with the $Bash$ and $apt$-$get$ modules will be developed, an $Ansible$ module with $apt$ package manager module can be added. 
+After the minimal configuration with the $Bash$ and $apt$-$get$ modules is developed, an $Ansible$ module with $apt$ package manager module can be added. 
 Ansible scripts are called playbooks. 
-Ansible playboks and a related data are often packed to a zip archive for encapsulation.
+Ansible playbooks and related data are often packed to a zip archive for encapsulation.
 That makes the ansible module harder to implement since it should not only parse playbooks but additionally unpack archives. Ansible Node Type Implementations will contain only one artifact.
 This artifact will be an archive containing both the playbook and the installation data.
 %These software handlers of languages and package managers will be called language modules and package manager modules.
@@ -47,16 +48,18 @@ This artifact will be an archive containing both the playbook and the installati
 %After implementing the minimal configuration, it should be easy to add more language modules and package manager modules, like $Aptitude$ for Bash or completely new language like $Chef$.
 %In order to proof the correctness of the corresponding TOSCA topology, Winery described in section \ref{tool:winery} will be used.
 \section*{Handling}
-Here an example is provided, representing how the framework should proceed a CSAR.\\
-At start an input CSAR will be extracted to a temporary folder, to handle its content.
-Then the internal structure will be analyzed during the preprocessing. In additional, the common TOSCA definitions not belonging to a specific node (like Artifact Types or Relationship Types) will be added. 
-After that starts the processing. Each file from the input CSAR will be processed by each language module.
-If a language module accepts a file, then the file is transferred to the package manager modules, belonging to the language module.
+There is an example, representing how the framework should process a CSAR.\\
+At start an input CSAR will be extracted to a temporary folder to handle its content.
+Then the internal structure will be analyzed during the preprocessing. 
+In addition, the common TOSCA definitions not belonging to a specific node (like Artifact Types or Relationship Types) will be added. 
+After that the processing starts. 
+Each file from the input CSAR will be processed by each language module.
+If a language module accepts a file, then the file is transferred to the package manager modules belonging to the language module.
 A package manager module will resolve reference by commenting out the installation command and extracting package names from the command.
-Using the package name the package installation data will be downloaded, the installation script created, and the TOSCA node defined. 
-To define a new TOSCA node for the package, the definitions for Node Type, Node Type Implementation, and Artifact Templates should be created. 
-A separate Node Template, as well as Relationship Template, should be defined for each depending node.
-These actions will be recursively repeated for all dependent packages from the package's dependencies tree, which mirrors the tree to the TOSCA topology.
+Using the package name the package installation data will be downloaded, the installation script and the TOSCA node created. 
+To create a new TOSCA node for the given package, the definitions for Node Type, Node Type Implementation, and Artifact Templates should be added to the CSAR. 
+A separate Node Template, as well as Relationship Template, will be defined for each depending node.
+These actions will be recursively repeated for all depending packages from the package's dependencies tree which mirrors the tree to the TOSCA topology.
 At the end, the meta-file should be updated and the data packed back to the SCAR.\\
 %\begin{itemize}  
 %	\item Begin  \\
@@ -78,12 +81,12 @@ At the end, the meta-file should be updated and the data packed back to the SCAR
 %	\item End\\
 %	Meta-file should be updated and all data packed back to the CSAR.
 %\end{itemize}
-These actions will be described in more details the chapter \ref{chap:conarch} and implemented in the chapter \ref{chap:imp}.
+These actions will be described in the chapter \ref{chap:conarch} and implemented in the chapter \ref{chap:imp} in more detail.
 
 \section*{Result}
-As a result of the software's work, an output CSAR will be received. 
+As a result of the program's work, an output CSAR will be received. 
 This CSAR must have the same functionality as the input CSAR, but all external references to additional packages must be resolved.
 The output CSAR must be able to be deployed properly without downloading these packages over the Internet. 
-In additional, the dependencies trees for packages from new nodes should be represented in the TOSCA topology.\\
+In addition, the dependencies trees for packages from new nodes should be represented in the TOSCA topology.\\
 
-In order to validate the output CSAR, the TOSCA topology can be checked and represented by the winery and the created artifacts can be checked through those installations on a test machine. 
+In order to validate the output CSAR, the TOSCA topology can be checked and printed by the winery and the defined artifacts can be validated through those installations on a test machine. 
