@@ -1,25 +1,25 @@
 % !TeX spellcheck = en_US
 
 \chapter{Concept and Architecture}\label{chap:conarch}
-In this chapter, the concept and the architecture of the framework, which can satisfy the requirements will be described and substantiated.
+In this chapter, the concept and the architecture of the framework which can satisfy the requirements will be explained and substantiated.
 Solutions to some additional problems will be presented. 
 \section{Concept}
-In this section, the main concept of this work will be described.
+In this section, the main concept of this work are described.
 The general structure of the framework is represented in the block diagram \ref{fig:gen}. 
-In the section~\ref{subs:analyse}, it will be found out how to determine during the preprocessing stage which Node Templates uses the given artifact.
-Then a functionality of language modules and package manager modules is described.
-In the section~\ref{subs:repres}, it will be explained how to create a new node for a TOSCA topology. 
-After that, a problem of the determining the architecture of the final platform will be explained and a solution described.
-In additional, it will be described, how the results can be validated.
+In section~\ref{subs:analyse}, it will become clear how to determine during the preprocessing stage the Node Templates, which use the given artifact.
+Then language modules and package manager modules functionality is going to be described.
+In section~\ref{subs:repres}, it will be expressed how to create a new node for a TOSCA topology. 
+After that, a problem of the determination the architecture of the final platform will be explained and a solution presented.
+In addition, it will be described, how the results can be validated.
 \input{graphics/general}
 
 
-\subsection{Analysis existing TOSCA-Topology}\label{subs:analyse}
-To properly update the \gls{tosca} topology, it is necessary to add references from the nodes where external references were to newly created nodes, which resolve the external references. 
-According to the TOSCA standard, only references between Node Templates in the same Service Template can be created.  
-That means that each Node Template, which uses artifacts with external references must be found.
-Furthermore, Service Template where these Node Templates are instantiated must be found to create there a Node Template for the new nodes and reference them to the Node Templates with external references.
-The Pointers to Artifacts are contained by Artifact Templates, which are used by Node Type Implementations.
+\subsection{Analysis of existing TOSCA-Topology}\label{subs:analyse}
+To update the \gls{tosca} topology properly, it is necessary to add references from the nodes where external references were to the newly created nodes which resolve the external references. 
+According to the TOSCA standard, references between Node Templates can only be created in the same Service Template.  
+That means that each Node Template which uses artifacts with external references must be found.
+Furthermore, Service Template where these Node Templates are instantiated must be determined to create there a Node Template for the new nodes and reference them to the Node Templates with external references.
+The Pointers to Artifacts are contained by Artifact Templates which are used by Node Type Implementations.
 By composing all the information a simple references chain can be built:\\
 $Artifact$ $\rightarrow$ $Artifact$~$Template$ $\rightarrow$ $Node$~$Type$~$Implementation$ $\rightarrow$ $Node$~$Type$ $\rightarrow$ $Node$~$Template$ $\rightarrow$ $Service$~$Template$\\
 Now consider the references in more detail. 
@@ -35,24 +35,24 @@ Now consider the references in more detail.
 	\item  $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
 	But each Node Template is instantiated only once.
 \end{itemize}
-Thus structure can be described by a tree with an Artifact as the root, and Service Templates as leaves (The example is on figure \ref{fig:script_serv}) and will be called the internal dependencies tree.
-\input{graphics/script_serv_tree}
+This structure can be described as a tree with an Artifact as a root, and Service Templates as leaves (The example is on figure \ref{fig:script_serv}) and will be called the internal dependencies tree.\\
 %Of course it is possible to move in opposite direction, starting from a Node and moving toward scripts, but this method brings additional complexity. 
-An additional problem is in the reference between a Node Type and a Node Type Implementation.
-Node Type can have several implementations, but which one will be used will be determined only during the deployment. 
-The chosen solution to this problem is to use each Node Type Implementation in hope, that they will not conflict.\\
+There is an additional problem in the reference between a Node Type and a Node Type Implementation.
+A Node Type can have several implementations, but which one will be used is determined only during the deployment. 
+The chosen solution to this problem is to use each Node Type Implementation in the hope, that they will not conflict.\\
 %The method presented above can uniquely determine Node Templates and Service Template for a given script.
 %Of course it is not guaranteed that found Node Type Implementation will be used during deployment, but we can't do anything with this. 
-The following steps can be executed during the preprocessing, to build the internal dependencies tree.
+The following steps to build the internal dependencies tree can be executed during the preprocessing.
 \begin{itemize}
 	\item Find all Artifact Templates to build references from Artifacts to Artifact Templates.
-	\item Find all Node Type Implementations. Because they contain references both to the Node Type and to the Artifact Templates, then the dependency from Artifact to Node Types can be built.
-	\item Find all Service Templates and in them contained Node Templates. Each Node Template contains a reference to Node Type, what is useful for building a dependency from Artifact to Node Template.
+	\item Find all Node Type Implementations. Since they contain references both to the Node Type and to the Artifact Templates, so the dependency from Artifact to Node Types can be built.
+	\item Find all Service Templates and all contained Node Templates they contain. Each Node Template contains a reference to Node Type what is useful for building a dependency from Artifact to Node Template.
 \end{itemize} 
-In this way, the required internal dependencies tree can be built (with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$).
+In this way the required internal dependencies tree can be built (with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$).
+\input{graphics/script_serv_tree}
 
 \subsection{Modules and extensibility}
-Unfortunately, it is impossible to identify all types of external references, even when only one language and one package manager are used (an example in the listing \ref{alg:unreadable}).
+Unfortunately it is impossible to identify all types of external references, even when only one language and one package manager are used (see an example in the listing \ref{alg:unreadable}).
 \begin{Listing} 
 	\caption{Unreadable bash script}
 	\label{alg:unreadable}
@@ -64,63 +64,64 @@ set  word2 = ${line:6:1}${line:4:1}${line:17:1}
 $word1-$word2 install package
 \end{lstlisting}
 \end{Listing}
-Since this work is aimed at creating of the easily expanded and supplemented tool, initially only basic usage of package managers will be considered.\\
-The framework should handle different languages, each of them can support various package managers.
-A language module should filter files not belonging to the language, and accepted files will be transmitted to corresponding package manager modules.
-This principle can be illustrated by a figure \ref{fig:lang_pm}.
-\input{graphics/languages_pm}
-A package manager module resolves an external reference and transmits the package name to a package handler, described in section \ref{subs:archph}.\\
-The framework will contain a list of all supported language modules, and each language module will contain a list of supported package managers modules.
-Ease of adding new modules to the framework will proof the correctness of the architecture.\\
-At the beginning, the most popular combination will be implemented: the $bash$ language with the $apt-get$ package manager.
-This simple and powerful tool allows to install, delete or update the set of packages in one line.
-A line-by-line parser should be developed, which analyses scripts and finds the installation commands.
+Since this work is aimed at creating the easily expanded and supplemented tool, initially only basic usage of package managers will be considered.\\
+The framework should handle different languages, each of which can support various package managers.
+A language module should filter files not belonging to the language and the accepted files will be transmitted to the corresponding package manager modules.
+This principle can be illustrated by figure \ref{fig:lang_pm}.\\
+A package manager module resolves an external reference and transmits the package name to a package handler described in section \ref{subs:archph}.\\
+The framework will contain a list of all supported language modules and each language module will contain a list of supported package managers modules.
+Ease of adding new modules to the framework will prove the correctness of the architecture.\\
+At the beginning the most popular combination will be implemented: the $bash$ language with the $apt-get$ package manager.
+This simple and powerful tool allows to install, delete or update the set of packages in one line of code.
+A line-by-line parser which analyses scripts and finds the installation commands should be developed.
 After the modules for this combination will be implemented, new language and package manager modules should be added.
+\input{graphics/languages_pm}
 
 \subsection{Representing downloaded packages in TOSCA-Topology} \label{subs:repres}
-A package node denotes to the defined and instantiated element of \gls{tosca} topology, the purpose of which is to install the package.
-The adding of new package nodes to TOSCA topology can be divided into several steps.
+A package node denotes the defined and instantiated element of \gls{tosca} topology, the purpose of which is to install the package.
+The addition of new package nodes to TOSCA topology can be divided into several steps.
 \begin{itemize}
 	\item Add definitions for common elements, like Artifact Types or Relationship Types. 
 		This can be done once at the preprocessing stage.
 	\item The package node main definition will be represented by a Node Type. 
 		%There will be described that this node must be installed.
-	\item Artifacts (The downloaded data and the installation script) will be referenced by Artifact Templates.
-	\item Node Type Implementation will combine the artifacts.
-	\item Node Template will instantiate the package node in the corresponding Service Templates.
-		To determine corresponding Service Template the preprocessing described in the section \nameref{subs:analyse} will be used.
-	\item Reference Template will provide topology information, allowing the observer (a user or a runtime environment) to determine, for which nodes the package must be installed.
-		References will be created from the Node Template needing the package to Node Template of created package nodes.
+	\item Artifacts (the downloaded data and the installation script) will be referenced by Artifact Templates.
+	\item A Node Type Implementation will combine the artifacts.
+	\item A Node Template will instantiate the package node in the corresponding Service Templates.
+		To determine corresponding Service Template theautor will use the preprocessing described in the section \nameref{subs:analyse}.
+	\item A Reference Template will provide topology information, allowing the observer (a user or a runtime environment) to determine which nodes the package must be installed for.
+		References will be created from the Node Template which needs the package to the Node Template of the created package nodes.
 \end{itemize}
 After an execution of those steps, a definition of a package node will be finished and this node can be used.
-\subsection{Determining architecture of a final platform}
-An another problem appears during choosing the architecture of the device where packages will be installed.
-Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question, on which architecture which node will be deployed.
+
+\subsection{Determining architecture of the final platform}
+Another problem happens while choosing the architecture of the device where packages will be installed.
+Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question which architecture which node will be deployed on.
 There are many pitfalls here.\\
 A single Service Template can use several physical devices with different architectures.
-One Implementation Artifacts can be referred by different Node Types and Node Templates, instantiated on different platforms.
+Many Node Types and Node Templates instantiated on different platforms can refer to the same Implementation Artifact.
 This way one simple Implementation Artifact with a bash script containing "$apt$-$get$ $install$ $python$" command can be deployed on different devices within one Service Template (for example with the arm, amd64 and i386 architectures) and will result in the loading and installation of three different packages. 
-For an end user, the ability to use such a simple command is a huge advantage, but for the framework, it can greatly complicate analysis.
+For an end user, the ability to use such a simple command is a huge advantage, but for the framework, it can greatly complicate the analysis.
 The following methods of architecture selection were designed.
 \begin{itemize}
 	\item $Deployment$ $environment$ $analysis$\\
 	The script can analyze the system where it was started (for example using the "$uname$~$-a$" command) and depending on the result, it will install the package corresponding to the system's architecture.
 	\item $Unified$ $architecture$\\
-	The architecture will be defined by the user for a whole CSAR.
+	The architecture will be defined by the user for the whole CSAR.
 	\item $Artifact$ $specific$ $architecture$\\
-	The architecture will be defined separately for each artifact.
+	The architecture will be defined for each artifact separately.
 \end{itemize}
 \subsubsection*{Analysis of methods}
 The $deployment$ $environment$ $analysis$, which at first sight seems to be the most reliable solution, brings many additional problems.
 Packages for different platforms can differ not only by architecture but also by the version and the list of dependencies.
-As a consequence, a chaos can be produced by mirroring these different packages with different versions to the \gls{tosca}-topology.
-The only robust solution seems to be to create for each installed package a set of archives (one archive for one architecture), containing the entire dependency tree for the given package.
+As a consequence, chaos may occur while  mirroring these different packages with different versions to the \gls{tosca}-topology.
+The only found robust solution is to create a set of archives (one archive for one architecture), containing the entire dependency tree for the given package for each installed package.
 But this approach contradicts one of the main ideas of this work: the dependencies trees should be mapped to the topology.\\
 The $artifact$ $specific$ $architecture$ method carries an additional complexity to the user of the framework.
-It will obligate a user to analyze each artifact and decide on which architecture it will be executed. 
-This can be complicated by the fact that the same artifact can be executed on different architectures.\\
-The method of the $unified$ $architecture$ was chosen, as the simplest and easiest to implement.
-If it will be necessary, this method can be easily expanded to the $artifact$ $specific$ $architectures$ method (By removing the user input at start, and choosing an architecture for each artifact separately.) or to $deployment$ $environment$ $analysis$ (By downloading packages for all available architectures and adding the architecture determining algorithm to the installation scripts.).
+It will make a user analyze each artifact and decide which architecture it will be executed on. 
+All of this can be complicated by the fact that the same artifact can be executed on different architectures.\\
+The method of the $unified$ $architecture$ was chosen as the simplest and easiest to implement.
+If it will be necessary, this method can easily be expanded to the $artifact$ $specific$ $architectures$ method (by removing the user input at start, and choosing an architecture for each artifact separately) or to $deployment$ $environment$ $analysis$ (y downloading packages for all available architectures and adding the architecture determining algorithm to the installation scripts).
 
 %\subsection{Extensibility}
 %The framework should handle different languages, each of them can support various package managers.
@@ -128,61 +129,61 @@ If it will be necessary, this method can be easily expanded to the $artifact$ $s
 %This principle can be illustrated by a figure \ref{fig:lang_pm}.
 %\input{graphics/languages_pm}
 
-\subsection{Result's checking}
+\subsection{Validation}
 Checking the output of the framework is an important stage in the development of the program.
-It is necessary to verify both the overall validity of the output \gls{csar} and the possibility to deploy generated package nodes.
-To test for overall correctness it is possible to use $winery$ tool from OpenTOSCA.
+It is necessary to verify both the overall correctness of the output \gls{csar} and the possibility to deploy generated package nodes.
+To the correctness it is possible to use $Winery$ tool from OpenTOSCA.
 This tool for creating and editing CSAR archives is also great for visualizing the results.
-Checking the deployment of the generated package nodes can be done manually by entering commands starting the implementation artifact's execution.
+Checking the deployment of the generated package nodes can be done manually by entering commands which start the  artifact's execution.
 
 \section{Architecture}\label{sec:arch}
 This section will present the architecture of the framework and the detailed description of its elements.
 The main elements are a $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, a $package$ $handler$, and a $topology$ $handler$.
 
 \subsection{CSAR handler} \label{subs:casr_h}
-The CSAR handler provides an access to a \gls{csar} and maintains it's consistency. 
-It describes the processes of the adding of new files (to handle the metadata), archiving/unarchiving, and the choosing of a final platform architecture.
+The CSAR handler provides an access to a \gls{csar} and maintains its consistency. 
+It describes the processes of adding the new files (to handle the metadata), archiving/unarchiving, and choosing the final platform architecture.
 
 \subsection{References resolver} \label{subs:RR}
-This is the main element, the execution of which can be divided into the three stages: $preprocessing$, $processing$, $finishing$. \\
+This is the main element, whose execution can be divided into three stages: $preprocessing$, $processing$, $finishing$. \\
 During the $preprocessing$ stage, the CSAR will be unarchived, common files added, and internal dependencies trees generated.
 Figure \ref{fig:preproc} illustrates those steps.
-During the $processing$, all $language$ $modules$ will be activated, which are described in more details in the next section. \\
-To finish the work all results will be packed to the output CSAR during the $finishing$ stage.
+During the $processing$ stage, all $language$ $modules$ will be activated, the operation is described in more detail in the next section. \\
+To finish the work all results will be packed into the output CSAR during the $finishing$ stage.
 \input{graphics/preprocessing}
 
 \subsection{Language modules} \label{subs:archlm}
 Each $language$ $module$ describes a handling of one language and chooses files written in the language.
 It also contains a list of supported package manager modules.
-Each language module must provide the capability to generate a TOSCA node for a given package and this node must use the same language to install the package.
-That means, that a script and definitions for Artifact Templates, a Node Type, and a Node Type Implementation should be created by a language module.\\
-As already mentioned above, during $processing$ stage a $language$ $module$ analyzes all files one by one and checks their belonging to the language. 
+Each language module must provide the capability to generate a TOSCA node for the given package and this node must use the same language to install the package.
+This means that a script and definitions for Artifact Templates, a Node Type, and a Node Type Implementation should be created by a language module.\\
+As it is already mentioned above, during the $processing$ stage a $language$ $module$ analyzes all files one by one and checks their belonging to the language. 
 Any files not belonging to the described language are filtered out.
 The remaining files are transferred to the $language$ $module$'s $package$ $manager$ $modules$.
-For example, a $bash$ module will pass only files with $".sh"$ extension, which start with the $"\#!/bin/bash"$ line.
-An $ansible$ module should have an additional functionality to unpack zip archives, where ansible playbooks can be stored.
-Since ansible playbooks don't contain specific header or marker, the single sigh of ansible files is the "$.yml$" extension. 
+For example, a $bash$ module will pass only files with $".sh"$ extension which start with the $"\#!/bin/bash"$ line.
+An $ansible$ module should have an additional functionality to unpack zip archives where ansible playbooks can be stored.
+Since ansible playbooks don't contain a specific header or marker, the single sign of ansible files is the "$.yml$" extension. 
 
 \subsection{Package manager modules} \label{subs:archpmm}
-A $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$, described in the next section.
-Figure \ref{fig:lang_ph} illustrates data flow between language modules, package manager modules, and the package handler.\\
-To resolve an external reference a package manager module will parse a given file. 
+A $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$ described in the next section.
+Figure \ref{fig:lang_ph} illustrates data flow between language modules, package manager modules and the package handler.\\
+To resolve an external reference a package manager module will parse the given file. 
 In the case of the apt-get module for bash, the module will read a file line-by-line searching for the strings starting with "apt-get install".
-Such strings must be commented out and those ends should be divided to separate package names, which will be transferred to the package handler. 
+Such strings must be commented out and their ends should be divided into separate package names which will be transferred to the package handler. 
 \input{graphics/lang_ph}
 
 \subsection{Package Handler} \label{subs:archph}
-The $package$ $handler$ becomes a package name, downloads an installation data for an architecture specified by the CSAR handler, transfers the package name to the $topology$ $handler$ and recursively repeats the actions for all depended packages. 
+The $package$ $handler$ gets a package name, downloads an installation data for an architecture specified by the CSAR handler, transfers the package name to the $topology$ $handler$ and repeats the actions for all depended packages recursively. 
 To download an installation data the command "apt-get download \textbf{package}" can be used. 
 The architecture can be specified by a ":$architecture$" suffix, for example, a "package:$arm$" mean the package of the $arm$ architecture.
 The list of dependencies will be obtained using the "apt-cache depends \textbf{package}" command. 
 The output of such command should be parsed in order to extract names of depended packages.
-Of course, in a case of a fault during a download of a package, a user interface should be provided, to find a solution.
-That can be: retry the download, ignore the package, rename the package, or even break the framework's execution.
+Of course, in case of a fault during a download of a package, a user interface should be provided to find a solution.
+It can be: retry the download, ignore the package, rename the package or even break the framework's execution.
 
 \subsection{Topology Handler} \label{subs:archtop}
-This element should handle the TOSCA topology and has two main tasks: analyze the TOSCA topology during the preprocessing stage to create internal dependencies tries and use those tries to create TOSCA definitions for Node Templates and Relationship Templates in right places for packages provided by the package handler.
-The analyze of the TOSCA topology was described in the section \ref{subs:analyse} and the defining of Node Templates and Relationship Templates in the section \ref{subs:repres}.
+This element should handle the TOSCA topology and it has two main tasks: to analyze the TOSCA topology during the preprocessing stage to create internal dependencies trees and to use those trees to create TOSCA definitions for Node Templates and Relationship Templates in the right places for he packages provided by the package handler.
+The analysis of the TOSCA topology was described in section \ref{subs:analyse} and the definition of Node Templates and Relationship Templates was given in section \ref{subs:repres}.
 %$Topology$ $handler$ adds a package to the topology. 
 %This includes adding new files and updating existing files. 
 %Necessary steps were described in section \ref{subs:repres}.

@@ -15,9 +15,9 @@ A new node should be created for each package.
 During this, step a set of definitions will be created.
 A common description of a new node is provided via a Node Type, which contains the "install" operation. 
 This operation will be implemented by a Node Type Implementation, which uses Artifact Templates.
-Created nodes should install packages using the same language, as the original node contained the external reference.
+The created nodes should install packages using the same language, as the original node contained the external reference.
 In the example with the Bash language, the Artifact Templates will be represented by the deployment artifact with the installation data and by the implementation artifact with the script containing the installation command. \\
-Then nodes should be instantiated and referenced.
+Then the nodes should be instantiated and referenced.
 For each Node Template which uses an artifact with external references to a \textbf{package}, a separate Node Template of the \textbf{package}'s Node Type should be defined and referenced.
 Then for each \textbf{package}'s Node Template additional Node Templates for packages from its dependencies tree should be defined and referenced.
 To define a reference between nodes a Relationship Template will be used and to find out which Node Template uses which artifact the CSAR will be preprocessed.
@@ -32,21 +32,7 @@ Ansible scripts are called playbooks.
 Ansible playbooks and related data are often packed to a zip archive for encapsulation.
 That makes the ansible module harder to implement since it should not only parse playbooks but additionally unpack archives. Ansible Node Type Implementations will contain only one artifact.
 This artifact will be an archive containing both the playbook and the installation data.
-%These software handlers of languages and package managers will be called language modules and package manager modules.
-%As an example, the $Bash$ and $apt$-$get$ modules will remove package installation commands from bash-scripts ($apt$-$get$ $install$ \textbf{$package$}).
-%Then both the \textbf{$package$} itself and all the depended packages from his dependencies tree will be downloaded.
-%It is also necessary to update the topology of the TOSCA, by adding new nodes and dependencies.
-%To do so, common definitions will be added, like Relationship Types and Artifact Types.
-% for downloaded packages and dependencies from nodes previously containing an external reference to the node displaying the downloaded packages. 
-%Then new nodes will be defined by Node Types, Node Type Implementations, Artifacts Templates, and instantiated by Node Templates. 
-%Relations between nodes will be instantiated by Relationship Templates.
-%These Templates must be added to the right Service templates, where the nodes containing external references are instantiated.
-%Dependencies between downloaded packages, representing dependency tree should be added too.
-%To find the Service Templates and Node Types corresponding to a certain artifact, it can be useful to apply preprocessing to the entire TOSCA topology. \\
-%References chain can be build:\\
-%$script$ $\rightarrow$ $Artifact$ $Implementation$ $\rightarrow$ $Node$ $Type$ $Implementation$ $\rightarrow$ $Node$ $Type$ $\rightarrow$ $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
-%After implementing the minimal configuration, it should be easy to add more language modules and package manager modules, like $Aptitude$ for Bash or completely new language like $Chef$.
-%In order to proof the correctness of the corresponding TOSCA topology, Winery described in section \ref{tool:winery} will be used.
+
 \section*{Handling}
 There is an example, representing how the framework should process a CSAR.\\
 At start an input CSAR will be extracted to a temporary folder to handle its content.
@@ -60,28 +46,8 @@ Using the package name the package installation data will be downloaded, the ins
 To create a new TOSCA node for the given package, the definitions for Node Type, Node Type Implementation, and Artifact Templates should be added to the CSAR. 
 A separate Node Template, as well as Relationship Template, will be defined for each depending node.
 These actions will be recursively repeated for all depending packages from the package's dependencies tree which mirrors the tree to the TOSCA topology.
-At the end, the meta-file should be updated and the data packed back to the SCAR.\\
-%\begin{itemize}  
-%	\item Begin  \\
-%%	To start the work $RR$ needs input CSAR name, output CSAR name, and architecture of target hardware. 
-%%	This will be done using user input.
-%	An input CSAR will be extracted.
-%	\item Preprocessing\\
-%	During preprocessing stage, RR needs to analyze internal references.
-%	In additional, common Tosca definitions for artifacts and relations between packages will be added.
-%	\item Processing with language modules\\
-%	Each file from the input CSAR will be processed by Language modules.
-%	\item Processing with packet manager modules\\
-%    If the file belongs to an Language, it will be processed by the packet manager module belonging to the Language to find and resolve external references.
-%    Package name from this reference will be moved forward.
-%	\item Package handling\\
-%	Using the package name the package will be downloaded and TOSCA definitions created. These actions will be recursively repeated for all dependent packages, creating the dependency tree in the TOSCA topology.
-%	\item Topology handling\\
-%	Using information about internal references and dependencies the TOSCA Topology will be updated by creating new Node and Reference Templates. 
-%	\item End\\
-%	Meta-file should be updated and all data packed back to the CSAR.
-%\end{itemize}
-These actions will be described in the chapter \ref{chap:conarch} and implemented in the chapter \ref{chap:imp} in more detail.
+At the end, the meta-file should be updated and the data packed back to the SCAR. %\\
+This behavior will be described in the chapter \ref{chap:conarch} and implemented in the chapter \ref{chap:imp} in more detail.
 
 \section*{Result}
 As a result of the program's work, an output CSAR will be received. 
@@ -89,4 +55,4 @@ This CSAR must have the same functionality as the input CSAR, but all external r
 The output CSAR must be able to be deployed properly without downloading these packages over the Internet. 
 In addition, the dependencies trees for packages from new nodes should be represented in the TOSCA topology.\\
 
-In order to validate the output CSAR, the TOSCA topology can be checked and printed by the winery and the defined artifacts can be validated through those installations on a test machine. 
+In order to validate the output CSAR, the TOSCA topology can be checked and printed by Winery and the defined artifacts can be validated through those installations on a test machine. 

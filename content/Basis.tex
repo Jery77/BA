@@ -133,9 +133,11 @@ The input \gls{csar} is the \gls{csar}, which can contain external references an
 The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
 
 \section{OpenTOSCA} \label{sec:opentosca}
-OpenTOSCA provides an open source ecosystem for \gls{tosca} applications. 
+OpenTOSCA provides an open source web-based ecosystem for \gls{tosca} applications. 
+It was developed at the University of Stuttgart in october 2012.
 This ecosystem consists of three parts: a \gls{tosca} \textbf{runtime environment}, a graphical modeling TOSCA tool \textbf{Winery}, and a self-service portal for the applications available in the container \textbf{Vinothek}.~\cite*{OpenTOSCA}
-Descriptions of the runtime environment and the winery will be provided in more detail. 
+Descriptions of the runtime environment and Winery will be provided in more detail. 
+
 \subsection*{Runtime environment}
 The runtime environment enables a fully automated plan-based deployment and management of cloud applications in the CSAR container. 
 First, the CSAR is unpacked and the files are put into the Files store.
@@ -143,10 +145,25 @@ Then, the TOSCA definitions documents are loaded, resolved, validated, and proce
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.~\cite{INPROC-2013-45}
+This system can be visualized by figure~\ref{fig:opencontainer}
+\input{graphics/opencontainer}
+
 \subsection*{Winery}\label{subs:wine}\label{tool:winery}
-The winery works under a Tomcat server and therefore visual interface is available in a browser. %, example in figure \ref{fig:winery_gui}.
-The winery provides a complete set of functions for creating, editing and deleting elements in the TOSCA topology. 
-An example of the TOSCA topology is presented in the figure~\ref{fig:winery_source}.
+Winery provides a complete set of functions for graphically create, edit and delete elements in the TOSCA topology presented by a CSAR. 
+It consists of four parts: the type and template management, the topology modeler, the BPMN4TOSCA plan modeler, and the repository.\\
+The type, template and artifact management enables managing all TOSCA types, templates and related artifacts. 
+This includes node types, relationship types, policy types, artifact types, artifact templates, and artifacts such as virtual machine images.\\
+The topology modeler enables to create service templates. 
+Service templates consist of instances of node types (node templates) and instances of relationship types (relationship templates). 
+They can be annotated with requirements and capabilities, properties, and policies.\\
+The BPMN4TOSCA plan modeler offers web-based creation of BPMN models with the TOSCA extension BPMN4TOSCA. 
+That means the modeler supports the BPMN elements and structures required by TOSCA plans and not the full set of BPMN. 
+The Stardust project offers a Browser Modeler, which supports BPMN. In the context of Winery, this modeler will be extended to support BPMN4TOSCA.\\
+The repository stores TOSCA models and allows managing their content. 
+For instance, node types, policy types, and artifact templates are managed by the repository. 
+The repository is also responsible for importing and exporting CSARs, the exchange format of TOSCA files and related artifacts.~\cite{winery}\\
+Winery works under a Tomcat server and therefore a visual interface is available in a browser. %, example in figure \ref{fig:winery_gui}.
+An example of the TOSCA topology visualization is presented in the figure~\ref{fig:winery_source}.
 %\begin{figure}[ht]   
 %	\centering
 %	\includegraphics[width=0.7\textwidth]{Screenshot_winery_gui.png}
@@ -156,7 +173,7 @@ An example of the TOSCA topology is presented in the figure~\ref{fig:winery_sour
 \begin{figure}[ht]   
 \centering
 \includegraphics[width=0.7\textwidth]{Screenshot_winery_source.png}
-\caption{TOSCA topology presented by the $Winery$.}
+\caption{TOSCA topology presented by $Winery$.}
 \label{fig:winery_source}
 \end{figure}
 
@@ -199,14 +216,17 @@ A structure describing all necessary packages and dependencies between them for 
 The dependency type $required$ can lead to cycles in a dependency tree what differs it from the normal tree graph structures.
 
 \section{Languages for package management automation}
-To automate the package management, various languages are used. 
-The languages used in the framework will be described.
+To ease the package management, various languages can be used. 
+One can use a language to write an executable file, which checks an environment and installs the necessary packages using a package manager.
+Such files are called scripts and are commonly used.
+Bash and Ansible languages used in the framework will be described.
+
 \subsection*{Bash} \label{lang:bash}
 Bash is a Unix command language written as a free software.
-In addition bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
-Instead of typing commands direct into a command line, a file containing some commands can be executed.~\cite{bash}
-This file is called a script.
-Scripts are often used to install programs automatically.
+In addition Bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
+Instead of typing commands direct into a command line, a script can be executed directly.~\cite{bash}
+Bash is a very popular and ease language, therefore a huge number of problems have solutions in Bash scripts already.
+
 \subsection*{Ansible} \label{lang:ansible}
 Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
 As with most configuration management software, Ansible has two types of servers: controlling machines and nodes.
