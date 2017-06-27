@@ -215,16 +215,19 @@ In these examples, the $package2$ is needed for the $package1$, but the $package
 A structure describing all necessary packages and dependencies between them for the given root-package is called a dependency tree. 
 The dependency type $required$ can lead to cycles in a dependency tree what differs it from the normal tree graph structures.
 
-\section{Languages for package management automation}
-To ease the package management, various languages can be used. 
-One can use a language to write an executable file, which checks an environment and installs the necessary packages using a package manager.
+\section{Configuration management tools}
+To ease the package management, various tools can be used. 
+One can write an executable file, which checks an environment and installs the necessary packages using a package manager.
 Such files are called scripts and are commonly used.
-Bash and Ansible languages used in the framework will be described.
+Bash and Ansible used in the framework will be described.
+Furthermore Chef and CFEngine will be presented too.
 
 \subsection*{Bash} \label{lang:bash}
 Bash is a Unix command language written as a free software.
+It provides enough capabilities to be used as a  management tool.
 In addition Bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
 Instead of typing commands direct into a command line, a script can be executed directly.~\cite{bash}
+These scripts can be used to configure a system, install package, create files, check environment and so on.
 Bash is a very popular and ease language, therefore a huge number of problems have solutions in Bash scripts already.
 
 \subsection*{Ansible} \label{lang:ansible}
@@ -237,3 +240,17 @@ Ansible playbooks express configurations, deployment, and orchestration in Ansib
 The playbook format is YAML. 
 Each playbook maps a group of hosts to a set of roles.
 Each role is represented by calls to Ansible tasks.~\cite{ansible} 
+
+\subsection*{Chef} \label{lang:shef}
+Chef is a configuration management tool, which uses Ruby for writing system configuration files called "recipes".
+They describe how Chef manages applications and utilities and how they are to be configured.
+These recipes (which can be grouped together as a "cookbook" for easier management) define a series of resources that should be in a particular state: packages that should be installed, services that should be running, or files that should be written.
+Chef can run in client/server mode, or in a standalone configuration named "chef-solo".
+In client/server mode, the Chef client sends various attributes about the node to the Chef server. 
+In solo mode th local system will be configured.~\cite{chef}
+
+\subsection*{CFEngine}
+CFEngine is an open source configuration management system.
+Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers.~\cite{cfengine}
+Configurations are described by "policy" files, which are plain text-files with .cf extension.
+These files define the necessary state of files, packages, users, processes, services and so on.~\cite{cfengine2}

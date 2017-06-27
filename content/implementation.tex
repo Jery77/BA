@@ -50,6 +50,7 @@ This is the main module which starts by framework startup and is executed into t
 At the preprocessing stage, the CSAR is unpacked, common \gls{tosca} definitions are generated and internal dependencies trees are built. 
 %
 %\subsubsection*{Unpacking}
+As the first step, a user interface is provided to get the names of the input CSAR, output CSAR and the architecture of the final platform.
 To unpack the CSAR the function $unpack$ from the CSAR handler is used.\\
 %
 %\subsubsection*{Generating TOSCA Definitions}
@@ -74,6 +75,9 @@ To build internal dependencies trees the topology handler described in section \
 \subsection*{Processing}
 During this stage, all language modules listed in the framework are started.
 For the references resolver element that is only two strings of code, but they start the main functionality of the framework.
+The languages modules check all files presented in the input CSAR. 
+The list of these files is stored in the CSAR handler, a pointer to which the modules became during their instantiation and translate to the corresponding package manager modules.
+This system allows the modules to access the CSAR's content at any time.
 %Since the language modules are stored in $language$ variable, this simple stage can be presented by the listing~\ref{lst:start_lang}.
 %\begin{Listing}
 %\caption{The processing stage}
@@ -86,8 +90,11 @@ For the references resolver element that is only two strings of code, but they s
 
 
 \subsection*{Finishing}
-To finish the work the changed data should be packed back into a \gls{csar}.
+When all external references will be resolved, the framework can enter its last stage.
+At this stage, the changed data should be packed into an output \gls{csar}, whose name was entered during the preprocessing stage.
 The function $pack$ from the CSAR handler is used. 
+After this operation, we become a more encapsulated CSAR.
+Its level of Internet access during a deployment will be significantly lower.
 
 \section{Language modules} 
 This section will describe the language modules. %implementation of %TODO

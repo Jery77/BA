@@ -48,11 +48,19 @@ A separate Node Template, as well as Relationship Template, will be defined for 
 These actions will be recursively repeated for all depending packages from the package's dependencies tree which mirrors the tree to the TOSCA topology.
 At the end, the meta-file should be updated and the data packed back to the SCAR. %\\
 This behavior will be described in the chapter \ref{chap:conarch} and implemented in the chapter \ref{chap:imp} in more detail.
-
 \section*{Result}
 As a result of the program's work, an output CSAR will be received. 
 This CSAR must have the same functionality as the input CSAR, but all external references to additional packages must be resolved.
 The output CSAR must be able to be deployed properly without downloading these packages over the Internet. 
-In addition, the dependencies trees for packages from new nodes should be represented in the TOSCA topology.\\
-
+In addition, the dependencies trees for packages from new nodes should be represented in the TOSCA topology. \\
 In order to validate the output CSAR, the TOSCA topology can be checked and printed by Winery and the defined artifacts can be validated through those installations on a test machine. 
+\section*{Summarize}
+The developed framework must:
+\begin{itemize}
+	\item delete references to external packages from a CSAR.
+	\item add the internal installation of the packages to the CSAR.
+	\item handle different configuration management tools and package managers.
+	\item have an easy to expendable structure. 
+	\item represent the packages into the TOSCA topology.
+	\item generate a new CSAR with the same functionality, but without any external references.
+\end{itemize}

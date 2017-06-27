@@ -94,7 +94,7 @@ The addition of new package nodes to TOSCA topology can be divided into several 
 \end{itemize}
 After an execution of those steps, a definition of a package node will be finished and this node can be used.
 
-\subsection{Determining architecture of the final platform}
+\subsection{Determining architecture of the final platform} \label{finplatf}
 Another problem happens while choosing the architecture of the device where packages will be installed.
 Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question which architecture which node will be deployed on.
 There are many pitfalls here.\\
@@ -138,17 +138,26 @@ Checking the deployment of the generated package nodes can be done manually by e
 
 \section{Architecture}\label{sec:arch}
 This section will present the architecture of the framework and the detailed description of its elements.
-The main elements are a $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, a $package$ $handler$, and a $topology$ $handler$.
+The main elements are a \boldmath $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, a $package$ $handler$, and a $topology$ $handler$. \unboldmath
 
 \subsection{CSAR handler} \label{subs:casr_h}
 The CSAR handler provides an access to a \gls{csar} and maintains its consistency. 
-It describes the processes of adding the new files (to handle the metadata), archiving/unarchiving, and choosing the final platform architecture.
+It describes the processes of adding the new files (to handle the metadata), archiving/unarchiving, and choosing the final platform architecture. \\
+A new name/value pair must be added to the metadata for each new file integrated into the CSAR. 
+The name represents the path and the name of the file.
+The value contains a type of the file. 
+This type will be used by a runtime environment during the deployment to chose the right behavior. %\\
+The input CSAR is initially archived and must be decompressed in order to handle the content first.
+When all external references will be resolved, the content will be archived to an output CSAR. %\\
+As already was mentioned in section~\ref{finplatf}, an architecture of the final platform will be chosen for the entirely CSAR.
+A command line interface must be provided for a user, to allow him to chose the architecture. 
+The chosen architecture must be saved to the CSAR for the case of future processing by the framework to avoid the collisions between architectures of packages.
 
 \subsection{References resolver} \label{subs:RR}
 This is the main element, whose execution can be divided into three stages: $preprocessing$, $processing$, $finishing$. \\
 During the $preprocessing$ stage, the CSAR will be unarchived, common files added, and internal dependencies trees generated.
 Figure \ref{fig:preproc} illustrates those steps.
-During the $processing$ stage, all $language$ $modules$ will be activated, the operation is described in more detail in the next section. \\
+During the $processing$ stage, all $language$ $modules$ will be activated, the operation is described in more detail in the next section. %\\
 To finish the work all results will be packed into the output CSAR during the $finishing$ stage.
 \input{graphics/preprocessing}
 
