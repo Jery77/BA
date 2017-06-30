@@ -9,13 +9,14 @@ In section \ref{sec:aptitude_imp} the module is implemented and in section \ref{
 This section describes the $aptitude$ package manager.
 Like to the $apt$-$get$, the $aptitude$ is a command line program, where a package can be installed using the $aptitude$ $install$ \emph{package} command. 
 In additional, it can be started in a pseudo-graphical mode to provide a visual interface (An example in figure \ref{fig:aptitude_gui}).
+An another advantage compared to the $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_aptitude.png}
 	\caption{A command line visual interface for the $aptitude$ package manager.}
 	\label{fig:aptitude_gui}
 \end{figure}
-An another advantage compared to the $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
+
 \section{Implementing the new package manager module}\label{sec:aptitude_imp}
 The implementation of the $aptitude$ module will be described here.
 At first, the $aptitude$ class will be inherited from the abstract class $PackageManager$. 
@@ -33,9 +34,11 @@ public final class PM_aptitude extends PackageManager {
 }
 \end{lstlisting}
 \end{Listing} 
+
 After that, the $aptitude$ class can be used as a regular package manager module (but it lacking functionality).
 It is necessary to add the common code, like the constructor and the manager's name.
 After these operations, the $ansible$ module can be presented in the listing \ref{lst:aptit_common}.\\
+
 \begin{Listing} 
 \caption{The $aptitude$ module with some common elements}
 \label{lst:aptit_common}

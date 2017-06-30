@@ -84,11 +84,12 @@ The addition of new package nodes to TOSCA topology can be divided into several 
 	\item Add definitions for common elements, like Artifact Types or Relationship Types. 
 		This can be done once at the preprocessing stage.
 	\item The package node main definition will be represented by a Node Type. 
+		It must contain an $install$ operation, which represents the capability to install the node.
 		%There will be described that this node must be installed.
 	\item Artifacts (the downloaded data and the installation script) will be referenced by Artifact Templates.
-	\item A Node Type Implementation will combine the artifacts.
+	\item A Node Type Implementation will combine the artifacts to implement the $install$ operation.
 	\item A Node Template will instantiate the package node in the corresponding Service Templates.
-		To determine corresponding Service Template theautor will use the preprocessing described in the section \nameref{subs:analyse}.
+		To determine the corresponding Service Template the autor will use the preprocessing described in the section \nameref{subs:analyse}.
 	\item A Reference Template will provide topology information, allowing the observer (a user or a runtime environment) to determine which nodes the package must be installed for.
 		References will be created from the Node Template which needs the package to the Node Template of the created package nodes.
 \end{itemize}
@@ -193,6 +194,7 @@ It can be: retry the download, ignore the package, rename the package or even br
 \subsection{Topology Handler} \label{subs:archtop}
 This element should handle the TOSCA topology and it has two main tasks: to analyze the TOSCA topology during the preprocessing stage to create internal dependencies trees and to use those trees to create TOSCA definitions for Node Templates and Relationship Templates in the right places for he packages provided by the package handler.
 The analysis of the TOSCA topology was described in section \ref{subs:analyse} and the definition of Node Templates and Relationship Templates was given in section \ref{subs:repres}.
+The Internal dependencies trees must be updated to represent changes after addition of new Node Templates and Relationship Templates.
 %$Topology$ $handler$ adds a package to the topology. 
 %This includes adding new files and updating existing files. 
 %Necessary steps were described in section \ref{subs:repres}.

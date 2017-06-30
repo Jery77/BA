@@ -153,11 +153,11 @@ should be defined.
 And finally, a Node Type Implementation linking the operation and the Artifact Templates should be defined.
 A Node Template will be added later by the topology handler.
 
-\section{Package handler modules}
-In this section, package handler modules will be specified.
+\section{Package manager modules}
+In this section, package manager modules will be specified.
 Like languages, an abstract model will be defined to make the extensibility easier.
 The apt-get module for bash and an apt module for ansible will be implemented.
-\subsection*{Package handler model}
+\subsection*{Package manager model}
 The model is described by an abstract class.
 Its description contains only one function $proceed$ (in  listing~\ref{lst:pmabst}), that finds and eliminates external references, as well as passes the found package names to the package handler.
 \subsection*{Apt-get for bash}
@@ -206,6 +206,7 @@ This function downloads packages, calls the language's function $createTOSCA\_No
 After those operations, a dependencies three for the $packet$ will be built.\\
 The command $apt$-$get$ $download$ \emph{package} is used for downloading. 
 If the process fails, a user input is provided to solve the problem. 
+The user will be able to rename the package, ignore it or even break the processing.
 
 \subsection*{Dependencies}
 To determine the dependency type the $getDependensies$ function was developed.
