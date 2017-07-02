@@ -181,13 +181,14 @@ An example of the TOSCA topology visualization is presented in the figure~\ref{f
 \section{Package management} \label{sec:pm}
 %This section will describe the package management process and basic concepts for this area.
 %\subsection*{Package managers}
-A \textbf{package} is an archive file containing both data for installation of the program component and a set of metadata like name, function, version, producer, and a list of dependencies to other packages. 
+Package is an archive file containing both data for installation of the program component and a set of metadata like name, function, version, producer, and a list of dependencies to other packages. 
 Those program components can present not only a complete program but also a certain component of a large application. % or libraries, a packages which can be used only by other programs.
 For a user, a \textbf{package manager} is a set of software tools that automate the process of installing, updating, configuring and removing packages.
 But from the operating system side, a package manager is used for managing the database of packages, their dependencies, and versions, to prevent erroneous installation of programs and missing dependencies.
 %\subsection*{Packages}
 %\subsection*{Dynamic libraries}
-This task is especially complex in computer systems relying on dynamic library linking. Those systems share executable libraries of machine instructions across packages and applications. 
+This task is especially complex in computer systems relying on dynamic library linking. 
+Those systems share executable libraries of machine instructions across packages and applications. 
 In these systems, complex relationships between different packages requiring different versions of libraries result in a challenge colloquially known as "dependency hell".
 Good package management is vital to these systems.\\
 %\subsection*{Repository}
@@ -214,6 +215,26 @@ Dependency $package1$ \textbf{$preRequired$} $package2$ indicates that the $pack
 In these examples, the $package2$ is needed for the $package1$, but the $package2$ itself can require additional packages.
 A structure describing all necessary packages and dependencies between them for the given root-package is called a dependency tree. 
 The dependency type $required$ can lead to cycles in a dependency tree what differs it from the normal tree graph structures.
+
+\subsection*{Example dependencies handling}
+The $apt$-$get$ package manager will be considered to provide an example of a dependencies handling.
+This application is part of the \textbf{A}dvanced \textbf{P}ackaging \textbf{T}ool (APT) which uses $dpkg$ to communicated with an operating system.
+The system keeps a database of packages and their condition.
+These relations are presented in figure~\ref{fig:packages}.\\
+$apt$-$get$ has many functions: install, remove, update, autoremove, download and so on.
+We will consider the install, remove and autoremove operations to present the common algorithm of processing.
+When a package manager becomes a $package$ installation command, it builds a dependencies tree for the $package$ and checks the possibility to install these depended packages.
+For example it must check the compatibility with installed packages. 
+If the check was successful, the $apt$-$get$ downloads and installs the packages beginning with the bottom of the tree.
+The $package$ is marked in database as manually installed and all other packages are marked as automatically installed. 
+That will be helpful during the autoremove operation, when all automatically installed packages will be checked whether they are still needed.
+After installation of packages from the dependencies tree, the $package$ will be ready to work.\\
+A $package$ can be deleted during the $remove$ $package$ command.
+That happens only if there are no other packages depending on the $package$. 
+If the deletion is very important, then these packages can be removed too to keep the consistence of the database. 
+The packages needed for the $package$ itself will be deleted only by the autoremove command.
+
+\input{graphics/packages}
 
 \section{Configuration management tools}
 To ease the package management, various tools can be used. 
@@ -247,10 +268,39 @@ They describe how Chef manages applications and utilities and how they are to be
 These recipes (which can be grouped together as a "cookbook" for easier management) define a series of resources that should be in a particular state: packages that should be installed, services that should be running, or files that should be written.
 Chef can run in client/server mode, or in a standalone configuration named "chef-solo".
 In client/server mode, the Chef client sends various attributes about the node to the Chef server. 
-In solo mode th local system will be configured.~\cite{chef}
+In solo mode the local system will be configured.~\cite{chef}
 
 \subsection*{CFEngine}
 CFEngine is an open source configuration management system.
 Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers.~\cite{cfengine}
 Configurations are described by "policy" files, which are plain text-files with .cf extension.
 These files define the necessary state of files, packages, users, processes, services and so on.~\cite{cfengine2}
+
+\section{Encapsulation of CSAR}
+According to requirements from the Institute of Architecture of Application Systems (IAAS), the encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
+But it can be interesting to analyze other techniques to encapsulate a CSAR. 
+At first the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology we will be described.\\
+
+\subsection*{Generate custom repositories}
+It's possible to download all necessary packages and create an own custom package repository for each device used in application. 
+Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
+This method introduces minimal changes in a TOSCA structure.
+The main problem is the creation of the custom repositories. 
+When a TOSCA application consists of many small devices with limited capabilities it can be difficult to start many big custom repositories.
+
+\subsection*{Generate shared repository}
+Another opportunity is to create a single repository for all devices in a TOSCA application.
+It can be difficult to choose the right location for such server, but since an application represent the connected system this can redistribute the load to a powerful server.
+It is difficult to estimate the changes which will occur in a TOSCA topology during the applying of such method.
+
+\subsection*{One node for one package}
+This method was suggested by IAAS. 
+A new TOSCA node will be created for each downloaded package. 
+All dependencies between packages will be mirrored to a TOSCA topology.
+This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.
+
+\subsection*{Sets of packages}
+A set of depended packages from a dependencies tree related to an external reference can be archived and represented in a TOSCA topology as a single node.
+An installation of such node will lead to an installation of all needed packages.
+Of course some packages can be saved in different archives redundant, but a small size of a TOSCA application's structure will be achieved.
+It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. 
