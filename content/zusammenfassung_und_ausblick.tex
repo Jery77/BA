@@ -1,21 +1,61 @@
 % !TeX spellcheck = en_US
 
 \chapter{Summary}\label{chap:zusfas}
+!!!Entwurf!!!\\
+%The main points of this work will be presented and highlighted.\\
+External references can negatively affect the performance of cloud applications.
+Unfortunately, very many TOSCA applications access external sources for installing various packages at the stage of deployment.
+If we have high level of an information security or an limited access to the Internet, these external dependencies lead to a lot of problems which encapsulation can solve.
+The purpose of this work was to develop a software for the elimination of such dependencies.\\
+The software was developed in the Java language, which ensures its portability, ease of maintenance and expanding.
+To enable the ability to add processing of new types of external dependencies, the software was implemented in the form of a modular framework, with separate modules for languages and package managers.
+This allows the user to easily add their new handlers to package managers and languages.
+In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
+To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and the Ansible playbooks with the $apt$ package manager.\\
+The framework handles the CSAR as follows.
+The structure of a CSAR is analyzed to determine the internal dependencies between artifacts and Node Templates.
+Each language module selects artifacts for which the language was used.
+All such artifacts are transferred for processing to the package managers of the language.
+They find external dependencies, remove them and pass the names of the required packages to the package handler.
+It loads each package along with all its dependencies and sends information about them to the topology handler, which creates TOSCA nodes for these packages and dependencies from the original nodes to the new ones.
+In the future, a runtime environment could analyze these dependencies and install the necessary packages.\\
+In order to show the extensibility of the framework, the process of adding the $aptitude$ package manager module into $Bash$ module was described in detail.
+It  was shown how to create a module which can be added to the framework, how to implement its basic functions, pass data to the packet handler, and connect the module to $Bash$ language. \\
+In the end, the results of the framework were validated.
+The output SCARs were visualized and analyzed with the help of Winery.
+Generated artifacts were tested and executed.\\
+As a result, the framework was obtained that eliminates external dependencies in a CSAR.
+It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers and $Ansible$ language with $apt$ package managers and can be easily expanded to handle additional types of external references. 
 
 \if 0
-возможно вставить ссылки на главы???
-В этой главе будут повторно приведены и обощены основные моменты данной работы.
+В этой главе будут приведены и обощены основные моменты данной работы.
 
-Проблема внешних зависимостей в облачных приложениях для некоторых областей применения стоит очень остро.
-Целью данной работы было разработать фреймворк для устранения таких зависимостей.
-Для этого приведены базовые понятия, методы и спецификации.
-Далее объяснена концепция решения данной проблемы и решения некоторых проблем связанных с разработкой.
-Была описана архитектура фреймворка и отдельных его модулей.
-Былы описан ключевые моменты имплементации фреймворка
-Для того что бы проверить расширяемость фреймворка был добавлен новый модуль менеджера пакетов.
+Внешние зависимости могут негативно влиять на работу облачных приложениях.
+К сожалению очень многие тоска приложения обращаются к внешним источникам для установки различных пакетов на этапе развёртки.
+Если дело касается информационной безопастности или ограниченного доступа в интернет, то инкапсуляция приложения может решить множество проблем.
+Целью данной работы было разработать софт для комплексного устранения таких зависимостей.
 
-В результате был разработан фреймворк, устраняющий внешние зависимости в ССАР архивах для скриптовых языков таких то??? подробнее?.
-Инструмен является легкорасширяемым, что позволяет добавлять новые обработчики по мере необходимости.
-Полученные архивы были проверены с помощью ??
+Софт разработан на языке ява, что обеспечивает его портируемость, простоту обслуживания и расширения.
+Что бы дать возможность добавлять обработку новых типов внешних зависимостей, софт был выполнен в виде модульного фреймворка, с отдельными модулями для языков и менеджеров пакетов.
+Это позволяет пользователю легко добавлять свои обработчики менеджеров пакетов и языков.
+Изначально фреймворк обрабатывал только баш скрипты использующие менеджер пакетов апт-гет, но в ходе работы былы добавлены менеджер пакетов аптитуде для баш и Энсибл игровые книги с апт, для демонстрации простоту расширяемости фреймворка. 
+
+Фреймворк обрабатывает ЦСАР следующим образом. 
+Анализируется структура ЦСАР для определения внутренних зависимостей между артифактами и шаблонами ячеек.
+Далее каждый модуль языков отфильтровывает артифакты, для написания которых использовался этот язык.
+Все такие артифакты передаются на обработку модулям менеджеров пакетов этих языков. 
+Находят внешние зависимости, устраняют их и передают имена необходимых пакетов обработчику пакетов.
+Он загружает данный пакет вместе со всеми его зависимостями и предоставляет информацию о них обработчику топологии.
+Обработчик топологии создаёт ячейки тоска данных пакетов и зависимости от изначальных ячеек к новым, так что бы в дальнейшем, среда выполнения могла проанализировать эти зависимости и установить необходимые пакеты самостоятельно.
+
+Для того что бы показать расширяемость фреймворка процесс добавления моделя менеджера пакетов аптитудэ для баш был описан подробно. 
+Было показано как создаётся модуль, который можно добавить во фреймворк, как имплементировать его основные функции, передавать данные обработчику пакетов и подключить модуль к языку баш.
+
+в завершении были проверены результаты работы фреймворка.
+Выходные ЦСАР были визуализированы и проанализированы с помощью вайнери.
+Сгенерированные артефакты были протестированы и исполнены.
+
+В результате был получен фреймворк, устраняющий внешние зависимости в ЦСАР.
+Он обрабатывает такие то языки и может быть легко дополнен новыми модулями.
 
 \fi
