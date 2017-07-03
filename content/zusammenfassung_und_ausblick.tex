@@ -4,28 +4,29 @@
 !!!Entwurf!!!\\
 %The main points of this work will be presented and highlighted.\\
 External references can negatively affect the performance of cloud applications.
-Unfortunately, very many TOSCA applications access external sources for installing various packages at the stage of deployment.
-If we have high level of an information security or an limited access to the Internet, these external dependencies lead to a lot of problems which encapsulation can solve.
+Unfortunately, many TOSCA applications access external sources to install various packages during a deployment.
+If we have a high level of an information security or an limited access to the Internet, these external dependencies lead to a lot of problems which can be solved by encapsulation.
 The purpose of this work was to develop a software for the elimination of such dependencies.\\
-The software was developed in the Java language, which ensures its portability, ease of maintenance and expanding.
-To enable the ability to add processing of new types of external dependencies, the software was implemented in the form of a modular framework, with separate modules for languages and package managers.
-This allows the user to easily add their new handlers to package managers and languages.
+The software was developed in the Java language, which ensures its portability, ease of maintenance and extensibility.
+To enable the ability to handle new types of external dependencies, the software was implemented in the form of a modular framework with separate modules for languages and package managers.
+This allows a user easily add their new handlers for package managers and languages.
 In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
-To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and the Ansible playbooks with the $apt$ package manager.\\
-The framework handles the CSAR as follows.
-The structure of a CSAR is analyzed to determine the internal dependencies between artifacts and Node Templates.
-Each language module selects artifacts for which the language was used.
-All such artifacts are transferred for processing to the package managers of the language.
+To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and the Ansible playbooks with the $apt$ package manager was added.\\
+The framework handles a CSAR as follows.
+The structure of the CSAR is analyzed to determine the internal dependencies between artifacts and Node Templates.
+Then each language module selects artifacts for which the language was used.
+All such artifacts are transferred to the package managers of the language for processing.
 They find external dependencies, remove them and pass the names of the required packages to the package handler.
 It loads each package along with all its dependencies and sends information about them to the topology handler, which creates TOSCA nodes for these packages and dependencies from the original nodes to the new ones.
-In the future, a runtime environment could analyze these dependencies and install the necessary packages.\\
+Later, a runtime environment could analyze these dependencies and install the necessary packages.\\
 In order to show the extensibility of the framework, the process of adding the $aptitude$ package manager module into $Bash$ module was described in detail.
 It  was shown how to create a module which can be added to the framework, how to implement its basic functions, pass data to the packet handler, and connect the module to $Bash$ language. \\
 In the end, the results of the framework were validated.
 The output SCARs were visualized and analyzed with the help of Winery.
 Generated artifacts were tested and executed.\\
 As a result, the framework was obtained that eliminates external dependencies in a CSAR.
-It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers and $Ansible$ language with $apt$ package managers and can be easily expanded to handle additional types of external references. 
+It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers and $Ansible$ language with $apt$ package managers.
+the Framework can be easily expanded to handle additional types of external references. 
 
 \if 0
 В этой главе будут приведены и обощены основные моменты данной работы.

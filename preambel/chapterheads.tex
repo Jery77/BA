@@ -46,12 +46,12 @@
 %   * serifenhafter Schriftart (wenn kein zusaetzliches Kommando aktiviert ist) und
 %   * Kapitälchen wählen
 \iffalse
-\makeatletter
-%\def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
+%\makeatletter
+%%\def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
 
-%Fuer Kapitel mit Kapitelnummer
+%%Fuer Kapitel mit Kapitelnummer
 \def\@makechapterhead#1{%
-  \vspace*{10\p@}%
+%  \vspace*{10\p@}%
   {\parindent \z@ \raggedright \reset@font
 			%Default-Schrift: Serifenhaft (gut fuer englische Dokumente)
             %A) Fuer serifenlose Schrift:
@@ -65,34 +65,34 @@
         \par\nobreak\vspace*{10\p@}%
         \interlinepenalty\@M
     {\Huge\bfseries\baselineskip3ex
-	%Fuer Kapitaelchen folgende Zeile aktivieren:
-	%\fontseries{m}\fontshape{sc}\selectfont
+%	%Fuer Kapitaelchen folgende Zeile aktivieren:
+%	%\fontseries{m}\fontshape{sc}\selectfont
 	#1\par\nobreak}
     \vspace*{10\p@}%
 \makebox[\textwidth]{\hrulefill}%    \hrulefill alone does not work
     \par\nobreak
-    \vskip 40\p@
+    \vskip 20\p@
   }}
 
-  %Fuer Kapitel ohne Kapitelnummer (z.B. Inhaltsverzeichnis)
+%  %Fuer Kapitel ohne Kapitelnummer (z.B. Inhaltsverzeichnis)
   \def\@makeschapterhead#1{%
-  \vspace*{10\p@}%
+%  \vspace*{10\p@}%
   {\parindent \z@ \raggedright \reset@font
             \normalfont \vphantom{\@chapapp{} \thechapter}
         \par\nobreak\vspace*{10\p@}%
         \interlinepenalty\@M
     {\Huge \bfseries %
-	%Default-Schrift: Serifenhaft (gut fuer englische Dokumente)
-    %A) Fuer serifenlose Schrift folgende Zeile aktivieren:
+%	%Default-Schrift: Serifenhaft (gut fuer englische Dokumente)
+%    %A) Fuer serifenlose Schrift folgende Zeile aktivieren:
     \fontfamily{phv}\selectfont
-	%B) Fuer Kapitaelchen folgende Zeile aktivieren:
-	%\fontseries{m}\fontshape{sc}\selectfont
+%	%B) Fuer Kapitaelchen folgende Zeile aktivieren:
+%	%\fontseries{m}\fontshape{sc}\selectfont
 	#1\par\nobreak}
     \vspace*{10\p@}%
 \makebox[\textwidth]{\hrulefill}%    \hrulefill does not work
     \par\nobreak
-    \vskip 40\p@
+    \vskip 20\p@
   }}
-%
+%%
 \makeatother
 \fi
