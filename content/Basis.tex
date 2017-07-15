@@ -218,21 +218,21 @@ The dependency type $required$ can lead to cycles in a dependency tree what diff
 
 \subsection*{Example dependencies handling}
 The $apt$-$get$ package manager will be considered to provide an example of a dependencies handling.
-This application is part of the \textbf{A}dvanced \textbf{P}ackaging \textbf{T}ool (APT) which uses $dpkg$ to communicated with an operating system.
+This application is part of the \textbf{A}dvanced \textbf{P}ackaging \textbf{T}ool (APT) which uses $dpkg$ to communicate with an operating system.
 The system keeps a database of packages and their condition.
 These relations are presented in figure~\ref{fig:packages}.\\
 $apt$-$get$ has many functions: install, remove, update, autoremove, download and so on.
 We will consider the install, remove and autoremove operations to present the common algorithm of processing.
 When a package manager becomes a $package$ installation command, it builds a dependencies tree for the $package$ and checks the possibility to install these depended packages.
-For example it must check the compatibility with installed packages. 
-If the check was successful, the $apt$-$get$ downloads and installs the packages beginning with the bottom of the tree.
-The $package$ is marked in database as manually installed and all other packages are marked as automatically installed. 
-That will be helpful during the autoremove operation, when all automatically installed packages will be checked whether they are still needed.
+For example, it must check the compatibility with previously installed packages. 
+If the check was successful, the $apt$-$get$ downloads and installs the packages starting with the bottom of the tree.
+The $package$ is marked in the database as manually installed and all the other packages are marked as automatically installed. 
+It will be helpful during the autoremove operation when all automatically installed packages will be checked whether they are still needed.
 After installation of packages from the dependencies tree, the $package$ will be ready to work.\\
 A $package$ can be deleted during the $remove$ $package$ command.
-That happens only if there are no other packages depending on the $package$. 
-If the deletion is very important, then these packages can be removed too to keep the consistence of the database. 
-The packages needed for the $package$ itself will be deleted only by the autoremove command.
+It happens only if there are no other packages depending on the $package$. 
+If the deletion is very important, then these packages can also be removed too to keep the consistency of the database. 
+The packages necessary for the $package$ itself will be deleted only by the autoremove command.
 
 \input{graphics/packages}
 
@@ -277,12 +277,12 @@ Configurations are described by "policy" files, which are plain text-files with 
 These files define the necessary state of files, packages, users, processes, services and so on.~\cite{cfengine2}
 
 \section{Encapsulation of CSAR}
-According to requirements from the Institute of Architecture of Application Systems (IAAS), the encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
+According to the requirements from the Institute of Architecture of Application Systems (IAAS), the encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
 But it can be interesting to analyze other techniques to encapsulate a CSAR. 
-At first the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology we will be described.\\
+At first, we will described the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology.\\
 
 \subsection*{Generate custom repositories}
-It's possible to download all necessary packages and create an own custom package repository for each device used in application. 
+It's possible to download all necessary packages and create one's own custom package repository for each device used in the application. 
 Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
 This method introduces minimal changes in a TOSCA structure.
 The main problem is the creation of the custom repositories. 
@@ -290,8 +290,8 @@ When a TOSCA application consists of many small devices with limited capabilitie
 
 \subsection*{Generate shared repository}
 Another opportunity is to create a single repository for all devices in a TOSCA application.
-It can be difficult to choose the right location for such server, but since an application represent the connected system this can redistribute the load to a powerful server.
-It is difficult to estimate the changes which will occur in a TOSCA topology during the applying of such method.
+It can be difficult to choose the right location for such a server, but since an application represents the connected system this step can redistribute the load to a more powerful device.
+It is difficult to estimate the changes which will occur in a TOSCA topology while applying such a method.
 
 \subsection*{One node for one package}
 This method was suggested by IAAS. 
@@ -301,6 +301,6 @@ This is a very visual method, facilitating the understanding of a TOSCA applicat
 
 \subsection*{Sets of packages}
 A set of depended packages from a dependencies tree related to an external reference can be archived and represented in a TOSCA topology as a single node.
-An installation of such node will lead to an installation of all needed packages.
-Of course some packages can be saved in different archives redundant, but a small size of a TOSCA application's structure will be achieved.
+An installation of such a node will lead to the installation of all needed packages.
+Of course, some packages can be saved in different archives redundantly, but a small size of a TOSCA application's structure will be achieved.
 It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. 
