@@ -10,31 +10,33 @@ Furthermore one can observe the growth in the number of firms which are using cl
 And it concerns not only some big corporations but also many small companies.~\cite*{destatis_2014, destatis_2016} \\ 
 One of the most important reasons for the development of cloud applications is the economy of resources.
 It is much easier and often cheaper to rent a part of another's big mainframe than to maintain one's own server.
-It is also easier and cheaper to send a small package by mail than to keep your own car (server) and driver (administrator) for rare traffic as well.\\ 
+%It is also easier and cheaper to send a small package by mail than to keep your own car (server) and driver (administrator) for rare traffic as well.\\ 
 The growing popularity of cloud applications makes the automation and the ease of management increasingly important.
-Management is understood as deployment, administration, maintenance and the final roll-off of cloud applications.\\
-The common problem of cloud applications is \emph{affection}. 
+Management is understood as deployment, administration, maintenance and the final roll-off of cloud applications.~\cite*{autocloud} \\   
+The common problem of cloud applications is a \emph{vendor lock-in}.~\cite*{lockin} 
 The transfer of a cloud application configured to interact with the \gls{api} of one provider to work with another provider and another \gls{api} is a difficult but important task. 
 The ability to move a cloud application to the more suitable provider quickly is a key to the development of competition and reducing the cost of maintenance.\\ %развитие конкуренции
-\gls{tosca} \cite*{TOSCA-v1.0} provides an opportunity to solve this problem. 
-\gls{tosca} defines the language which makes cloud application's description and management portable and interoperable. 
+\gls{tosca} \cite*{TOSCA-v1.0} is a standard to solve this problem. 
+\gls{tosca} defines a meta-model to describing cloud application's definition and management portable and interoperable. 
 The use of TOSCA allows to simplify and automate the management of cloud applications by different providers. 
-According to \gls{tosca} standard a cloud application is stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR).
+According to \gls{tosca} standard a structure and management data are stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR).
 This archive contains the description of a cloud application, its external functions and internal dependencies and the data for the deployment and operation.\\
-OpenTOSCA \cite*{OpenTOSCA} is an open source constantly improving and expanding ecosystem (runtime environment) for TOSCA standard developed by the University of Stuttgart.
-OpenTOSCA processes data in CSAR format and performs specified actions. %\\
-These actions often contain links to external packages and programs which will be subsequently downloaded over the Internet for deployment of a cloud application,.
+OpenTOSCA \cite*{OpenTOSCA} is an open source constantly improving and expanding ecosystem for TOSCA standard developed by the University of Stuttgart.
+OpenTOSCA processes data in CSAR format and performs specified operations. %\\
+Installation operations often contain links to external packages and programs which will be subsequently downloaded over the Internet for the deployment of a cloud application.
 These downloads can add expenses to the time required to download packages, money spent on rent of an idle server and Internet traffic for megabytes of pre-known data.
-If a cloud application consists of the only deployed server, this may mean a few seconds of delay. 
-But when an application deploys a large number of linked servers (a cloud system), the costs can increase significantly.\\
+For many cloud applications, this may mean a few seconds of delay. 
+But for a large distributed application which contains a lot of identical nodes requiring the installation of the same external packages and programs, the costs can increase significantly.\\
 The other problems of external dependencies are security and stability.
 To ensure the security of information some firms restrict the Internet access.
 In other networks the Internet access is extremely limited.
-(For example, there can be no broadband access, slow communication only over a satellite at certain hours, etc)
+For example, there can be no broadband access, slow communication only over a satellite at certain hours, etc.
 An attempt to deploy a cloud application with external dependencies in such networks may not succeed. \\
 To solve these problems a software solution for removing external dependencies in CSARs will be developed and implemented during this work.
-This software will analyze a CSAR, identify dependencies to external packages and resolve them by downloading the necessary data to install the package (as well as data for all depended packages) and adding them to the CSAR's structure.
-The simplest example is to find in given CSAR all the commands like "apt-get install package", delete these commands, download the package and all depended packages and add them to the CSAR.\\
+This software will analyze a CSAR, identify dependencies to external packages and resolve them by downloading the necessary data to install the package as well as data for all depended packages. 
+Then all downloaded data will be added into the CSAR's structure to represent the changes made.
+%The simplest example is to find in given CSAR all the commands like "apt-get install package", delete these commands, download the package and all depended packages and add them to the CSAR.
+\\
 This software must easily be expanded (in other words - to be a framework) since it is impossible to predict and describe all possible types of external dependencies.
 The output of the framework is a CSAR which contains additions to the original structure, like all the packages necessary for the deployment of the cloud application, with the minimum possible level of access to the Internet during operation.
 \clearpage 
@@ -45,8 +47,8 @@ The work structure is as follows:
 \item[Chapter~\ref{chap:req} -- \nameref{chap:req}.] It clarifies requirements for the framework.
 \item[Chapter~\ref{chap:conarch} -- \nameref{chap:conarch}.] The main concepts as well as architecture of the framework are explained and illustrated in chapter \ref{chap:conarch}.
 \item[Chapter~\ref{chap:imp} -- \nameref{chap:imp}.] This chapter contains the description of the implementation.
- It explains the design and development of individual components of the framework. 
-\item[Chapter~\ref{chap:add} -- \nameref{chap:add}.] New package manager will be added in this chapter to proof ease of extensibility. 
-\item[Chapter~\ref{chap:check} -- \nameref{chap:check}.] Output of the framework will be checked here.
-\item[Chapter~\ref{chap:zusfas} -- \nameref{chap:zusfas}] recaps the results of the work.
+ It explains the design and development of individual components of the software. 
+\item[Chapter~\ref{chap:add} -- \nameref{chap:add}.] New package manager will be added into the framework to proof the ease of extensibility. 
+\item[Chapter~\ref{chap:check} -- \nameref{chap:check}.] In this chapter the output of the developed program will be presented and validated.
+\item[Chapter~\ref{chap:zusfas} -- \nameref{chap:zusfas}.] The results of the work will be summarized in the last chapter.
 \end{description}

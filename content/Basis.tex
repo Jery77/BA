@@ -132,6 +132,37 @@ During this work, such terms as input CSAR and output CSAR will be used.
 The input \gls{csar} is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
 The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
 
+
+\subsection{Encapsulation of CSAR}
+The encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
+But it can be interesting to analyze other techniques to encapsulate a CSAR. 
+At first, we will described the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology.\\
+
+\subsubsection*{Generate custom repositories}
+It's possible to download all necessary packages and create one's own custom package repository for each device used in the application. 
+Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
+This method introduces minimal changes in a TOSCA structure.
+The main problem is the creation of the custom repositories. 
+When a TOSCA application consists of many small devices with limited capabilities it can be difficult to start many big custom repositories.
+
+\subsubsection*{Generate shared repository}
+Another opportunity is to create a single repository for all devices in a TOSCA application.
+It can be difficult to choose the right location for such a server, but since an application represents the connected system this step can redistribute the load to a more powerful device.
+It is difficult to estimate the changes which will occur in a TOSCA topology while applying such a method.
+
+\subsubsection*{One node for one package}
+This method was suggested by IAAS. 
+A new TOSCA node will be created for each downloaded package. 
+All dependencies between packages will be mirrored to a TOSCA topology.
+This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.
+
+\subsubsection*{Sets of packages}
+A set of depended packages from a dependencies tree related to an external reference can be archived and represented in a TOSCA topology as a single node.
+An installation of such a node will lead to the installation of all needed packages.
+Of course, some packages can be saved in different archives redundantly, but a small size of a TOSCA application's structure will be achieved.
+It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. 
+
+
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source web-based ecosystem for \gls{tosca} applications. 
 It was developed at the University of Stuttgart in october 2012.
@@ -275,32 +306,3 @@ CFEngine is an open source configuration management system.
 Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers.~\cite{cfengine}
 Configurations are described by "policy" files, which are plain text-files with .cf extension.
 These files define the necessary state of files, packages, users, processes, services and so on.~\cite{cfengine2}
-
-\section{Encapsulation of CSAR}
-According to the requirements from the Institute of Architecture of Application Systems (IAAS), the encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
-But it can be interesting to analyze other techniques to encapsulate a CSAR. 
-At first, we will described the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology.\\
-
-\subsection*{Generate custom repositories}
-It's possible to download all necessary packages and create one's own custom package repository for each device used in the application. 
-Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
-This method introduces minimal changes in a TOSCA structure.
-The main problem is the creation of the custom repositories. 
-When a TOSCA application consists of many small devices with limited capabilities it can be difficult to start many big custom repositories.
-
-\subsection*{Generate shared repository}
-Another opportunity is to create a single repository for all devices in a TOSCA application.
-It can be difficult to choose the right location for such a server, but since an application represents the connected system this step can redistribute the load to a more powerful device.
-It is difficult to estimate the changes which will occur in a TOSCA topology while applying such a method.
-
-\subsection*{One node for one package}
-This method was suggested by IAAS. 
-A new TOSCA node will be created for each downloaded package. 
-All dependencies between packages will be mirrored to a TOSCA topology.
-This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.
-
-\subsection*{Sets of packages}
-A set of depended packages from a dependencies tree related to an external reference can be archived and represented in a TOSCA topology as a single node.
-An installation of such a node will lead to the installation of all needed packages.
-Of course, some packages can be saved in different archives redundantly, but a small size of a TOSCA application's structure will be achieved.
-It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. 
