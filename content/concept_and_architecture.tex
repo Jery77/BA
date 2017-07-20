@@ -14,9 +14,9 @@ In addition, it will be described, how the results can be validated.
 \input{graphics/general}
 
 
-\subsection{Analysis of existing TOSCA-Topology}\label{subs:analyse}
+\subsection{Analysis of a TOSCA-Topology}\label{subs:analyse}
 To update the \gls{tosca} topology properly, it is necessary to add references from the nodes where external references were to the newly created nodes which resolve the external references. 
-According to the TOSCA standard, references between Node Templates can only be created in the same Service Template.  
+According to TOSCA standard, references between Node Templates can only be created in the same Service Template.  
 That means that each Node Template which uses artifacts with external references must be found.
 Furthermore, Service Template where these Node Templates are instantiated must be determined to create there a Node Template for the new nodes and reference them to the Node Templates with external references.
 The Pointers to Artifacts are contained by Artifact Templates which are used by Node Type Implementations.
@@ -77,9 +77,9 @@ A line-by-line parser which analyses scripts and finds the installation commands
 After the modules for this combination will be implemented, new language and package manager modules should be added.
 \input{graphics/languages_pm}
 
-\subsection{Representing downloaded packages in TOSCA-Topology} \label{subs:repres}
-A package node denotes the defined and instantiated element of \gls{tosca} topology, the purpose of which is to install the package.
-The addition of new package nodes to TOSCA topology can be divided into several steps.
+\subsection{Representing downloaded packages in a TOSCA-Topology} \label{subs:repres}
+A package node denotes the defined and instantiated element of the \gls{tosca} topology, the purpose of which is to install the package.
+The addition of new package nodes to the TOSCA topology can be divided into several steps.
 \begin{itemize}
 	\item Add definitions for common elements, like Artifact Types or Relationship Types. 
 		This can be done once at the preprocessing stage.
@@ -112,17 +112,17 @@ The following methods of architecture selection were designed.
 	\item $Artifact$ $specific$ $architecture$\\
 	The architecture will be defined for each artifact separately.
 \end{itemize}
-\subsubsection*{Analysis of methods}
+%\subsubsection*{Analysis of methods}
 The $deployment$ $environment$ $analysis$, which at first sight seems to be the most reliable solution, brings many additional problems.
 Packages for different platforms can differ not only by architecture but also by the version and the list of dependencies.
-As a consequence, chaos may occur while  mirroring these different packages with different versions to the \gls{tosca}-topology.
+As a consequence, chaos may occur while  mirroring these different packages with different versions to the \gls{tosca} topology.
 The only found robust solution is to create a set of archives (one archive for one architecture), containing the entire dependency tree for the given package for each installed package.
 But this approach contradicts one of the main ideas of this work: the dependencies trees should be mapped to the topology.\\
 The $artifact$ $specific$ $architecture$ method carries an additional complexity to the user of the framework.
 It will make a user analyze each artifact and decide which architecture it will be executed on. 
 All of this can be complicated by the fact that the same artifact can be executed on different architectures.\\
 The method of the $unified$ $architecture$ was chosen as the simplest and easiest to implement.
-If it will be necessary, this method can easily be expanded to the $artifact$ $specific$ $architectures$ method (by removing the user input at start, and choosing an architecture for each artifact separately) or to $deployment$ $environment$ $analysis$ (y downloading packages for all available architectures and adding the architecture determining algorithm to the installation scripts).
+If it will be necessary, this method can easily be expanded to the $artifact$ $specific$ $architectures$ method (by removing the user input at start, and choosing an architecture for each artifact separately) or to $deployment$ $environment$ $analysis$ (by downloading packages for all available architectures and adding the architecture determining algorithm to the installation scripts).
 
 %\subsection{Extensibility}
 %The framework should handle different languages, each of them can support various package managers.
