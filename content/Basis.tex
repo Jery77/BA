@@ -85,38 +85,52 @@ This standard can be used not only to describe all stages of a Cloud application
 \subsection*{Structure of TOSCA applications}
 TOSCA specification provides a language to define components (described in section~\ref{def:servmod}) and relationships between them using $Service$ $Templates$. 
 In addition it describes the management procedures which create or modify services using orchestration processes.
-The description of the \gls{tosca} components used in this work is provided. \\
+The description of elements of a TOSCA structure used in this work is provided. \\
 A $Service$ $Template$ is the main component in a \gls{tosca} structure. 
-It contains an information about the structure (Topology Template) and interfaces (Plans) of the service. 
-There can be many Service Templates within one TOSCA application. %\\
-$Plans$ provide interfaces to manage Cloud applications.
-These components combine management capabilities to create high-level management tasks which can then be executed for fully automated deployment, configuration, management, and operation of the application.
-Plans are started by external messages and call management operations of the nodes in the topology. %\\
+It defines the structure (Topology Template) and process models (Plans) of the service. 
+There can be many Service Templates within one TOSCA application.
+The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of Cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
+This is useful when an application is ported to alternative Cloud environments.~\cite{TOSCA-v1.0_book} \\ %\\
+$Plans$ provide capabilities to manage Cloud applications, especially their creation and termination.
+These components combine management capabilities to create high-level management tasks which can then be executed for fully automated deployment, configuration and other operations of the application.
+Plans can be started by user or fully automatically and call management operations of the nodes in the topology. %\\
 A $Topology$ $Template$ describes the topology of a Cloud application, defining nodes (Node Templates) and relations between them (Relationship Templates). %\\
 A $Node$ $Template$ instantiates a Node Type as a component of a service. 
 A $Node$ $Type$ defines the properties of such a component and the operations available to manipulate the component.
 A $Relationship$ $Template$ instantiates a Relationship Type as a relationship between Node Templates in a Topology Template. 
 The Relationship Template indicates that two nodes are connected and defines the direction of the connection.
 A $Relationship$ $Type$ defines semantics and properties of the relationship.\label{subs:reltype} %\\
-Any Node Types and Relationship Types can by instantiated multiple times.
+A Node Type and Relationship Type can by instantiated multiple times.
 Those types are like abstract classes in high-level programming languages and Templates are objects of those classes.\\
-$Artifact$ represents the content necessary for a management such as executables (e.g. a script, an executable program, an image), a configuration file, a data file, or something that might be needed for other executables (e.g. libraries).
-TOSCA distinguishes two kinds of artifacts: Implementation Artifacts and Deployment Artifacts.
+A simple cloud application for weather calculating can be considered as an example. 
+The calculation is performed by a python script which requires a python environment that is hosted on an Ubuntu virtual server.
+$Node$ $Types$ must be defined for the python script, python environment and Ubuntu server.  
+These $Node$ $Types$ will describe available operations for defined components.
+It will a $compute$ operation for the python script, an $install$ operation for the python environments and $deploy$ and $shutdown$ operations for the server.
+Additionally, one must define $Relationship$ $Types$ for $requires$ and $hosted$ $on$ dependencies.
+Then these types will be instantiated inside the $Topology$ $Template$ named $weater$ $calculator$.
+For each specified $Node$ $Type$ is created a corresponding $Node$ $Template$ with unique identifiers.
+These identifiers are used by $Relationship$ $Templates$ define the dependencies.
+Figure~\ref{fig:weather} presents the described application. \\
+Artifact represents the content necessary for a management such as executables (e.g. a script or an executable program), a configuration file, a data file, or something that might be needed for other executables (e.g. libraries or images of file system).
+TOSCA distinguishes two kinds of artifacts: $Implementation$ $Artifacts$ and $Deployment$ $Artifacts$.
 An $Implementation$ $Artifact$ represents the executable of an operation described by a Node Type.
 An $Deployment$ $Artifact$ represents the executable for materializing instances of a node.
 An $Artifact$ $Type$ describes a common type of an artifact: python script, installation package and so on.
 An $Artifact$ $Template$ represents information about the artifact. 
 The location of the artifact and other attendant data are stored here. 
-Again, types are classes, templates are objects, and artifacts represent content or a value of an object, but these values of objects can not be changed. %\\
+Again, types are like classes, templates are like objects, and artifacts represent content or a value of an object, but these values of objects can not be changed. %\\
 $Node$ $Type$ $Implementation$ defines the artifacts needed for implementing the corresponding Node Type.
-For example, if Node Type contains $deploy$ and $shutdown$ operations, then Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data necessary for the deployment. %\\
+For example, if a Node Type contains $deploy$ and $shutdown$ operations, then Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data necessary for the deployment. %\\
 Implementations are like final classes between Node Types and Node Templates, but in TOSCA standard, the Implementation will be chosen only during execution.
 Types, Templates, and Implementations defining a TOSCA application are stored in definition document which have the XML format. %\\
-\subsection*{Usage}
+\input{graphics/weather}
+
+%%\subsection*{Usage}
 The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of Cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
 This is useful when an application is ported to alternative Cloud environments.~\cite{TOSCA-v1.0_book} \\
 %
-%%\subsection*{CSAR} 
+\subsection*{CSAR} 
 %
 To store a TOSCA application a \gls{csar}\label{sec:csar} is used.
 This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
@@ -137,7 +151,7 @@ The input \gls{csar} is the \gls{csar}, which can contain external references an
 The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
 
 
-\subsection{Encapsulation of CSAR}
+\subsection{Encapsulation of CSARs}
 The encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
 But it can be interesting to analyze other techniques to encapsulate a CSAR. 
 At first, we will described the methods not representing packages in a TOSCA topology and then the methods mirroring packages in a topology.\\
@@ -174,30 +188,43 @@ This ecosystem consists of three parts: a \gls{tosca} \textbf{runtime environmen
 Descriptions of the runtime environment and Winery will be provided in more detail. 
 
 \subsection*{Runtime environment}
-The runtime environment enables a fully automated plan-based deployment and management of Cloud applications in the CSAR container. 
-First, the CSAR is unpacked and the files are put into the Files store.
+The runtime environment enables a fully automated plan-based deployment and management of Cloud applications contained in a CSAR. 
+The architecture of the environment is visualized by figure~\ref{fig:openarch}.
+Requests to the Container API are passed to the Control component, which orchestrates the different components, tracks their progress, and interprets the TOSCA application. 
+The Core component offers common services to other components, e. g., managing data or validating XML.
+Management operations of nodes and relationships are either provided by running (Web) services, e. g., the Amazon EC2 API, or by Implementation Artifacts contained in the CSAR.
+In the latter case, the Implementation Artifact Engine is responsible to run these artifacts in order to make them available for plans. 
+The plugin architecture of the Implementation Artifact Engine ensure extensibility.
+Implementation Artifacts, e. g., a SOAP Web service implemented as Java Web archive, are processed by a corresponding plugin of the engine which knows where and how to run this kind of artifact. 
+The plugins deploy the respective artifacts and return the endpoints of the deployed management operations to be stored in the Endpoints database.
+The deployment of Web Archives on Tomcat~\cite*{tomcat} and Axis Archives on Apache Axis~\cite*{axis} is supported~\cite*{macharb}.
+The Plan Engine handles plans in the same manner.
+It is also build according to a plugin architecture and supports different workflow languages, e.g., Business Process Model and Notation (BPMN) or Business Process Execution (BPEL) Language, and their runtime environments.~\cite{INPROC-2013-45}
+\\
+A processing is done in following manner.  
+First, the CSAR is unpacked and the files are put into the files store.
 Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
 The endpoints of the management plans are stored in the Plans database.~\cite{INPROC-2013-45}
-This system can be visualized by figure~\ref{fig:opencontainer}
-\input{graphics/opencontainer}
+%\input{graphics/opencontainer}
+\input{graphics/openarch}
 
 \subsection*{Winery}\label{subs:wine}\label{tool:winery}
 Winery provides a complete set of functions for graphically create, edit and delete elements in the TOSCA topology presented by a CSAR. 
-It consists of four parts: the type and template management, the topology modeler, the BPMN4TOSCA plan modeler, and the repository.\\
+It consists of four parts: the type and template management, the topology modeler, the BPMN4TOSCA plan modeler ~\cite{BPMN4TOSCA}, and the repository.\\
 The type, template and artifact management enables managing all TOSCA types, templates and related artifacts. 
 This includes node types, relationship types, policy types, artifact types, artifact templates, and artifacts such as virtual machine images.\\
-The topology modeler enables to create service templates. 
-Service templates consist of instances of node types (node templates) and instances of relationship types (relationship templates). 
+The topology modeler allows to create service templates which consist of node templates and relationship templates. 
 They can be annotated with requirements and capabilities, properties, and policies.\\
 The BPMN4TOSCA plan modeler offers web-based creation of BPMN models with the TOSCA extension BPMN4TOSCA. 
 That means the modeler supports the BPMN elements and structures required by TOSCA plans and not the full set of BPMN. 
-The Stardust project offers a Browser Modeler, which supports BPMN. In the context of Winery, this modeler will be extended to support BPMN4TOSCA.\\
+The Stardust project~\cite*{stardust} offers a Browser Modeler, which covers all phases of the Business Process Lifecycle including modeling, simulation, execution and monitoring. 
+In the context of Winery, this modeler was extended to support BPMN4TOSCA.\\
 The repository stores TOSCA models and allows managing their content. 
 For instance, node types, policy types, and artifact templates are managed by the repository. 
-The repository is also responsible for importing and exporting CSARs, the exchange format of TOSCA files and related artifacts.~\cite{winery}\\
-Winery works under a Tomcat server and therefore a visual interface is available in a browser. %, example in figure \ref{fig:winery_gui}.
+The repository is also responsible for importing and exporting CSARs, the exchange format of TOSCA files and related artifacts.~\cite{winery} %\\
+%Winery works under a Tomcat server and therefore a visual interface is available in a browser. %, example in figure \ref{fig:winery_gui}.
 An example of the TOSCA topology visualization is presented in the figure~\ref{fig:winery_source}.
 %\begin{figure}[ht]   
 %	\centering
