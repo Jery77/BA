@@ -20,15 +20,15 @@ The ability to move a Cloud application to the more suitable provider quickly is
 \gls{tosca} defines a meta-model to describing Cloud application's definition and management portable and interoperable. 
 The use of TOSCA allows to simplify and automate the management of Cloud applications by different providers. 
 According to \gls{tosca} standard a structure and management data are stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR).
-This archive contains the description of a Cloud application, its external functions and internal dependencies and the data for the deployment and operation.\\
-OpenTOSCA \cite*{OpenTOSCA} is an open source constantly improving and expanding ecosystem for TOSCA standard developed by the University of Stuttgart.
+This archive contains the description of a Cloud application, its external functions, internal dependencies and the data for the deployment and operation.\\
+OpenTOSCA \cite*{OpenTOSCA} is an open source constantly improving and expanding ecosystem for the TOSCA standard developed by the University of Stuttgart.
 OpenTOSCA processes data in CSAR format and performs specified operations. %\\
 Installation operations often contain links to external packages and programs which will be subsequently downloaded over the Internet for the deployment of a Cloud application.
 These downloads can add expenses to the time required to download packages, money spent on rent of an idle server and Internet traffic for megabytes of pre-known data.
 For many Cloud applications, this may mean a few seconds of delay. 
 But for a large distributed application which contains a lot of identical nodes requiring the installation of the same external packages and programs, the costs can increase significantly.\\
 The other problems of external dependencies are security and stability.
-To ensure the security of information some firms restrict the Internet access.
+To ensure the security of information some firms restrict the access to Internet.
 In other networks the Internet access is extremely limited.
 For example, there can be no broadband access, slow communication only over a satellite at certain hours, etc.
 An attempt to deploy a Cloud application with external dependencies in such networks may not succeed. \\
@@ -39,7 +39,7 @@ Then all downloaded data will be added into the CSAR's structure to represent th
 \\
 This software must easily be expanded (in other words - to be a framework) since it is impossible to predict and describe all possible types of external dependencies.
 The output of the framework is a CSAR which contains additions to the original structure, like all the packages necessary for the deployment of the Cloud application, with the minimum possible level of access to the Internet during operation.
-\clearpage 
+%\clearpage 
 \section*{Structure}
 The work structure is as follows:
 \begin{description}

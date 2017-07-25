@@ -98,6 +98,8 @@
 
 \input{content/abkuerzungen}
 
+\usepackage{titlesec}
+\titlespacing*{\subsubsection}{7pt}{0ex}{0ex}
 \begin{document}
 
 %tex4ht-Konvertierung verschönern
@@ -148,21 +150,21 @@
 \section*{Abstract}
 \fi
 In recent years, Cloud computing is gaining more and more popularity. 
-It is difficult to create one Cloud application that is suitable for work with different Cloud service providers.
+But it's difficult to create one Cloud application that is suitable for work with different Cloud service providers.
 \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) provides a solution for this problem.
-This standard adds an additional level of abstraction to the Cloud applications, in other words, a layer between the external interfaces of Cloud application and Cloud service provider's API.
+This standard adds an additional level of abstraction to the Cloud applications, in other words, a layer between the external interfaces of a Cloud application and a Cloud service provider's API.
 With the help of TOSCA, it's possible to describe several models of interaction with many different APIs, what allows to automate the rapid redeployment between providers, which are using completely different API.
-The University of Stuttgart implemented this specification in the runtime environment named OpenTOSCA.
-Description of a Cloud application is stored in the \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for a Cloud application life-cycle.\\
+Description of a Cloud application is stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for the Cloud application life-cycle.
+The University of Stuttgart implemented this specification in the runtime environment named OpenTOSCA. \\
 Cloud systems are often described in such way that during they deployment, additional packages and programs need to be downloaded via the Internet.
-Even with a single server, this can slow down the deployment of Cloud application. 
-And if Cloud application consists of a large number of servers, each of them downloading a large amount of data during the deployment, this can significantly increase both time and money consumption.\\
+Even with a single server, this can slow down the deployment of a Cloud application. 
+And if the Cloud application consists of a large number of servers, each of them downloading a large amount of data during the deployment, this can significantly increase both time and money consumption.\\
 %During this work a software solution which will eliminate external dependencies in CSAR, resupply them with all packages necessary for deployment and also change the internal structure to display the achieved self-containment will be developed and implemented.
 %For example, all commonly used "apt-get install" commands, which download and install packages, must be removed. 
 %Appropriate package must be downloaded and integrated into CSAR structure.
 %Furthermore, all depended packages needed for new packages must also be added recursively.\\
-This document considers the concept and architecture for the developed software solution which will recognize external dependencies in a CSAR, eliminate them, resupply the CSAR with all packages necessary for deployment and also change the internal structure to display the achieved self-containment.
-In addition some aspects of implementation will be described and explained.
+This document considers the concept, architecture and implementation of the developed software solution which will recognize external dependencies in a CSAR, eliminate them, resupply the CSAR with all packages necessary for deployment and also change the internal structure of the CSAR to display the achieved self-containment.
+%In addition some aspects of implementation will be described and explained.
 \cleardoublepage
 
 
@@ -248,7 +250,7 @@ In addition some aspects of implementation will be described and explained.
 \input{content/zusammenfassung_und_ausblick}
 %
 %\input{content/latex-tipps}
-\input{content/end_listings}
+%\input{content/end_listings}
 %
 %\renewcommand{\appendixtocname}{Anhang}
 %\renewcommand{\appendixname}{Anhang}
