@@ -20,9 +20,10 @@ The service has two submodules: a Data Prediction and a Data Delivery, both are 
 \section{Processing}\label{sec:process}
 %For Linux systems it can be easily installed.
 To start the framework an Java environment is used.
-After the start, a user should enter the input CSAR name, the output CSAR name, and the architecture.
+After the start, a user should enter the input CSAR name, the output CSAR name, the architecture and chose the mode of operation.
 After that, the framework works fully automatically, analyzing the artifacts and resolving any external references.
-Figure \ref{fig:process} provides the example.
+The output of the framework in the normal mode and the single node mode will be called a normal CSAR and a single node CSAR respectively.
+Figure~\ref{fig:process} provides the example.
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_processing}
@@ -34,7 +35,7 @@ Figure \ref{fig:process} provides the example.
 Winery was installed to test the correctness of the output CSAR. 
  This is an environment for the development of TOSCA systems and is useful for checking the results. %\\
  The input CSAR's representation by Winery is displayed in Figure~\ref{fig:winery_source2}.
- Those external references will be resolved by the framework and exchanged by new nodes in output CSAR. 
+ Those external references will be resolved by the framework and exchanged by new nodes in a output CSAR. 
  \begin{figure}[ht]   
  	\centering
  	\includegraphics[width=0.7\textwidth]{Screenshot_winery_source2}
@@ -44,35 +45,44 @@ Winery was installed to test the correctness of the output CSAR.
    
  \subsection*{Add to Winery}
  The output CSAR is added to Winery.
- Due to a significant increase in size, this can be a fairly lengthy procedure.
+ Due to a significant increase in size of the normal CSAR, this can be a fairly lengthy procedure.
  It was only six nodes in the input CSAR, but after the processing, the output CSAR contains more than 100 of nodes.
+ Addition of a single node CSAR is faster process.
+ The number of additional nodes coincides with the number of artifacts containing external references.
  During the addition to Winery, the CSAR's syntax is tested.
  In a case of errors, messages will be displayed.
  
  \subsection*{Display by Winery}
- The output CSAR is displayed by Winery.
-Due to the high number of nodes, the processing can take a long time. 
+ The output CSARs where displayed by Winery.
+Due to the high number of nodes, the processing of the normal CSAR can take a long time. 
  At the time, the  internal references are validated.
  If something was defined not properly, these erroneous nodes or links between them will not be displayed.
-The representation of the output CSAR is shown on Figure~\ref{fig:winery_output} (Only the part of the CSAR is visible).\\
+The representation of the normal CSAR is shown on Figure~\ref{fig:winery_output}, but only the part of the CSAR is visible.\\
  The structure seems very difficult to follow.
  To verify the topology some nodes was moved manually. 
  Figure~\ref{fig:winery_output2} displays the result. 
+ And figure~\ref{fig:winery_output_single} visualize the single node CSAR with manually moved nodes. 
  The correctness of dependencies was verified by checking several nodes with the $apt$-$cache$ $depends$ command.
  By opening the content of the new nodes, it was verified, that there are right artifacts.
+ For example it was noted that python installing node from the single node CSAR contains more then 50 Deployment Artifacts and one Implementation Artifact which installs corresponding packages.
  \begin{figure}[ht]   
  	\centering
  	\includegraphics[width=0.7\textwidth]{Screenshot_winery_output}  
- 	\caption{The output CSAR represented by $Winery$.}
+ 	\caption{The CSAR processed in normal mode and represented by Winery.}
  	\label{fig:winery_output}
  \end{figure}
  \begin{figure}[ht]   
  	\centering
  	\includegraphics[width=0.7\textwidth]{Screenshot_winery_output2}
- 	\caption{The output CSAR represented by $Winery$, some nodes moved manually.}
+ 	\caption{The normal CSAR represented by Winery with some nodes moved manually.}
  	\label{fig:winery_output2}
  \end{figure}
-
+\begin{figure}[ht]   
+	\centering
+	\includegraphics[width=0.7\textwidth]{Screenshot_winery_output_single}
+	\caption{The representation of the CSAR processed in the single node mode.}
+	\label{fig:winery_output_single}
+\end{figure}
 \section{Validate Artifacts}\label{sec:checkart}
 It is necessary to check whether it is possible to install new packages using the generated artifacts.
 At first Bash scripts will be tested, then ansible playbooks.
@@ -97,8 +107,8 @@ This way any Bash installation script can be checked.
 \end{Listing}
 
 \subsection*{Validate Ansible Playbooks}
-To check an ansible playbook manually we need to extract the zip file containing the playbook. 
-During the regular execution, this work will be done by the runtime environment.
+To check an ansible playbook we need to extract the zip file containing the playbook manually. 
+During the regular execution, this work will be done by a runtime environment.
 The call of the ansible runtime which proceeds the playbook is a simple procedure too.
 An example is provided in Figure~\ref{fig:ansible_output2}. %\\
 $Ok$ signals that the installation was completed successfully.

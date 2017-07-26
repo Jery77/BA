@@ -163,10 +163,10 @@ This method was suggested by IAAS.
 A new TOSCA node will be created for each downloaded package. 
 All dependencies between packages will be mirrored to a TOSCA topology.
 This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.\\
-\subsubsection*{Sets of Packages}
-A set of depended packages from a dependencies tree related to an external reference can be archived and represented in a TOSCA topology as a single node.
+\subsubsection*{Sets of Packages} \label{mode:setsofpkg}
+A set of depended packages from a dependencies tree related to an external reference can be combined and represented in a TOSCA topology as a single node.
 An installation of such a node will lead to the installation of all needed packages.
-Of course, some packages can be saved in different archives redundantly, but a small size of a TOSCA application's structure will be achieved.
+This way a small size of a TOSCA application's structure will be achieved.
 It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. \\
 \section{OpenTOSCA} \label{sec:opentosca}
 OpenTOSCA provides an open source web-based ecosystem for \gls{tosca} applications. 

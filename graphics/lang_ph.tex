@@ -12,7 +12,7 @@
 
 \begin{figure}
 	\centering
-\begin{tikzpicture}[->,>={Stealth[round,sep]},shorten >=1pt,auto,level 1/.style={sibling distance=10em,node distance=25mm},
+\begin{tikzpicture}[->,>={Stealth[round,sep]},shorten >=1pt,auto,level 1/.style={sibling distance=12em,node distance=25mm},
 level 2/.style={sibling distance=8em,node distance=30mm},
 level 3/.style={sibling distance=12em,node distance=30mm},
 level 4/.style={sibling distance=6em,node distance=25mm},
@@ -40,12 +40,16 @@ level 6/.style={sibling distance=8em,node distance=25mm}]
     		child { node {\ldots}}}}
 	;
 
-	\node [main node,below, yshift=-20mm] at (35) (ph) {Package handler};
+	\node [data node,below, yshift=-20mm, xshift=-4em] at (35) (ph) {Package handler};
+	\node [main node, xshift=+10em] at (ph) (40) {Full list of packages};
     \node at ($(3)!.5!(4)$) {\ldots};
     \node at ($(33)!.5!(34)$) {\ldots};
     \draw [->] (35) --(ph);
     \draw [->] (37) --(ph);
-    \draw [->] (39) --(ph);
+    \draw [->] (39.south west) --(ph);
+    \draw [->] (ph) --(40);
+    \draw [->] (40) --(31.south east);
+    
     
 \end{tikzpicture} 
 \caption{The data flow scheme between language modules, package manager modules and the package handler.} 	\label{fig:lang_ph}

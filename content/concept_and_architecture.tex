@@ -157,6 +157,12 @@ The validity of internal dependencies can be checked by $Winery$ tool from OpenT
 This tool for creating and editing CSAR archives is also great for visualizing the results.
 Checking the deployment of the generated package nodes can be done manually by entering commands which start the  artifact's execution.
 
+\subsection{Single Node Mode}
+Besides the required mode of operation, the sets of packages mode described in section~\ref{mode:setsofpkg} will be  developed to provide possibility to generate relatively small encapsulated applications.
+This additional mode will be called the single node mode.
+To create the sets properly, the framework must combine the information about all needed packages and then create a single TOSCA node for all of them.
+
+
 \section{Architecture}\label{sec:arch}
 This section will present the architecture of the framework and the detailed description of its elements.
 The main elements are a \boldmath $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, a $package$ $handler$, and a $topology$ $handler$. \unboldmath
@@ -194,10 +200,12 @@ The remaining files are transferred to the language module's $package$ $manager$
 For example, a $bash$ module will pass only files with $".sh"$ extension which start with the $"\#!/bin/bash"$ line.
 An $ansible$ module should have an additional functionality to unpack zip archives where ansible playbooks can be stored.
 Since ansible playbooks don't contain a specific header or marker, the single sign of ansible files is the "$.yml$" extension. 
+In the single node mode it will collect names of required packages from the corresponding package manager modules and create a single TOSCA node for all of them.
 
 \subsection{Package Manager Modules} \label{subs:archpmm}
-A $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$ described in the next section.
-Figure~\ref{fig:lang_ph} illustrates data flow between language modules, package manager modules and the package handler.\\
+In normal mode a $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$ described in the next section.
+After transmitting the names to the package handler, it must return the list of all required packages back to the language module to transfer them farther back to a language module.\\
+Figure~\ref{fig:lang_ph} illustrates data flow between language modules, package manager modules and the package handler.
 To resolve an external reference a package manager module will parse the given file. 
 In the case of the apt-get module for bash, the module will read a file line-by-line searching for the commands starting with "apt-get install".
 Such commands must be commented out and their arguments should be divided into separate package names which will be transferred to the package handler. 
@@ -206,9 +214,10 @@ Such commands must be commented out and their arguments should be divided into s
 \subsection{Package Handler} \label{subs:archph}
 The $package$ $handler$ communicates with an operating system's package manager. 
 It can download installation data, determine the type of dependency between packages and provide a list with dependent packages for a given package.
-This component will download the installation data using given package name and an architecture specified by the CSAR handler.
+To download the installation data this component will use given package name and the architecture specified by the CSAR handler.
 Then it transfers the package name to the $topology$ $handler$ and repeats the actions for all depended packages recursively. 
-The download the data the command "apt-get download \textbf{package}" can be used. 
+In the process it stores all names of packages from the dependency tree of original package and sends them back to the calling package manager module.
+To download the data the command "apt-get download \textbf{package}" can be used. 
 The architecture can be specified by a ":$architecture$" suffix, for example, a "package:arm" mean the package for the $arm$ architecture.
 The list of dependencies will be obtained using the "apt-cache depends \textbf{package}" command. 
 The output of such command should be parsed in order to extract names of depended packages.

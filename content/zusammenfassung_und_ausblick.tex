@@ -8,6 +8,7 @@ Unfortunately, many TOSCA applications access external sources to install variou
 If we have a high level of information security or a limited access to the Internet, these external dependencies lead to a lot of problems which can be solved by encapsulation.
 The purpose of this work was to develop the software for the elimination of such dependencies and the encapsulation of a TOSCA application.\\
 The software was developed in Java language, which ensures its portability, ease of maintenance and extensibility.
+The program identifies external references, removes them and integrates necessary packages and dependencies between them into the topology of a TOSCA application.
 To enable the ability to handle new types of external dependencies, the software was implemented in the form of a modular framework with separate modules for processing of languages and package managers.
 This allows a user to add their new handlers for package managers and languages easily.
 In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
@@ -27,3 +28,5 @@ Generated artifacts were verified and executed.\\
 As a result, the framework that eliminates external dependencies in a CSAR and satisfies the requirements was obtained.
 It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers and $Ansible$ language with $apt$ package managers.
 The framework can be easily expanded to handle additional types of external references. 
+An additional mode was developed which creates one TOSCA node for each artifact containing external reference.
+Such nodes combine all packages needed to eliminate external references in the artifact.

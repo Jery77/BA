@@ -30,7 +30,7 @@ After these operations, the $ansible$ module can be presented in listing~\ref{ls
 \begin{lstlisting}
 public final class PM_aptitude extends PackageManager {
 	@Override
-	public void proceed(String filename, String source)
+	public List<String> proceed(String filename, String source)
 		throws FileNotFoundException, IOException, JAXBException {
 		// TODO Auto-generated method stub
 	}
@@ -55,7 +55,7 @@ public final class PM_aptitude extends PackageManager {
 	}
 	
 	@Override
-	public void proceed(String filename, String source)
+	public List<String> proceed(String filename, String source)
 		throws FileNotFoundException, IOException, JAXBException {
 		// TODO Auto-generated method stub
 	}
@@ -66,11 +66,14 @@ Since the package manager will read files from an input CSAR, the CSAR handler i
 In addition, a pointer to the language (to Bash in this case) is stored too, to be propagated later to the package handler.\\
 Now focus on the $proceed$ function.
 A line-by-line file analyzer is needed.
-It must modify the data and in the case of modification, the entire file should be rewritten.
+It must modify the data and in the case of changes, the entire file should be rewritten.
 The $isChanged$ variable indicates that the file must be rewritten with a new content from the $newFile$ variable.
-Now an $aptitude$ line parser will be implemented, which reads a line from the $line$ variable and stores it or it's changed version to the $newFile$ variable.
+In the $output$ variable a set of packages from the package handler will be stored and returned back to the Bash module.
+Described behavior is implemented in listing~\ref{lst:aptit_proceed}.\\
+An $aptitude$ line parser will be implemented, which reads a line from the $line$ variable and stores it or it's modified version to the $newFile$ variable.
 If the data is changed, then the $isChanged$ variable must be set to true.
-Any $ansible$ package installation calls should be detected, commented out and its arguments (package names) should be propagated one by one to the package handler's function $getPackage$.\\
+Any $ansible$ package installation calls should be detected, commented out and its arguments (package names) should be propagated one by one to the package handler's function $getPackage$. 
+The result of the $getPackage$ function will be added to the $output$ variable.\\
 During the parsing which is described in the listing \ref{lst:aptit_parse}, the line is divided into words. 
 Each found package name is transmitted to the packet handler as an argument of its public function $getPackage$.
 In additional, this function must take the language and the source artifact's name as the arguments.
@@ -94,6 +97,7 @@ public void proceed(String filename, String source)
 	br.close();
 	if (isChanged)
 		Utils.createFile(filename,newFile);
+	return output;
 }	 
 \end{lstlisting}
 \end{Listing} 
@@ -114,7 +118,7 @@ if (words.length >= 1 + i && words[i].equals("aptitude")) {
 		isChanged = true;
 		for (int packet = 2 + i; packet < words.length; packet++) {
 			System.out.println("package: " + words[packet]);
-			ch.getPackage(language, words[packet], source);
+			output = ch.getPackage(language, words[packet], source);
 		}
 	}
 	newFile += "#//References resolver//" + line + '\n';
@@ -127,4 +131,4 @@ else
 Now the $aptitude$ module can be added to the Bash module.
 The only thing to do is to add the $aptitude$ to the Bash's list of package manager modules (the list is stored in the \emph{packetManagers} variable).
 This is done by the Bash's constructor with the command: \emph{"packetManagers.add(new PM\_aptitude(this, ch));"}.\\
-After these operation the new module is ready to identify and resolve external references which use aptitude to install packages.
+After these operation the new module is ready to identify and resolve external references which use aptitude package manager to install packages.
