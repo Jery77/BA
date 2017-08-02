@@ -1,7 +1,8 @@
 % !TeX spellcheck = en_US
 
 \chapter{Implementation}\label{chap:imp}
-This chapter provides an information about the implementation of the framework and its elements, whose behavior was described in chapter \ref{chap:conarch}.
+This chapter provides an information about the implementation of the framework and its elements, whose behavior was described in chapter~\ref{chap:conarch}.
+A software was implemented to resolve external references presented by a packages.
 Java language was chosen, because of its simplicity and strength. 
 
 %In this language, the elements are represented by classes.
@@ -11,7 +12,7 @@ Java language was chosen, because of its simplicity and strength.
 
 \section{Global Elements}
 This section describes the elements used throughout the whole framework's execution.
-A ZIP handler provides a functionality to operate ZIP archives, a CSAR handler keeps an interface to interact with a CSAR and a Utils helps to solve problems common to many other elements.
+A ZIP handler provides a functionality to operate ZIP archives, a CSAR handler keeps an interface to interact with a CSAR and a Utils helps to solve problems common for many other elements.
 
 \subsection*{Zip Handler}
 This is a small element with straight functionality. 
@@ -42,8 +43,8 @@ The main purpose of these functions is to make the code cleaner. \\
 Using the $createFile$ other elements of the framework can create a file with the given content.
 The $getPathLength$ function returns the deep of the given file's path what is very useful for creating references between files.\\
 OpenTOSCA uses some limitations to names of TOSCA nodes. 
-Those names can't contain slashes, dots and so on.
-The function $correctName$ can be used to obtain an acceptable name from a given name.
+Those names can't contain slashes, dots, etc.
+The function $correctName$ can be used to obtain an acceptable name from a given string.
 
 \section{References Resolver}
 This is the main module which starts by framework startup and is executed into three stages: preprocessing, processing and finishing. 
@@ -53,7 +54,7 @@ These stages will be described shortly.
 At the preprocessing stage, the CSAR is unpacked, common \gls{tosca} definitions are generated and internal dependencies trees are built. 
 %
 %\subsubsection*{Unpacking}
-As the first step, a user interface is provided to get the names of the input CSAR, output CSAR and the architecture of the final platform.
+As the first step, a user interface is provided to get the names of the input CSAR, output CSAR, mode of operation and the architecture of the final platform.
 To unpack the CSAR the function $unpack$ from the CSAR handler is used.\\
 %
 %\subsubsection*{Generating TOSCA Definitions}
@@ -134,7 +135,7 @@ This system allows the modules to access the CSAR's content at any time.
 When all external references will be resolved, the framework can enter its last stage.
 At this stage, the changed data should be packed into the output \gls{csar}, whose name was entered during the preprocessing stage.
 The function $pack$ from the CSAR handler is used. 
-After this operation, one becomes a more encapsulated CSAR whose level of access to Internet will be significantly lower which implements the requirement~\ref{req:out}.
+After this operation, one becomes a more encapsulated CSAR whose level of access to the Internet will be significantly lower which implements the requirement~\ref{req:out}.
 
 \section{Language Modules} 
 This section will describe the language modules. %implementation of %TODO
@@ -222,7 +223,7 @@ Those definitions and the installation script are created by the $createTOSCA\_N
 %Then the node name is generated using $getNodeName$ and TOSCA definitions for this name are created.
 
 \subsection*{Ansible Implementation}
-Ansible configuration management tool was added to test the extensibility of the framework,
+Ansible configuration management tool was added to test the extensibility of the framework.
 Since Ansible playbooks are often packed into archives, it may be necessary to unpack them first and then to analyze the content.
 Thus, the files are either immediately transferred to the package manager modules, or they are unzipped first.
 Listing~\ref{lst:ansible_proceed} represents those operations.
@@ -277,7 +278,7 @@ public List<String> proceed(String filename, String source)
 \end{Listing}
 \section{Package Manager Modules}
 In this section, package manager modules will be specified.
-The main task of this modules is to identify external references and to delete them.
+The main task of this modules is to identify external references, delete them and call the package handler.
 Those modules satisfy the requirements~\ref{req:identify} and~\ref{req:delete}.
 An abstract model will be defined to make the extensibility easier, which is needed for requirement~\ref{req:expand}.
 The apt-get module for Bash and an apt module for Ansible will be implemented.
@@ -324,7 +325,7 @@ It allows to download packages, to determine the type of dependencies between th
 
 \subsection*{Package Downloading}
 The download operation is performed using the recursive function $getPackage$. 
-Download of installation data will satisfy the requirement~\ref{req:adddata}% defined in the listing \ref{lst:getpack}.
+Download of installation data will satisfy the requirement~\ref{req:adddata}. % defined in the listing \ref{lst:getpack}.
 %\begin{Listing}
 %\caption{The $getPackage$ definition}
 %\label{lst:getpack}
@@ -358,7 +359,7 @@ This function downloads packages, calls the language's function $createTOSCA\_No
 After those operations, a dependencies three for the $packet$ will be built.\\
 The command $apt$-$get$ $download$ \emph{package} is used for download the package. 
 If the process fails, a user input is provided to solve the problem. 
-The user will be able to rename the package, ignore it or even break the processing.
+A user will be able to rename the package, ignore it or even break the processing.
 
 \subsection*{List with Dependent Packages}
 To obtain the dependent packages the $getDependensies$ function was developed.
@@ -370,7 +371,7 @@ These dependent packages are combined to a list and returned back.
 
 \subsection*{Type of Dependency}
 To determine the type of dependency between two packages the $getDependencyType$ function is used.
-It becomes the names of source package and target package and uses  $apt$-$cache$ $depends$ depends command to get the type.
+It becomes the names of the source package and the target package and uses the $apt$-$cache$ $depends$ command to get the type.
 It can be $Depends$, $preDepends$ or $noDepends$ dependencies.
 
 \section{Topology Handling}\label{sec:imptophan}

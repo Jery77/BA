@@ -2,17 +2,18 @@
 
 \chapter{Concept and Architecture}\label{chap:conarch}
 In this chapter, the concept and the architecture of the framework which can satisfy the requirements will be explained and substantiated.
+The chosen solution will resolve data download commands and package installation commands.
+%A user will have an opportunity to chose the method of the encapsulation, the "sets of packages" or "one node for one package" which were described in section~\ref{subs:encaps}.
 Solutions to some additional problems will be presented. 
 \section{Concept}
 In this section, the main concept of this work are described.
 The general structure of the framework is visualized in Figure~\ref{fig:gen}. 
 In section~\ref{subs:analyse}, it will be explained how to determine the Node Templates which use the given artifact.
-Then language modules and package manager modules functionality will be presented.
+Then language modules, package manager modules and download tool modules functionality will be presented.
 In section~\ref{subs:repres}, it will be expressed how to create a new node for a TOSCA topology. 
-After that, a problem of the determination the architecture of the final platform will be explained and a solution presented.
+After that, some methods to determine the architecture of the final platform will be presented.
 In addition, it will be described, how the results can be validated.
 \input{graphics/general}
-
 
 \subsection{Analysis of a TOSCA-Topology}\label{subs:analyse}
 To update the \gls{tosca} topology properly, it is necessary to add references from the nodes where external references were to the newly created nodes which resolve the external references. 
@@ -35,7 +36,8 @@ Now consider the references in more detail.
 	\item  $Node$ $Template$ $\rightarrow$ $Service$ $Template$\\
 	But each Node Template is instantiated only once.
 \end{itemize}
-This structure can be described as a tree with an Artifact as a root, and Service Templates as leaves (The example is on Figure \ref{fig:script_serv}) and will be called the internal dependencies tree.\\
+This structure can be described as a tree with an Artifact as a root, and Service Templates as leaves and will be called the internal dependencies tree.
+The example is provided by Figure~\ref{fig:script_serv}.\\
 %Of course it is possible to move in opposite direction, starting from a Node and moving toward scripts, but this method brings additional complexity. 
 There is an additional problem in the reference between a Node Type and a Node Type Implementation.
 A Node Type can have several implementations, but which one will be used is determined only during the deployment. 
@@ -45,82 +47,132 @@ The chosen solution to this problem is to use each Node Type Implementation in t
 The following steps to build the internal dependencies tree can be executed during the preprocessing.
 \begin{itemize}
 	\item Find all Artifact Templates to build references from Artifacts to Artifact Templates.
-	\item Find all Node Type Implementations. Since they contain references both to the Node Type and to the Artifact Templates, so the dependency from Artifact to Node Types can be built.
-	\item Find all Service Templates and all contained Node Templates they contain. Each Node Template contains a reference to Node Type what is useful for building a dependency from Artifact to Node Template.
+	\item Find all Node Type Implementations. 
+		Since they contain references both to the Node Type and to the Artifact Templates, so the dependency from Artifact to Node Types can be built.
+	\item Find all Service Templates and all contained Node Templates they contain. 
+		Each Node Template contains a reference to Node Type what is useful for building a dependency from Artifact to Node Template.
 \end{itemize} 
 In this way the required internal dependencies tree with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$ can be built.
 \input{graphics/script_serv_tree}
 
 \subsection{Search for Artifacts}
 Since external references are stored in artifacts, we need to find all of them in order to identify the references.
-The first simple solution is to analyze the structure of TOSCA application and identify all artifacts used.
-But this method brings an possibility to miss some artifacts because some of them can be called from other artifacts.
+The first simple solution is to analyze the structure of a TOSCA application and identify all artifacts used.
+But this method brings an possibility to miss artifacts because some of them can be called from other artifacts.
 This case is presented by Figure~\ref{fig:artart}.
 In this example Implementation Artifact Engine calls the "Artifact 1" which calls the "Artifact 2".
-The "Artifact 2" isn't called by Implementation Artifact Engine  directly and therefore will not be considered by the method described above.
-The found solution is to analyze all files presented in a input CSAR and resolve external references in all of them.
-We need to describe methods to identify files not described in the TOSCA topology for each supported configuration management tool.
+The "Artifact 2" isn't called by Implementation Artifact Engine directly and therefore will not be considered by the method described above.
+The found solution is to analyze all files presented in an input CSAR and resolve external references in all of them.
+One needs to define methods to identify scripts for each supported configuration management tool.
 \input{graphics/artart}
 
 \subsection{Modules and Extensibility}
-It is impossible to identify all types of external references, even when only one language and one package manager are used (an example in listing~\ref{alg:unreadable}).
+The framework should handle different languages, each of which can support various package managers and data download tools.
+It was decided to develop a modular system, where modules handle the above listed elements.
+The chosen solution is to create the software which will contain and support language modules handling configuration management tools.
+Each language module itself will contain and support package managers modules and download tool modules which handle package managers and data download tools respectively.
+A language module should filter files not belonging to the language and the accepted files will be transmitted to the supported modules.
+A package manager module resolves an external reference and transmits the package name from this reference to a package handler described in section~\ref{subs:archph}.
+A data download module identifies download commands, removes them, downloads the data and calls a topology handler defined in section~\ref{subs:archtop}. 
+This principle can be illustrated by Figure~\ref{fig:lang_pm}.
+Ease of adding of new modules to the framework will prove the correctness of this system.\\
+It is impossible to identify all types of external references, even when only one language and one package manager are used.
+An example can be found in listing~\ref{alg:unreadable}.
+Since this work is aimed at creating the easily expanded and supplemented tool, then only basic usage of package managers will be considered initially.\\
+At the beginning the most popular combination must be developed: the $bash$ language with the $apt-get$ package manager.
+This simple and powerful tool allows to install, delete or update the set of packages in one line of code.
+A line-by-line parser which analyses scripts and finds the installation commands can parse such commands must be developed.
+After the modules for this combination will be implemented and validated, new language and package manager modules can be added.
 \begin{Listing} 
 	\caption{Unreadable bash script}
 	\label{alg:unreadable}
-\begin{lstlisting}
-#!/bin/bash
-set  line = abcdefgijklmnoprst
-# The "line" contains a part of the alphabet
-set  word1 = ${line:0:1}${line:14:1}${line:17:1} 
-# The 1th, 15th and 18th letters of the "line" variable are stored into the "word1".
-# "word1" will contain the "apt" string 
-set  word2 = ${line:6:1}${line:4:1}${line:17:1}
-# The 7th, 5th and 18th letters of the "line" variable are stored into the "word2".
-# "word2" will contain the "get" string 
-$word1-$word2 install package
-# This is the "apt-get install package" command,
-#		 but to determine that a good interpreter is needed.
-\end{lstlisting}
+	\begin{lstlisting}
+	#!/bin/bash
+	set  line = abcdefgijklmnoprst
+	# The "line" contains a part of the alphabet
+	set  word1 = ${line:0:1}${line:14:1}${line:17:1} 
+	# The 1th, 15th and 18th letters of the "line" variable are stored into the "word1".
+	# "word1" will contain the "apt" string 
+	set  word2 = ${line:6:1}${line:4:1}${line:17:1}
+	# The 7th, 5th and 18th letters of the "line" variable are stored into the "word2".
+	# "word2" will contain the "get" string 
+	$word1-$word2 install package
+	# This is the "apt-get install package" command,
+	#		 but to determine that a good interpreter is needed.
+	\end{lstlisting}
 \end{Listing}
-Since this work is aimed at creating the easily expanded and supplemented tool, then only basic usage of package managers will be considered initially.\\
-The framework should handle different languages, each of which can support various package managers.
-The best solution is to develop a modular system, where modules handle different languages and package managers.
-The framework will contain a  language modules and each language module will contain package managers modules.
-A language module should filter files not belonging to the language and the accepted files will be transmitted to the corresponding package manager modules.
-This principle can be illustrated by Figure \ref{fig:lang_pm}.\\
-A package manager module resolves an external reference and transmits the package name from this reference to a package handler described in section~\ref{subs:archph}.\\
-Ease of adding of new modules to the framework will prove the correctness of the architecture.\\
-At the beginning the most popular combination must be developed: the $bash$ language with the $apt-get$ package manager.
-This simple and powerful tool allows to install, delete or update the set of packages in one line of code.
-A line-by-line parser which analyses scripts and finds the installation commands can parse such commands and will be implemented.
-After the modules for this combination will be implemented and validated, new language and package manager modules can be added.
 \input{graphics/languages_pm}
+\subsection*{Encapsulation of CSARs with extarnal Packages}\label{subs:encaps}
+Here will be define some methods of encapsulation of a CSAR containing external packages.
+
+%It will be defined two methods  which install external packages during the deployment.
+%The encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
+%But it can be interesting to analyze other techniques to encapsulate a CSAR. 
+At first, one will describe the $generate$ $custom$ $repositories$ and $generate$ $shared$ $repositories$ methods not representing packages in a TOSCA topology and then the $one$ $node$ $for$ $one$ $package$ and $sets$ $of$ $packages$ methods mirroring packages into the topology.
+\subsubsection*{Generate Custom Repositories}
+It's possible to download all necessary packages and create one's own custom package repository for each operating system used in the application. 
+Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
+This method introduces minimal changes in a TOSCA structure.
+The main problem is the creation of the custom repositories. 
+When a TOSCA application consists of many small devices with limited capabilities it can be difficult to start many big custom repositories.
+\subsubsection*{Generate Shared Repository}
+Another opportunity is to create a single repository for all devices in a TOSCA application.
+It can be difficult to choose the right location for such a server, but since an application represents the connected system this step can redistribute the load to a more powerful device.
+It is difficult to estimate the changes which will occur in a TOSCA topology while applying such a method.
+\subsubsection*{One Node for One Package}
+%This method was suggested by the \gls{uniiaas}. 
+A new TOSCA node will be created for each downloaded package. 
+All dependencies between packages will be mirrored to a TOSCA topology.
+This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.
+\subsubsection*{Sets of Packages} \label{mode:setsofpkg}
+A set of depended packages from a dependencies tree related to an external reference can be combined and represented in a TOSCA topology as a single node.
+An installation of such a node will lead to the installation of all needed packages.
+This way a small size of a TOSCA application's structure will be achieved.
+It will be impossible to trace dependencies (since many packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. 
+
+\subsection{Encapsulation of CSARs with extarnal files}
+%At the startup of the software, a user will be able to choose modes of operation.
+%It was developed the concepts for two modes for external references presented by package installations and two modes for external references presented by file downloads.
+%The default mode for package processing is the "one node for one package" mode. 
+%In this mode, a new TOSCA node will be created for each used package from a packages database and dependencies between packages from the database will be mirrored to a TOSCA topology.
+%Besides the default mode of operation, the "sets of packages" mode described in section~\ref{mode:setsofpkg} will be developed to provide possibility to generate relatively small encapsulated applications.
+%This mode will be called the single node mode.
+%To create the sets properly, the language module must combine the information about all packages needed for an artifact and then create a single TOSCA node for all of them.\\
+It was developed two modes to process external files.
+The first possibility is to create a new TOSCA node which contains a deployment artifact presenting the downloaded file and an implementation artifact which will try to put the file into the right place.
+But one can't be sure that this file will be available for other nodes.
+In the second mode, downloaded files must be integrated into the node which contain the download command.
+The download command can be exchanged by a file move command to put the file in the right position.
 
 \subsection{Representing Downloaded Packages in a TOSCA-Topology} \label{subs:repres}
-A package node denotes the defined and instantiated element of the \gls{tosca} topology, the purpose of which is to install the package.
-The addition of new package nodes to the TOSCA topology can be divided into several steps.
+Downloaded data must be represented in the structure of a Cloud Application. 
+A package node denotes the defined and instantiated element of the \gls{tosca} topology, the purpose of which is to install packages.
+And a file node denotes the defined and instantiated element of the \gls{tosca} topology, the purpose of which is to store files.
+The addition of new package and file nodes to the TOSCA topology can be divided into several steps.
 \begin{itemize}
 	\item One must add definitions for common elements like Artifact Types or Relationship Types. 
 		This can be done once.
 	\item The package node common definition will be represented by a Node Type. 
 		It must contain the $install$ operation, which represents the capability to install the node.
+		For the package nodes that will cause the installation of the package, and for the file nodes it is the file move operation.
 		%There will be described that this node must be installed.
-	\item Artifacts (the downloaded data and the installation script) will be referenced by Artifact Templates.
-	\item A Node Type Implementation will combine the artifacts to implement the $install$ operation.
-	\item A Node Template will instantiate the package node in the corresponding Service Templates.
+	\item Artifacts (downloaded data and installation scripts) will be referenced by Artifact Templates.
+	\item A Node Type Implementation will combine the Artifact Templates to implement the $install$ operation.
+	\item A Node Template will instantiate a node in the corresponding Service Templates.
 		To determine the corresponding Service Template the autor will use the preprocessing described in the section~\ref{subs:analyse}.
 	\item A Reference Template will provide topology information allowing the observer (a user or a runtime environment) to determine which nodes the package must be installed for.
-		References will be created from the Node Template which needs the package to the Node Template of the created package nodes.
+		References will be created from the Node Template which needs the created node to the Node Template of the created nodes.
 \end{itemize}
-After an execution of these steps, a definition of a package node will be finished and this node can be used.
+After an execution of these steps, a definition of a node will be finished and it can be used.
 
 \subsection{Determining Architecture of the Final Platform} \label{finplatf}
-It can be difficult to choose the architecture of the device where packages will be installed.
-Unfortunately, it is impossible to analyze the structure of any CSAR and give an unambiguous answer to the question which architecture which node will be deployed on.
+To download the right instance of a package one must define its architecture.
+It can be difficult to predict the architecture of the device where packages will be installed.
+Unfortunately, it is impossible to analyze the structure of any CSAR and determine the architecture of the device which node will be deployed on.
 There are many pitfalls here.\\
 A single Service Template can use several physical devices with different architectures.
 Many Node Types and Node Templates instantiated on different platforms can refer to the same Implementation Artifact.
-This way one simple Implementation Artifact with a bash script containing "$apt$-$get$ $install$ $python$" command can be deployed on different devices within one Service Template (for example with the arm, amd64 and i386 architectures) and will result in the loading and installation of three different packages. 
+This way one simple Implementation Artifact with a bash script containing the "$apt$-$get$ $install$ $python$" command can be deployed on different devices within one Service Template (for example with the arm, amd64 and i386 architectures) and will result in the download and installation of three different packages. 
 For an end user, the ability to use such a simple command is a huge advantage, but for the framework, it can greatly complicate the analysis.
 The following methods of architecture selection were designed.
 \begin{itemize}
@@ -154,13 +206,8 @@ If it will be necessary, this method can easily be expanded to the $artifact$ $s
 Checking the output of the framework is an important stage in the development of the program.
 It is necessary to verify both the internal correctness of the output \gls{csar} and the possibility to deploy generated package nodes.
 The validity of internal dependencies can be checked by $Winery$ tool from OpenTOSCA.
-This tool for creating and editing CSAR archives is also great for visualizing the results.
-Checking the deployment of the generated package nodes can be done manually by entering commands which start the  artifact's execution.
-
-\subsection{Single Node Mode}
-Besides the required mode of operation, the sets of packages mode described in section~\ref{mode:setsofpkg} will be  developed to provide possibility to generate relatively small encapsulated applications.
-This additional mode will be called the single node mode.
-To create the sets properly, the framework must combine the information about all needed packages and then create a single TOSCA node for all of them.
+This tool allows create and edit CSAR archives and is also great for visualizing the results.
+Checking the deployment of the generated nodes can be done manually by entering commands which start the artifact's execution.
 
 
 \section{Architecture}\label{sec:arch}
@@ -169,14 +216,13 @@ The main elements are a \boldmath $CSAR$ $handler$, a $references$ $resolver$, $
 
 \subsection{CSAR handler} \label{subs:casr_h}
 The CSAR handler provides an access to a \gls{csar} and maintains its consistency. 
-It describes the processes of adding the new files (to handle the metadata), \mbox{archiving/unarchiving}, and choosing the final platform architecture. \\
-The input CSAR is initially archived and must be decompressed in order to handle the content first.
+It defines the method to add new files handling the metadata, \mbox{archiving/unarchiving}, and choosing the final platform architecture. \\
+The input CSAR is initially archived and must be decompressed first in order to handle the content.
 When all external references will be resolved, the content will be archived to an output CSAR.
 A new name-value pair must be added to the metadata for each new file integrated into the CSAR during processing. 
-The name represents the full path to of the file.
-The value contains the type of the file. 
+The name represents the full path to the file and the value contains the type of the file. 
 This type will be used by a runtime environment to chose the right behavior. %\\ %\\
-As already was mentioned in section~\ref{finplatf}, an architecture of the final platform will be chosen for the entirely CSAR.
+As it was mentioned in section~\ref{finplatf}, an architecture of the final platform will be chosen for the entirely CSAR.
 A command line interface must be provided for a user, to allow him to chose the architecture. 
 The chosen architecture must be saved to the CSAR for the case of future processing by the framework to avoid the collisions between architectures of packages.
 
@@ -203,6 +249,9 @@ Since ansible playbooks don't contain a specific header or marker, the single si
 In the single node mode it will collect names of required packages from the corresponding package manager modules and create a single TOSCA node for all of them.
 
 \subsection{Package Manager Modules} \label{subs:archpmm}
+These modules handle different package managers.
+They are integrated into language modules and become from them files to analyze.
+They must identify package installation commands which use the handled package manager.
 In normal mode a $package$ $managers$ $module$ finds external references, resolves them and transmits the package name to the $package$ $handler$ described in the next section.
 After transmitting the names to the package handler, it must return the list of all required packages back to the language module to transfer them farther back to a language module.\\
 Figure~\ref{fig:lang_ph} illustrates data flow between language modules, package manager modules and the package handler.
@@ -211,8 +260,14 @@ In the case of the apt-get module for bash, the module will read a file line-by-
 Such commands must be commented out and their arguments should be divided into separate package names which will be transferred to the package handler. 
 \input{graphics/lang_ph}
 
+\subsection{Download Tool Modules}
+A download tool module process the defined data download tool.
+It analysis the files provided by a language module which it was defined in.
+Identified external references must be resolved by removing installation commands, downloading files and transferring them to the topology handler described later.
+Behavior features will be defined by the selected operation mode.
+
 \subsection{Package Handler} \label{subs:archph}
-The $package$ $handler$ communicates with an operating system's package manager. 
+The $package$ $handler$ provides interface to communicate with an operating system's package manager. 
 It can download installation data, determine the type of dependency between packages and provide a list with dependent packages for a given package.
 To download the installation data this component will use given package name and the architecture specified by the CSAR handler.
 Then it transfers the package name to the $topology$ $handler$ and repeats the actions for all depended packages recursively. 

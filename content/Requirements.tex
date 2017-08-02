@@ -1,30 +1,32 @@
 % !TeX spellcheck = en_US
 
-\chapter{Requirements}\label{chap:req}
+\chapter{Requirements for the Encapsulation}\label{chap:req}
 In this chapter, requirements for the program and its components being developed will be defined.
 Furthermore it will be described what we expect as a result of the application's work.\\
 It's necessary to develop new software, which will resolve external references and complement the TOSCA topology to represent the changes in a given CSAR file.
+A prototype must be implemented to test the correctness of the concept.
 Since the main purpose of the software is to resolve references, further it can be called $References$ $resolver$ $framework$.  
 During this work, such terms as input CSAR and output CSAR will be used.
 The input \gls{csar} is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
 The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. \\%(at least those that are handled by the framework).\\
-The application must identify references to external packages.
-That includes a wide range of package installation command types which contact package repositories with the help of different package managers.
+The application must proceed an input CSAR and identify references to external packages and files.
+That includes a wide range of file download commands and package installation commands which contact package repositories with the help of different package managers.
 To find such commands the software must be able to unpack the data and access all artifacts contained in a input CSAR .
 Since one can't develop an application which support all possible types of external references the structure of the application must ensure an easy extensibility which allows to extend the software and handle any new types of references.
 Therefore the framework must be developed in the form of modular system so that each module will be able to identify and resolve the corresponding external reference type.
-The two types of modules must be developed.
-One type of modules will be responsible for configuration management tool and the other type will process package managers.\\
-When an external reference is identified it must be resolved. T
-hat includes remove of package installation command and addition of the package into the proceeded CSAR.
+The three types of modules must be developed.
+One type of modules will be responsible for configuration management tools, the other type will process package managers and the last one will handle data download tools.\\
+When an external reference is identified it must be resolved. 
+In case of packages, that includes remove of package installation command and integration of the package into the proceeded CSAR.
 To provide the encapsulation of the output CSAR the package must be accompanied by all dependent packages which must be found, downloaded and added to the CSAR too.
 Then all downloaded packages must be integrated into the TOSCA topology.
 That means that one must define new nodes and relationships to map the dependencies from a package database into the topology.
+For file download commands, one must remove the command, download the file and integrate it into the CSAR structure.
 As a last step the extracted input CSAR with additions must be packed to the output CSAR.
 The concept and architecture of a program which satisfies the requirements will be described in chapter~\ref{chap:conarch}.
 The implementation of the program is provided in chapter~\ref{chap:imp}.
 \if 0 
-A primary type of external references is an artifact represented by a bash script which uses an apt-get package manager to install new packages.
+A primary type of external references is an artifact represented by a Bash script which uses an apt-get package manager to install new packages.
 The exact command for this type of references is "$apt$-$get$~$install$ \textbf{package}".
 In this example, References resolver should comment out such commands and add the installation of the \textbf{package} and installations of all packages from its dependencies tree as new separate nodes to the TOSCA topology. \\
 A system package manager can be used for this purpose. 
@@ -72,20 +74,23 @@ This behavior will be described in the chapter \ref{chap:conarch} and implemente
 \fi
 \section*{Result}
 As a result of the program's work, an output CSAR will be received.      
-This CSAR must have the same functionality as the input CSAR, but all external references to additional packages must be resolved.
-The output CSAR must be able to be deployed properly without downloading these packages over the Internet. 
-In addition, the dependencies trees for packages from new nodes should be represented in the TOSCA topology. \\
+This CSAR must have the same functionality as the input CSAR, but all external references to additional packages or files must be resolved.
+The output CSAR must be able to be deployed properly without downloading these data via the Internet. 
+In addition, the dependencies trees for downloaded packages should be represented in the TOSCA topology. \\
 In order to validate the output CSAR, the TOSCA topology can be verified and the defined artifacts can be validated through those installations on a test machine. 
 %\clearpage
 \section*{Summarize}
 The requirements are summarized here. 
 The developed framework must:
 \begin{enumerate}
-	\item identify references to external packages in a input CSAR.\label{req:identify}
+%	\item identify references to external packages and files in a input CSAR.\label{req:identify}
+	\item identify references to external packages in an input CSAR.\label{req:identify}
 	\item delete the external references.\label{req:delete}
 	\item add data into the CSAR to encapsulated installations of the packages.\label{req:adddata}
+%	\item handle different configuration management tools, package managers and data download tools.\label{req:handledif}
 	\item handle different configuration management tools and package managers.\label{req:handledif}
 	\item have an easy expandable structure.\label{req:expand}
-	\item represent the packages into the TOSCA topology.\label{req:represent}
+	\item represent the changes into the TOSCA topology.\label{req:represent}
+	\item implement a prototype.
 	\item generate an output CSAR with the same functionality as the input CSAR, but without external references.\label{req:out}
 \end{enumerate}

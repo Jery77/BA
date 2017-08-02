@@ -1,49 +1,50 @@
 % !TeX spellcheck = en_US
 
-\chapter{Basis}
+\chapter{Basics}
 \label{chap:basis}
 In this chapter, the fundamentals used in this work will be explained.
-These include definitions for Cloud computing and Cloud applications, description of TOSCA standard and its implementation: OpenTOSCA.
-At the end, a package management and tools for its automation are described.
-\section{Cloud computing and Cloud application} \label{sec:cloud}
-Understanding the problem requires a clear definition of the term "Cloud computing".
-%In everyday life, you can often hear the phrase "Cloud computing", but what is it?\\
+These include definitions for Cloud Computing and Cloud Applications, description of the TOSCA standard and the OpenTOSCA runtime environment.
+At the end, the overview of package management, file download and tools for its automation will be presented.
+\section{Cloud Computing and Cloud Application} \label{sec:cloud}
+To understand problems of \emph{Cloud Computing} we require a clear definition of this term.
+%In everyday life, you can often hear the phrase "Cloud Computing", but what is it?\\
 %\subsection{Definitions}
-Unfortunately, a generally accepted definition of Cloud computing that describes all possible situations doesn't exist. 
+Unfortunately, a generally accepted definition of Cloud Computing that describes all possible situations doesn't exist. 
 But in the scientific community, the definition put forward by \gls{nist}~\cite*{wwwnist} is commonly used. 
-This definition appropriately describes the concept of Cloud computing used in this paper, and therefore this definition will be used.\\
-%\begin{definition}[Cloud computing]
-\emph{\textbf{Cloud computing}\label{def:nist} is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction.}~\cite*{nist}\\
+This definition appropriately describes the concept of Cloud Computing used in this paper, and therefore this definition will be used:\\
+%\begin{definition}[Cloud Computing]
+\emph{\textbf{Cloud Computing}\label{def:nist} is a model for enabling ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources (e.g., networks, servers, storage, applications, and services) that can be rapidly provisioned and released with minimal management effort or service provider interaction~\cite*{nist}.}\\
 %\end{definition}
-But computing is too abstract term, for our purpose we need something more practical, like an application.
-Also, the are no generally accepted definitions of Cloud application, but it can be obtained from the definition of Cloud computing.\\
-%\begin{definition}[Cloud application] 
-\emph{A \textbf{Cloud application}\label{def:capp} is an application that is executed according to the Cloud computing model.} \\%~\cite*{cloudapp}\\
+%But computing is too abstract term, for our purpose we need something more practical, like an application.
+Also the is no generally accepted definition of Cloud Application, but it will be defined for this work using the Cloud Computing term.
+%\begin{definition}[Cloud Application] 
+A \textbf{Cloud Application}\label{def:capp} is an application that is executed according to the Cloud Computing model. %\\%~\cite*{cloudapp}\\
 %\end{definition} 
-In addition, a short meanings of a Cloud system, a provider, and a user will be provided.\\
+In addition, a short meanings of a Cloud system, a provider, and a consumer will be defined too.
 %\begin{definition}[Cloud system] 
-A composite Cloud application which consist of multiple small applications will be called a \textbf{Cloud system}\label{def:csys}. %\\
+A composite Cloud Application which consists of multiple small applications will be called a \textbf{Cloud system}\label{def:csys}. %\\
 %\end{definition} 
 %\subsubsection{Sides}
-An owner of the physical platform, where Cloud computing takes place is called a \textbf{provider}.
-An owner of the Cloud application renting a provider's platform is called a \textbf{user}.
-\clearpage
-\subsection*{Service Models}\label{def:servmod}
-Cloud applications provide a wide range of different services.
+An owner of a physical platform, where Cloud Computing takes place will be called a \textbf{provider}, an owner of a Cloud Application renting a provider's platform will be called a \textbf{consumer}~\cite{viewCC}.
+%\clearpage
+%\subsection*{Service Models} 
+\\
+\label{def:servmod}
+Providers grant access to a wide range of different services: software, hardware devices, etc.
 Some groups of services which follow the common rules and perform the similar function are described by service models.
-NIST distinguishes between three main types of such models.
+NIST distinguishes between three main types of such models:
 \begin{itemize}
 	\item  \gls{saas}. 
 	The capability provided to the consumer is to use the provider’s applications running on a Cloud infrastructure. 
 	The applications are accessible from various client devices through either a thin client interface, such as a web browser (e.g., web-based email), or a program interface. 
-	The consumer does not manage or control the underlying Cloud infrastructure including network, servers, operating systems, storage, or even individual application capabilities, with the possible exception of limited userspecific application configuration settings.~\cite*{nist}
+	The consumer does not manage or control the underlying Cloud infrastructure including network, servers, operating systems, storage, or even individual application capabilities, with the possible exception of limited userspecific application configuration settings~\cite*{nist}.
 	\item \gls{paas}. 
 	The capability provided to the consumer is to deploy onto the Cloud infrastructure consumer-created or acquired applications created using programming languages, libraries, services, and tools supported by the provider.
-	The consumer does not manage or control the underlying Cloud infrastructure including network, servers, operating systems, or storage, but has control over the deployed applications and possibly configuration settings for the application-hosting environment.~\cite*{nist}
+	The consumer does not manage or control the underlying Cloud infrastructure including network, servers, operating systems, or storage, but has control over the deployed applications and possibly configuration settings for the application-hosting environment~\cite*{nist}.
 	\item \gls{iaas}.
 	The capability provided to the consumer is to provision processing, storage, networks, and other fundamental computing resources where the
 	consumer is able to deploy and run arbitrary software, which can include operating systems and applications.
-	The consumer does not manage or control the underlying Cloud infrastructure but has control over operating systems, storage, and deployed applications; and possibly limited control of select networking components (e.g., host firewalls).~\cite*{nist}
+	The consumer does not manage or control the underlying Cloud infrastructure but has control over operating systems, storage, and deployed applications; and possibly limited control of select networking components (e.g., host firewalls)~\cite*{nist}.
 \end{itemize}
 %\subsection*{Deployment models}
 %Similarly, NIST distinguishes between four types of deployment models.
@@ -61,82 +62,86 @@ NIST distinguishes between three main types of such models.
 %	The cloud infrastructure is a composition of two or more distinct cloud infrastructures (private, community, or public) that remain unique entities, but are bound together by standardized or proprietary technology that enables data and application portability (e.g., cloud bursting for load balancing between clouds). 
 %\end{itemize}
 \subsection*{Usage of Cloud Computations}
-Nowadays Cloud computing and applications can be found everywhere, and their number constantly grows~\cite*{cloud_stat}.
-They are used for test and development, big data analyses, file storage and so on.
-Cloud computing allows using resources effectively, to distribute the load to a system from several physical servers and to shift the maintenance to the providers. 
+Nowadays Cloud Computing and applications can be found everywhere, and their number constantly grows~\cite*{cloud_stat}.
+They are used for test and development, big data analyses, file storage, etc.
+Cloud Computing allows using resources effectively, to distribute the load to a multi-server system and to shift the maintenance to the providers. 
 If  a service uses a single physical server and this server will be disabled, then the entire service will be completely unavailable too.
-But if a Cloud application uses a hundred of physical servers, then disabling of one will not carry such serious consequences.
-In addition, a user doesn't need to maintain a team of administrators for the event of various problems.\\
-A user doesn't have a direct access to the infrastructure (servers and operating systems) when using a PaaS or a SaaS service models. He can operate only with the provided Application Programming Interface (API).
-An API provides a set of methods to communicate with provider's infrastructure. 
-Each provider defines his own set of methods, depending on his area of specialization. 
+But if a Cloud Application uses a hundred of physical servers, then disabling of one will not carry such serious consequences.
+In addition, a consumer doesn't need to maintain a team of administrators for the event of various problems.\\
+A consumer doesn't have a direct access to the infrastructure (servers and operating systems) when using a PaaS or a SaaS service models. 
+He can operate only with the provided Application Programming Interface (API).
+An API defines a set of methods to communicate with provider's infrastructure. 
+Each provider prepares his own set of methods depending on his area of specialization. 
 On the one hand, this specialization makes easier to work with the provider, but on the other hand, it becomes more difficult to redeploy an application to another provider.
 \section{Topology and Orchestration Specification for Cloud	Applications} \label{sec:tosca}
 %\subsection*{Definition}
-The Topology and Orchestration Specification for Cloud Applications (\gls{tosca}) standard developed by \gls{oasis}~\cite{oasis} provides a new way to enable portable automated deployment and management of Cloud applications.
+The \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplications (\gls{tosca}) standard developed by \gls{oasis}~\cite{oasis} provides an opportunity to enable portable automated deployment and management of Cloud Applications.
 \gls{tosca} describes the structure of an application as a topology containing components and relationships between them.
 %Plans capture management tasks by orchestrating management operations exposed by the components. \cite*{INBOOK-2014-01}
-\gls{tosca} application is a Cloud application described according to the TOSCA standard.
-This standard can be used not only to describe all stages of a Cloud application life-cycle but also to serve as a layer between the Cloud application and provider's API, allowing to implement a single application suitable for working with different providers. 
+\gls{tosca} application is a Cloud Application described according to the TOSCA standard which can be used to describe all stages of TOSCA Applications life-cycle.
+To process TOSCA applications a TOSCA runtime environment must be executed on the provider's platform. 
+The runtime environments can process applications and serve as a layer between the Cloud Application and provider's API.
+That allows to implement a single application suitable for working with different providers. 
 \subsection*{Structure of TOSCA Applications}
-TOSCA specification provides a language to define components (described in section~\ref{def:servmod}) and relationships between them using $Service$ $Templates$. 
+TOSCA specification provides a language to define components of TOSCA application and relationships between them. % using $Service$ $Templates$. 
 In addition it describes the management procedures which create or modify services using orchestration processes.
 The description of elements of a TOSCA structure used in this work is provided. \\
-A $Service$ $Template$ is the main component in a \gls{tosca} structure. 
-It defines the structure (Topology Template) and process models (Plans) of the service. 
-There can be many Service Templates within one TOSCA application.
-The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of Cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
-This is useful when an application is ported to alternative Cloud environments.~\cite{TOSCA-v1.0_book} \\ %\\
-$Plans$ provide capabilities to manage Cloud applications, especially their creation and termination.
+$Service$ $Templates$ are the main components of a \gls{tosca} structure. 
+They define Cloud services provided by TOSCA application as a combination of the structure (Topology Template) and process models (Plans).
+It must be at least one Service Template within one TOSCA application.
+The combination of topology and orchestration defines what is needed to be preserved across operation in different environments.
+Thus it guarantees the interoperable deployment and management of Cloud services throughout the complete life-cycle and is useful when they are ported to alternative providers~\cite{TOSCA-v1.0_book}. \\ %\\
+$Plans$ provide capabilities to manage Cloud Applications, especially their creation and termination.
 These components combine management capabilities to create high-level management tasks which can then be executed for fully automated deployment, configuration and other operations of the application.
 Plans can be started by a user or fully automatically and call management operations of the nodes in the topology. %\\
-A $Topology$ $Template$ describes the topology of a Cloud application, defining nodes (Node Templates) and relations between them (Relationship Templates). %\\
+A $Topology$ $Template$ describes the topology of a Cloud Application, defining nodes (Node Templates) and relations between them (Relationship Templates). %\\
 A $Node$ $Template$ instantiates a Node Type as a component of a service. 
 A $Node$ $Type$ defines the properties of such a component and the operations available to manipulate the component.
 A $Relationship$ $Template$ instantiates a Relationship Type as a relationship between Node Templates in a Topology Template. 
 The Relationship Template indicates that two nodes are connected and defines the direction of the connection.
 A $Relationship$ $Type$ defines semantics and properties of the relationship.\label{subs:reltype} %\\
-A Node Type and Relationship Type can by instantiated multiple times.
+A Node Type and Relationship Type can be instantiated multiple times.
 Those types are like abstract classes in high-level programming languages and Templates are objects of those classes.\\
-A simple cloud application for weather calculating can be considered to provide an example. 
+A simple cloud Application for weather calculation can be considered to provide an example. 
 The calculation is performed by a python script which requires a python environment that is hosted on an Ubuntu virtual server.
 $Node$ $Types$ must be defined for the python script, python environment and Ubuntu server.  
 These $Node$ $Types$ will describe available operations for defined components.
-It will a $compute$ operation for the python script, an $install$ operation for the python environments and $deploy$ and $shutdown$ operations for the server.
+It will be the $compute$ operation for the python script, the $install$ operation for the python environments and the $deploy$ and $shutdown$ operations for the server.
 Additionally, one must define $Relationship$ $Types$ for $requires$ and $hosted$ $on$ dependencies.
 Then these types will be instantiated inside the $Topology$ $Template$ named $weater$ $calculator$.
 For each specified $Node$ $Type$, a corresponding $Node$ $Template$ with unique identifiers is created.
 These identifiers are used by $Relationship$ $Templates$ to define the dependencies.
 Figure~\ref{fig:weather} presents the described application. \\
-Artifact represents the content necessary for a management such as executables (e.g. a script or an executable program), configuration files, data files, or something that might be needed for other executables (e.g. libraries or images of file system).
+Artifact represents the content necessary such as executables (e.g. a script or an executable program), configuration files, data files, or something that might be needed for other executables (e.g. libraries or images of file system).
 TOSCA distinguishes two kinds of artifacts: $Implementation$ $Artifacts$ and $Deployment$ $Artifacts$.
-An $Implementation$ $Artifact$ represents the executable of an operation described by a Node Type.
-An $Deployment$ $Artifact$ represents the executable for materializing instances of a node.
-An $Artifact$ $Type$ describes a common type of an artifact: python script, installation package and so on.
-An $Artifact$ $Template$ represents information about the artifact. 
-For example the location of the artifact and other attendant data are stored in the $Artifact$ $Template$. 
-As in the example with nodes above, types are like classes, templates are like objects, and artifacts represent content or a value of an object, but these values can't be changed. %\\
-$Node$ $Type$ $Implementation$ defines the artifacts needed for implementing the corresponding Node Type.
-If a Node Type contains $deploy$ and $shutdown$ operations, then the corresponding Node Type Implementation can contain two Implementation Artifacts with scripts for these operations and one Deployment Artifact with data necessary for the deployment. %\\
+$Implementation$ $Artifacts$ represent the implementation of an operation described by a Node Type.
+$Deployment$ $Artifacts$ represent the content needed to materialize an instances of a Node Type.
+In the example with the weather calculation, the python script will be an $Implementation$ $Artifact$ associated with the $compute$ operation and the image of the Ubuntu virtual server will be a $Deployment$ $Artifact$.
+$Artifact$ $Types$ describe types of artifact: python script, installation package, etc.
+$Artifact$ $Templates$ are used to describe artifacts itself.
+Each $Artifact$ $Template$ contains information about one artifact: the location of the artifact, artifact type and other attended data. 
+%As in the example with nodes above, types are like classes, templates are like objects, and artifacts represent content or a value of an object, but these values can't be changed. %\\
+$Node$ $Type$ $Implementations$ combine information about artifacts implementing the corresponding Node Type.
+If a Node Type contains $deploy$ and $shutdown$ operations, then the corresponding Node Type Implementation can contain two Implementation Artifacts with scripts implementing these operations and one Deployment Artifact with data necessary for the materializing instances of nodes. %\\
 Implementations are like final classes between Node Types and Node Templates, but in TOSCA standard, the Implementation will be chosen only during execution.
 Types, Templates, and Implementations defining a TOSCA application are stored in definition document which have the XML format. %\\
 %%\subsection*{Usage}
-The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of Cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
-This is useful when an application is ported to alternative Cloud environments.~\cite{TOSCA-v1.0_book} \\
+%The combination of topology and orchestration in a Service Template defines what is needed to be preserved across deployments in different environments to enable interoperable deployment of Cloud services and their management throughout the complete lifecycle (e.g. scaling, patching, monitoring, etc.).
+%This is useful when an application is ported to alternative Cloud environments.~\cite{TOSCA-v1.0_book} \\
 \input{graphics/weather}
 %
 \subsection*{CSAR} 
 %
-To store a TOSCA application a \gls{csar}\label{sec:csar} is used.
+To pack a TOSCA application a \gls{csar}\label{sec:csar} is used.
 This is a ZIP-file with ".csar" extension that contains all the data needed for instantiation and management of TOSCA application.
-They include definition documents, artifacts and so on.
+They include definition documents, artifacts, etc.
 In this form, a TOSCA application can be processed by a TOSCA runtime environment.\\
 %\subsubsection*{Structure}
 The root folder of any CSAR must contain the "Definitions" and "\gls{tosca}-Metadata" folders.
 The "Definitions" folder contains definition documents one of which must define a Service Template.
 The "\gls{tosca}-Metadata" folder must contain TOSCA metadata in the form of a file with the "TOSCA.meta" name.
 This metafile consists of name/value pairs, one line for each pair. 
-The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator and so on). 
+The first set of pairs describes CSAR itself (TOSCA version, CSAR version, creator, etc). 
 All other pairs represent metadata of files from the CSAR. 
 The metadata is used by a TOSCA runtime environment to process given files correctly.\\
 %
@@ -144,71 +149,50 @@ The metadata is used by a TOSCA runtime environment to process given files corre
 %During this work, such terms as input CSAR and output CSAR will be used.
 %The input \gls{csar} is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
 %The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. %(at least those that are handled by the framework).
-\subsection*{Encapsulation of CSARs}
-The encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
-But it can be interesting to analyze other techniques to encapsulate a CSAR. 
-At first, we will described the methods not representing packages in a TOSCA topology and then the methods mirroring packages into the topology.\\
-\subsubsection*{Generate Custom Repositories}
-It's possible to download all necessary packages and create one's own custom package repository for each device used in the application. 
-Then one must rework any package installation commands or exchange system preferences to setup an access to the custom repository.
-This method introduces minimal changes in a TOSCA structure.
-The main problem is the creation of the custom repositories. 
-When a TOSCA application consists of many small devices with limited capabilities it can be difficult to start many big custom repositories.\\
-\subsubsection*{Generate Shared Repository}
-Another opportunity is to create a single repository for all devices in a TOSCA application.
-It can be difficult to choose the right location for such a server, but since an application represents the connected system this step can redistribute the load to a more powerful device.
-It is difficult to estimate the changes which will occur in a TOSCA topology while applying such a method.\\
-\subsubsection*{One Node for One Package}
-This method was suggested by IAAS. 
-A new TOSCA node will be created for each downloaded package. 
-All dependencies between packages will be mirrored to a TOSCA topology.
-This is a very visual method, facilitating the understanding of a TOSCA application and dependencies between packages.\\
-\subsubsection*{Sets of Packages} \label{mode:setsofpkg}
-A set of depended packages from a dependencies tree related to an external reference can be combined and represented in a TOSCA topology as a single node.
-An installation of such a node will lead to the installation of all needed packages.
-This way a small size of a TOSCA application's structure will be achieved.
-It will be impossible to trace dependencies (since all packages are represented by one node), but it can help to avoid a difficult structure which consists of hundreds of nodes. \\
+
 \section{OpenTOSCA} \label{sec:opentosca}
-OpenTOSCA provides an open source web-based ecosystem for \gls{tosca} applications. 
+OpenTOSCA provides an open source ecosystem for \gls{tosca} based applications. 
 %It was developed at the University of Stuttgart in october 2012.
-This ecosystem consists of three parts: the \gls{tosca} \textbf{runtime environment}, the graphical modeling TOSCA tool \textbf{Winery}, and the self-service portal for the applications available in the container \textbf{Vinothek}.~\cite*{OpenTOSCA}
-Descriptions of the runtime environment and Winery will be provided in more detail. 
+This ecosystem consists of three parts: the \gls{tosca} \textbf{runtime environment}, the graphical TOSCA modeling tool \textbf{Winery}, and the self-service portal for the applications available in the container \textbf{Vinothek}~\cite*{OpenTOSCA}.
+Descriptions of the runtime environment and Winery will be provided in more detail in the following. 
 \subsection*{Runtime Environment}
-The runtime environment enables a fully automated plan-based deployment and management of Cloud applications contained in a CSAR. 
-The architecture of the environment is visualized by Figure~\ref{fig:openarch}.
-Requests to the Container API are passed to the Control component, which orchestrates the different components, tracks their progress, and interprets the TOSCA application. 
-The Core component offers common services to other components, e. g., managing data or validating XML.
-Management operations of nodes and relationships are either provided by running (Web) services, e. g., the Amazon EC2 API, or by Implementation Artifacts contained in the CSAR.
-In the latter case, the Implementation Artifact Engine is responsible to run these artifacts in order to make them available for plans. 
-The plugin architecture of the Implementation Artifact Engine ensure extensibility.
-Implementation Artifacts, e. g., a SOAP Web service implemented as Java Web archive, are processed by a corresponding plugin of the engine which knows where and how to run this kind of artifact. 
-The plugins deploy the respective artifacts and return the endpoints of the deployed management operations to be stored in the Endpoints database.
-The deployment of Web Archives on Tomcat~\cite*{tomcat} and Axis Archives on Apache Axis~\cite*{axis} is supported~\cite*{macharb}.
+In this section, the OpenTOSCA runtime environment will be presented.
+The runtime environment enables a fully automated plan-based deployment and management of TOSCA Applications presented by CSARs. 
+It contains five main components: Controller, Implementation Artifact Engine, Plan Engine, Database and Container API.
+Container API provides in interface to communicate with Controller which  start plans, controls other components, tracks their progress, and interprets the TOSCA application.
+Implementation Artifact Engine is responsible to make implementation artifacts accessible for Plan Engine and execute them fully automatically.
+It has the plugin architecture which ensures extensibility.
+Implementation Artifacts are processed by the corresponding plugin which knows where and how to run this kind of artifact. 
+The plugins deploy the respective artifacts for execution and save into Database endpoints which can be called by Plan Engine to start the artifacts.
+The deployment of Web Archives on Tomcat~\cite*{tomcat}, Axis Archives on Apache Axis~\cite*{axis} and many others is supported~\cite*{macharb}.
 The Plan Engine handles plans in the same manner.
-It is also build according to a plugin architecture and supports different workflow languages, e.g., Business Process Model and Notation (BPMN) or Business Process Execution (BPEL) Language, and their runtime environments.~\cite{INPROC-2013-45}
+It is built according to a plugin architecture too and supports different workflow languages, e.g., \gls{bpmi} or \gls{bpel}, and their runtime environments~\cite{INPROC-2013-45}.
+Plan Engine plugins deploy supported plans and save endpoints into Database.
+Database stores all files Presented in a CSAR and endpoints of deployed artifacts and plans.
+%The architecture of the environment is visualized by Figure~\ref{fig:openarch}.
 \\
 A processing is done in following manner.  
-First, the CSAR is unpacked and the files are put into the files store.
+First, the CSAR is unpacked and the files are put into Database.
 Then, the TOSCA definitions documents are loaded, resolved, validated, and processed by the Control component, which calls the Implementation Artifact Engine and the Plan Engine.
 The Implementation Artifact Engine deploys the referenced Implementation Artifacts and stores their endpoints in the Endpoints database. 
 Finally, the Plan Engine binds and deploys the application’s management plans.
-The endpoints of the management plans are stored in the Plans database.~\cite{INPROC-2013-45}
+The endpoints of the management plans are stored in the Plans database too~\cite{INPROC-2013-45}.
 %\input{graphics/opencontainer}
-\input{graphics/openarch}
+%\input{graphics/openarch}
 \subsection*{Winery}\label{subs:wine}\label{tool:winery}
-Winery provides a complete set of functions for graphically create, edit and delete elements in the TOSCA topology presented by a CSAR. 
-It consists of four parts: the type and template management, the topology modeler, the BPMN4TOSCA plan modeler ~\cite{BPMN4TOSCA}, and the repository.\\
-The type, template and artifact management enables managing all TOSCA types, templates and related artifacts. 
+Winery provides a complete set of functions for graphically create, edit and delete elements in the TOSCA topology. 
+It operates with CSARs and consists of four parts: the type and template management, the topology modeler, the BPMN4TOSCA plan modeler ~\cite{BPMN4TOSCA}, and the repository.\\
+The type, template and artifact management enables management of all TOSCA types, templates and related artifacts. 
 This includes node types, relationship types, policy types, artifact types, artifact templates, and artifacts such as virtual machine images.\\
 The topology modeler allows to create service templates which consist of node templates and relationship templates. 
 They can be annotated with requirements and capabilities, properties, and policies.\\
-BPMN4TOSCA plan modeler offers web-based creation of BPMN models with the TOSCA extension: BPMN4TOSCA. 
+BPMN4TOSCA plan modeler offers web-based creation of BPMN models with the TOSCA extension, BPMN4TOSCA. 
 That means the modeler supports the BPMN elements and structures required by TOSCA plans and not the full set of BPMN. 
 The Stardust project~\cite*{stardust} offers Browser Modeler, which covers all phases of the Business Process Lifecycle including modeling, simulation, execution and monitoring. 
 In the context of Winery, this modeler was extended to support BPMN4TOSCA.\\
 The repository stores TOSCA models and allows managing their content. 
 For instance, node types, policy types, and artifact templates are managed by the repository. 
-The repository is also responsible for importing and exporting CSARs, the exchange format of TOSCA files and related artifacts.~\cite{winery} %\\
+The repository is also responsible for importing and exporting CSARs, the exchange format of TOSCA files and related artifacts~\cite{winery}. %\\
 %Winery works under a Tomcat server and therefore a visual interface is available in a browser. %, example in Figure \ref{fig:winery_gui}.
 An example of the TOSCA topology visualization is presented in Figure~\ref{fig:winery_source}.
 %\begin{figure}[ht]   
@@ -219,23 +203,26 @@ An example of the TOSCA topology visualization is presented in Figure~\ref{fig:w
 %\end{figure}
 \begin{figure}[ht]   
 \centering
-\includegraphics[width=0.7\textwidth]{Screenshot_winery_source.png}
-\caption{TOSCA topology visualized by $Winery$.}
+\includegraphics[width=0.7\textwidth]{Screenshot_winery_source2.png}
+\caption{The TOSCA Application visualized by $Winery$.}
 \label{fig:winery_source}
 \end{figure}
 \section{Package Management} \label{sec:pm}
-Packages and package management processes are described in this section.
-An installation of packages from external source represents an external reference and therefore they will be considered in order to identify such references.
+The package management in Unix-like operating systems is described in this section.
+It handles the installation, update, configuration and remove of packages or in other word the management of packages.
+%An installation of packages from external sources represents an external reference and therefore they will be considered in order to identify such references.
 %\subsection*{Package managers}
-Package is an archive file containing both data for installation of the program component and a set of metadata like name, function, version, producer, and a list of dependencies to other packages.~\cite*{opium}
-These packages can present not only a complete program but also a certain component of a large application. % or libraries, a packages which can be used only by other programs.
-For a user, a package manager is a set of software tools which automate the process of installing, updating, configuring and removing packages.
-But from the operating system side, a package manager is used for managing the database of packages, their dependencies, and versions, to prevent erroneous installation of programs and missing dependencies.
+Packages are archive files containing both data for installation of the program components and a sets of metadata like name, function, version, producer, and a list of dependencies to other packages~\cite*{opium}. 
+One package can present not only a complete program but also a certain component of a large application.
+Usually packages are stored in external web repositories which can be accessed by a user or a package management tool to download the necessary packages. % or libraries, a packages which can be used only by other programs.
+In this work, we are trying to eliminate usage of such external sources.\\
+For a user, a package manager is a set of software tools which automate the management of packages.
+But from the operating system side, a package manager is used to handle the database of packages, their dependencies, and versions, to prevent erroneous installation of programs and missing dependencies.
 %\subsection*{Packages}
 %\subsection*{Dynamic libraries}
 This task is especially complex in computer systems relying on dynamic library linking. 
-Those systems share executable libraries of machine instructions across  applications. 
-In these systems, complex relationships between different packages requiring different versions of libraries result in a challenge colloquially known as "dependency hell"~\cite*{linuxgeek}.
+These systems share executable libraries of machine instructions across  applications. 
+Complex relationships between different packages requiring different versions of libraries result in a challenge colloquially known as "dependency hell"~\cite*{linuxgeek}.
 Good package management is vital to these systems.\\
 %\subsection*{Repository}
 To give users more control over the kinds of programs that they allow to install on their systems, packages are often downloaded only from a number of software repositories.
@@ -262,11 +249,12 @@ In these examples, the $package2$ is needed for the $package1$, but the $package
 A structure describing all necessary packages and dependencies between them for the given root-package is called a dependency tree. 
 The dependency type $required$ can lead to cycles in dependency trees which differs them from the normal tree graph structures.
 \subsection*{Example Dependencies Handling}
-The $apt$-$get$ package manager will be considered to provide an example of a dependencies handling.
+Its necessary to define the principle of operation of common package managers to determine methods of encapsulation of their work.
+Therefore, the $apt$-$get$ package manager will be considered to provide an example of execution.
 This application is part of \gls{apt} program which uses $dpkg$ application to communicate with an operating system.
 The system keeps a database of packages and their condition.
 These relations are presented in Figure~\ref{fig:packages}.\\
-$apt$-$get$ has many functions: install, remove, update, autoremove, download and so on.
+$apt$-$get$ has many functions: install, remove, update, autoremove, download, etc.
 We will consider the install, remove and autoremove operations to present the common algorithms of processing.
 When a package manager becomes a $package$ installation command, it builds a dependencies tree for the $package$ and checks the possibility to install these depended packages.
 For example, it must check the compatibility with previously installed packages. 
@@ -279,21 +267,28 @@ It happens only if there are no other packages depending on the $package$.
 If the deletion is very important, then these packages can also be removed too to keep the consistency of the database. 
 The packages necessary for the $package$ itself will be deleted only by the autoremove command.
 \input{graphics/packages}
-\section{Configuration Management Tools}
-To ease the package management, various tools can be used. 
-We will consider some of them to determine the form of files which contains external references.
-Usually they are presented by commands in an executable file, which checks an environment and installs the necessary packages using a package manager.
-Such files are called scripts and are commonly used.
+\section{Configuration Management}
+In this section the process configuration management will be described. 
+Common configuration management tools and data download utilities will be presented.\\
+\subsection{Configuration Management Tools}
+To ease the package and file management, various tools can be used. 
+We will consider some of them to determine the form of files which contain external references. %TODO
+To store the configuration acceptable for a configuration
+One can use scripts to describe needed configuration, packages and files.
+A script is a file containing different commands which check an environment and call package managers and tools for data download to install the necessary packages and download the necessary data.
+These files are processed by configuration management tools 
+
+The tools will be associated with languages, which was used to write scripts.
 Popular management tools like Bash, Ansible, Chef and CFEngine will be described below.
-\subsection*{Bash} \label{lang:bash}
+\subsubsection*{Bash} \label{lang:bash}
 Bash is a Unix command language written as a free software.
-It provides enough capabilities to be used as a  management tool.
+It provides enough capabilities to be used as a management tool.
 In addition Bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
 Bash is examined because it is very popular since it is the default command line processor in Unix systems~\cite*{bashdef}.
-Instead of typing commands direct into a command line, a script can be executed directly.~\cite{bash}
-These scripts can be used to configure a system, install package, create files, check environment and so on.
+Instead of typing commands direct into a command line, a script can be executed directly~\cite{bash}.
+These scripts can be used to configure a system, install package, create files, check environment, etc.
 Bash is a very popular and ease language, therefore a huge number of problems have solutions in Bash scripts already.
-\subsection*{Ansible} \label{lang:ansible}
+\subsubsection*{Ansible} \label{lang:ansible}
 Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
 As with most configuration management software, Ansible has two types of servers: controlling machines and nodes.
 First, there is a single controlling machine which is where orchestration begins.
@@ -302,16 +297,31 @@ The controlling machine describes the location of nodes through its inventory.
 Ansible playbooks express configurations, deployment, and orchestration in Ansible.
 The playbook format is YAML. 
 Each playbook maps a group of hosts to a set of roles.
-Each role is represented by calls to Ansible tasks.~\cite{ansible} 
-\subsection*{Chef} \label{lang:shef}
+Each role is represented by calls to Ansible tasks~\cite{ansible}.
+\subsubsection*{Chef} \label{lang:shef}
 Chef is a configuration management tool, which uses Ruby for writing system configuration files called "recipes".
 They describe how Chef manages applications and utilities and how they are to be configured.
 These recipes which can be grouped together as a "cookbook" for easier management define a series of resources that should be in a particular state: packages that should be installed, services that should be running, or files that should be written.
 Chef can run in client/server mode, or in a standalone configuration named "chef-solo".
 In client/server mode, the Chef client sends various attributes about the node to the Chef server. 
-In solo mode the local system will be configured.~\cite{chef}
-\subsection*{CFEngine}
+In solo mode the local system will be configured~\cite{chef}.
+\subsubsection*{CFEngine}
 CFEngine is an open source configuration management system.
-Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers.~\cite{cfengine}
+Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers~\cite{cfengine}.
 Configurations are described by "policy" files, which are plain text-files with .cf extension.
-These files define the necessary state of files, packages, users, processes, services and so on.~\cite{cfengine2}
+These files define the necessary state of files, packages, users, processes, services, etc~\cite{cfengine2}.
+
+\subsection{Tools for Data Download}\label{sec:datadown}
+Sometimes is necessary to download data for the operation of Cloud Application.
+That can be a configuration file, a database image or something else.
+To get external files a lot of utilities like the popular $wget$ tool~\cite{wgetstat,wget} or cURL~\cite{curl} can be used. 
+These utilities will be described below.
+\subsubsection*{Wget}
+GNU Wget is a utility designed for retrieving binary documents across the Web, through the use of HTTP and FTP, and saving them to disk.
+Wget is non-interactive, which means it can work in the background, while the user is not logged in~\cite{wget_desc}.
+This tool is suitable for automatically  tasks because it has built-in mechanism for the server response analyze.
+A user can setup it to repeat download a certain number of times in case of fault.
+Additionally Wget supports recursion mechanism which allows to download folders as simple as a single files.
+\subsubsection*{cURL}
+cURL is a command line tool to transfer the data. It is based on libcurl a free open source library ported to a big number of platforms like AIX, AmigaOS, Android, BeOS, BlackBerry, OpenVMS, Darwin, DOS, FreeBSD, HP-UX, HURD, iOS, IRIX, Linux, macOS, NetBSD, NetWare, OpenBSD, OS/2, QNX Neutrino, RISC OS, Solaris, Symbian, Tru64, Ultrix, UnixWare, and Windows and supports a huge number of protocols.
+Due to this portability, cURL is often used in small embedded devices to transfer data~\cite{curl}.

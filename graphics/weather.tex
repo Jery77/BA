@@ -33,47 +33,47 @@ minimum height=7em, rounded corners]
 \node (requirestemplatetype) at (requirestemplate) [yshift=+1em] [item] {Type};
 \node (requirestemplatefrom) at (requirestemplate) [yshift=-1em] [item] {From};
 \node (requirestemplateto) at (requirestemplate) [yshift=-3em] [item] {To};
-\node at (requirestemplate.north) [yshift=-2em][align=center] {Relationship\\Template\\\large Requires};
+\node at (requirestemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Requires};
 
 \node (hostedtemplate) [xshift=-4.5em, yshift=-2em] at ( topology) [rtemplate] {};
 \node (hostedtemplatetype) at (hostedtemplate) [yshift=+1em] [item] {Type};
 \node (hostedtemplatefrom) at (hostedtemplate) [yshift=-1em] [item] {From};
 \node (hostedtemplateto) at (hostedtemplate) [yshift=-3em] [item] {To};
-\node at (hostedtemplate.north) [yshift=-2em][align=center] {Relationship\\Template\\\large Hosted on};
+\node at (hostedtemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Hosted on};
 
 \node (scripttemplate) [xshift=+4.5em, yshift=+11.5em] at ( topology) [ntemplate] {};
 \node (scripttemplatetype) at (scripttemplate) [yshift=+0em] [item] {Type};
 \node (scripttemplateID) at (scripttemplate) [yshift=-2em] [item] {ID};
-\node at (scripttemplate.north) [yshift=-2em][align=center] {Node\\Template\\\large Scipt};
+\node at (scripttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Scipt};
 
 \node (environmenttemplate) [xshift=+4.5em, yshift=+3em] at ( topology) [ntemplate] {};
 \node (environmenttemplatetype) at (environmenttemplate) [yshift=+0em] [item] {Type};
 \node (environmenttemplateID) at (environmenttemplate) [yshift=-2em] [item] {ID};
-\node at (environmenttemplate.north) [yshift=-2em][align=center] {Node\\Template\\\large Environment};
+\node at (environmenttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Environment};
 
 \node (servertemplate) [xshift=+4.5em, yshift=-5.5em] at ( topology) [ntemplate] {};
 \node (servertemplatetype) at (servertemplate) [yshift=+0em] [item] {Type};
 \node (servertemplateID) at (servertemplate) [yshift=-2em] [item] {ID};
-\node at (servertemplate.north) [yshift=-2em][align=center] {Node\\Template\\\large Server};
+\node at (servertemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Server};
 
 \node (requirestype) [xshift=-5.5em, yshift=+2em] at ( requirestemplate.west) [rtype] {};
-\node at (requirestype.north) [yshift=-2em][align=center] {Relationship\\Type\\\large Requires};
+\node at (requirestype.north) [yshift=-2em][align=center] {\small Relationship\\\small Type\\\large Requires};
 
 \node (hostedontype) [xshift=-5.5em, yshift=+2em] at ( hostedtemplate.west) [rtype] {};
-\node at (hostedontype.north) [yshift=-2em][align=center] {Relationship\\Type\\\large Hosted on};
+\node at (hostedontype.north) [yshift=-2em][align=center] {\small Relationship\\\small Type\\\large Hosted on};
 
 \node (scripttype) [xshift=+5.5em, yshift=+1.8em] at ( scripttemplate.east) [ntype, minimum height=5em] {};
 \node  at (scripttype.south) [yshift=+2em] [item] {compute};
-\node at (scripttype.north) [yshift=-1.5em][align=center] {Node Type\\\large Script};
+\node at (scripttype.north) [yshift=-1.5em][align=center] {\small Node Type\\\large Script};
 
 \node (environmenttype) [xshift=+5.5em, yshift=+1.8em] at ( environmenttemplate.east) [ntype, minimum height=5em] {};
 \node  at (environmenttype.south) [yshift=+2em] [item] {install};
-\node at (environmenttype.north) [yshift=-1.5em][align=center] { Node Type\\\large Environment};
+\node at (environmenttype.north) [yshift=-1.5em][align=center] {\small  Node Type\\\large Environment};
 
 \node (servertype) [xshift=+5.5em, yshift=+3em] at ( servertemplate.east) [ntype] {};
 \node  at (servertype.south) [yshift=+4em] [item] {deploy};
 \node  at (servertype.south) [yshift=+2em] [item] {shutdown};
-\node at (servertype.north) [yshift=-1.5em][align=center] { Node Type\\\large Server};
+\node at (servertype.north) [yshift=-1.5em][align=center] {\small  Node Type\\\large Server};
 
 \draw [->,scale=5,line width=2pt,shorten <= -2pt] (requirestemplatefrom.north east) -- (scripttemplateID.south west);
 \draw [->,scale=5,line width=2pt,shorten <= -2pt] (requirestemplateto.south east) -- (environmenttemplateID.north west);
@@ -87,5 +87,5 @@ minimum height=7em, rounded corners]
 \draw [->,scale=5,line width=2pt] (environmenttemplatetype.east) -- (environmenttype.west);
 \draw [->,scale=5,line width=2pt] (scripttemplatetype.east) -- (scripttype.west);
 \end{tikzpicture} 
-\caption{Example: a cloud application for weather calculation} 	\label{fig:weather}
+\caption{The example of a TOSCA Cloud Application for weather calculation} 	\label{fig:weather}
 \end{figure}
