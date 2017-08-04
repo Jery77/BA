@@ -1,15 +1,15 @@
 % !TeX spellcheck = en_US
 
-\chapter{Example Integration of a new Module}\label{chap:add}
-This chapter shows the extensibility of the framework by adding a new $aptitude$ package manager module for the Bash language.\\
-Section~\ref{sec:aptitude} provides common information about the $aptitude$.\\
-In section~\ref{sec:aptitude_imp} the module is implemented and in section~\ref{sec:aptitude_int} is integrated into the Bash language module.
+\chapter{Example Integration of new Module}\label{chap:add}
+This chapter shows the extensibility of the framework by adding a new $aptitude$ package manager module for the Bash language. %\\
+Section~\ref{sec:aptitude} provides common information about the $aptitude$. %\\
+In section~\ref{sec:aptitude_imp} the module is developed and integrated into the Bash language module.
 
-\section{Aptitude}\label{sec:aptitude}
+\section{Aptitude Package Manager}\label{sec:aptitude}
 This section describes the $aptitude$ package manager.
 Like the $apt$-$get$, the $aptitude$ is a command line program, where a package can be installed using the $aptitude$ $install$ \emph{package} command. 
 In additional, it can be started in a pseudo-graphical mode to provide a visual interface shown in Figure~\ref{fig:aptitude_gui}).
-An another advantage compared to the $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
+An another advantage compared to $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
 \begin{figure}[ht]   
 	\centering
 	\includegraphics[width=0.7\textwidth]{Screenshot_aptitude.png}
@@ -17,13 +17,13 @@ An another advantage compared to the $apt$-$get$ is the capability to search for
 	\label{fig:aptitude_gui}
 \end{figure}
 
-\section{Implementing the New Package Manager Module}\label{sec:aptitude_imp}
+\section{Development of Aptitude Module}\label{sec:aptitude_imp}
 The implementation of the $aptitude$ module will be described here.
 At first, the $aptitude$ class will be inherited from the abstract class $PackageManager$. 
-This is presented in listing~\ref{lst:aptit_inher}.\\
+This is presented in listing~\ref{lst:aptit_inher}. %\\
 After that, the $aptitude$ class can be used as a regular package manager module, but it lacking functionality.
 It is necessary to add the common code, like the constructor and the manager's name.
-After these operations, the $aptitude$ module can be presented in listing~\ref{lst:aptit_common}.\\
+After these operations, the $aptitude$ module can be presented in listing~\ref{lst:aptit_common}. %\\
 \begin{Listing} 
 	\caption{The $aptitude$ inherited from the $PackageManager$ abstract class}
 	\label{lst:aptit_inher}
@@ -70,11 +70,12 @@ It must modify the data and in the case of changes, the $isChanged$ variable sho
 The $isChanged$ variable indicates that the file must be rewritten with a new content from the $newFile$ variable.
 In the $output$ variable a set of packages from the package handler will be stored and returned back to the Bash module.
 Described behavior is implemented in listing~\ref{lst:aptit_proceed}.\\
-An $aptitude$ line parser will be implemented, which reads a line from the $line$ variable and stores it or it's modified version to the $newFile$ variable.
-If the data is changed, then the $isChanged$ variable is set to $true$.
+An $aptitude$ line parser will be implemented.
+It must read a line from the $line$ variable and store it or it's modified version into the $newFile$ variable.
+If the data was changed, then the $isChanged$ variable must be set to $true$.
 Any $aptitude$ package installation calls should be detected, commented out and its arguments (package names) should be propagated one by one to the package handler's function $getPackage$. 
 The result of the $getPackage$ function will be added to the $output$ variable.\\
-During the parsing which is described in the listing \ref{lst:aptit_parse}, the line is divided into words. 
+During the parsing which is defined in the listing \ref{lst:aptit_parse}, the line is divided into words. 
 Each found package name is transmitted to the packet handler as an argument of its public function $getPackage$.
 In additional, this function must take the language and the source artifact's name as the arguments.
 \begin{Listing} 
@@ -127,8 +128,9 @@ else
 	newFile += line + '\n';
 \end{lstlisting}
 \end{Listing} 
-\section{Integrating Aptitude into the Bash Module}\label{sec:aptitude_int}
+%\subsection*{Integration Aptitude into the Bash Module}\label{sec:aptitude_int}
+\\
 Now the $aptitude$ module can be added to the Bash module.
-The only thing to do is to add the $aptitude$ to the Bash's list of package manager modules (the list is stored in the \emph{packetManagers} variable).
-This is done by the Bash's constructor with the command: \emph{"packetManagers.add(new PM\_aptitude(this, ch));"}.\\
-After these operation the new module is ready to identify and resolve external references which use the aptitude package manager to install packages.
+The only thing to do is to add the $aptitude$ to the Bash's list of package manager modules (the list is stored in the \emph{packageManagers} variable).
+This is done by the Bash's constructor with the command: \emph{"packageManagers.add(new PM\_aptitude(this, ch));"}. %\\
+After these operation the new module is ready to identify and resolve external references which use the $aptitude$ package manager to install packages.

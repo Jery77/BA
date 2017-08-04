@@ -140,7 +140,7 @@
 \pagestyle{preamble}
 \renewcommand*{\chapterpagestyle}{preamble}
 
-\renewcommand{\chapterheadstartvskip}{\vspace{0em}}
+\renewcommand{\chapterheadstartvskip}{\vspace{4em}}
 
 %Kurzfassung / abstract
 %auch im Stil vom Inhaltsverzeichnis
@@ -151,8 +151,9 @@
 \fi
 In recent years, Cloud Computing is gaining more and more popularity. 
 %An application designed according to the principle of Cloud Computing are executed on an extern platform and is called a Cloud Application. 
-If someone will try to create a Cloud Application suitable to work with several different platforms, he will face a problem.
-The problem is that each platform provides its own \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface (API) to interact with Cloud Applications and it's difficult to create one unified application functioning on various platforms properly. 
+But if someone will try to create a Cloud Application suitable to work with several different platforms, he will face a problem.
+The problem is that each platform provides its own \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface (API) to interact with Cloud Applications.
+Therefore it's difficult to create one unified application functioning on various platforms properly. 
 \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) provides a solution for this problem.
 %%This standard adds an additional level of abstraction to a Cloud Applications, in other words, a layer between the external interfaces of the Cloud Application and a Cloud service provider's API.
 With the help of TOSCA, it's possible to describe several models of interaction with many different APIs within one TOSCA Cloud Application.
@@ -170,7 +171,7 @@ These downloads can slow down the deployment and when the access to the Internet
 %Furthermore, all depended packages needed for new packages must also be added recursively.\\
 This document considers the development of the solution to this problem through the predownload of the necessary data.
 Different methods of encapsulation of CSARs will be defined.
-It will be described the architecture of the software solution which will recognize external dependencies in a CSAR, eliminate them, resupply the CSAR with all the data necessary for deployment and also change the internal structure of the CSAR to display the achieved self-containment.
+It will be described the architecture of the software solution which can recognize external dependencies in a CSAR, eliminate them, resupply the CSAR with all the data necessary for deployment and also change the internal structure of the CSAR to display the achieved self-containment.
 The prototype of the software will be implemented and validated.
 %In addition some aspects of implementation will be described and explained.
 \cleardoublepage

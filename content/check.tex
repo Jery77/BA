@@ -4,8 +4,12 @@
 In this chapter, the usage of the developed framework will be presented and validated.
 An input CSAR will be described in section~\ref{sec:inputcsar}.
 %The processing by the framework is described in section~\ref{sec:process}.
-The output CSAR will be added to and displayed by Winery in section~\ref{sec:checkwin}.
-Generated Artifacts will be checked in section~\ref{sec:checkart}.
+The output CSAR will be displayed by Winery in section~\ref{sec:checkwin}.
+Generated Artifacts will be checked in section~\ref{sec:checkart}.\\
+To start the framework an Java environment is used.
+After the start, a user should enter the input CSAR name, the output CSAR name, the architecture and chose the mode of operation.
+Then, the framework works fully automatically, analyzing the artifacts and resolving any external references.
+The output of the framework in the One node for one package mode and in the Sets of packages mode will be called the first CSAR and the second CSAR respectively.
 
 \section{Input CSAR}\label{sec:inputcsar}
 %In this test, a CSAR will be handled by the software. 
@@ -15,14 +19,9 @@ The service uses a server virtualization environment named $vSphere$ (the $VSphe
 In the environment works the $Ubuntu$ virtual server (the $Ubuntu$-$14.04$-$VM$ node).
 The $Ubuntu$ hosts two applications: $Python$ (the $Python\_2.7$ node) and the $Flink$ $Simple$ (the $Flink\_Simple\_1.0.3$ node).
 The service has two submodules: a Data Prediction and a Data Delivery, both are hosted on the $Flink$ $Simple$ node and require the Python node. 
-An analyze shows two external references. The $Python$ node installs the python package and the $Flink$ $Simple$ node - the Java package. \\
-
+An analyze shows two external references. The $Python$ node installs the python package and the $Flink$ $Simple$ node - the Java package. 
 %\section{Processing}\label{sec:process}
 %For Linux systems it can be easily installed.
-To start the framework an Java environment is used.
-After the start, a user should enter the input CSAR name, the output CSAR name, the architecture and chose the mode of operation.
-Then, the framework works fully automatically, analyzing the artifacts and resolving any external references.
-The output of the framework in the One node for one package mode and in the Sets of packages mode will be called the first CSAR and the second CSAR respectively.
 %Figure~\ref{fig:process} provides the example.
 %\begin{figure}[ht]   
 %	\centering
@@ -30,10 +29,9 @@ The output of the framework in the One node for one package mode and in the Sets
 %	\caption{Processing by the framework.}
 %	\label{fig:process}
 %\end{figure}
-
-\section{Displaying with Winery}\label{sec:checkwin}
-Winery was installed to test the correctness of the output CSAR. 
- This is a tool for the development of TOSCA systems and is useful for checking the results. %\\
+\section{Visualize with Winery}\label{sec:checkwin}
+Winery was used to validate the correctness of the output CSAR. 
+ This is a tool for the development of TOSCA systems and is useful for verify the results. %\\
  The input CSAR's representation by Winery is displayed in Figure~\ref{fig:winery_source2}.
  Those external references will be resolved by the framework and exchanged by new nodes in output CSARs. 
  \begin{figure}[ht]   
@@ -50,7 +48,7 @@ Fully dependencies three for the Java package consists of about 60 nodes and the
 In the One node for one package mode for each of these packages a new node must be created.
 It was only six nodes in the input CSAR, but after the processing, the first CSAR contains more than 100 of nodes.
 This problem doesn't occur in the Sets of packages mode. 
-For two external references only two additional packages was created.
+For two external references only two additional packages were created.
 Therefore the addition of the second CSAR into Winery passes much faster. 
 % Addition of a single node CSAR is faster process.
 % The number of additional nodes coincides with the number of artifacts containing external references.
@@ -58,19 +56,18 @@ Therefore the addition of the second CSAR into Winery passes much faster.
  In a case of errors, messages will be displayed.
  \\
  %\subsection*{Display by Winery}
-hen the CSARs were displayed.
+Then the CSARs were displayed.
 To visualize a CSAR, Winery must validate and interpret it's internal references.
 Due to the high number of nodes, the processing of the first CSAR lasts longer as the processing of the second CSAR. 
-
- If something was defined not properly, these erroneous nodes or references between them will not be displayed.
+If something was defined not properly, these erroneous nodes or references between them will not be displayed.
 The representation of the first CSAR is shown on Figure~\ref{fig:winery_output}, but only a part of the CSAR is visible.
 The structure seems very difficult to follow.
 An observer can identify four old nodes, two new nodes and mix of references.
  To verify the topology some nodes was moved manually. 
  Figure~\ref{fig:winery_output2} displays the result. 
- Now its possible to identify references between some nodes.\\
+ Now its possible to identify references between some nodes.
 The second CSAR with manually moved nodes is presented on Figure~\ref{fig:winery_output_single}, which shows the clear structure.
-New nodes installing python and Java were created and referenced to nodes which contained external references earlier.
+New nodes installing python and Java were created and referenced to nodes which contained external references earlier.\\
  The correctness of dependencies was verified by checking several references with the $apt$-$cache$ $depends$ command.
 External references were deleted from artifacts.
 By opening the content of the new nodes, it was verified, that there are right artifacts.
@@ -100,7 +97,7 @@ At first Bash scripts will be tested, then ansible playbooks.
 \subsection*{Validate Bash Scripts}
 Since Bash is used in the Linux's command line, it will be pretty easy to check Bash installation scripts by starting them.
 Of course that must be done with the necessary privileges.
-For the script file installing the python2.7-minimal package, the command will be $sudo$ $RR_python2_7-minimal.sh$.
+For the script file installing the $python2.7$-$minimal$ package, the command will be $sudo$ $RR\_python2\_7$-$minimal.sh$.
 %An example of the $python2.7$ installation is presented in listing~\ref{lst:check_bash_script}. %\\
 The installation ended without any warnings or errors, which means that it was completed successfully.
 This way any generated Bash script can be validated.
@@ -121,7 +118,7 @@ This way any generated Bash script can be validated.
 To validate an ansible playbook we need to extract the zip file containing the playbook manually. 
 During the regular execution, this work will be done by a runtime environment.
 The call of the ansible runtime which proceeds the playbook is a simple procedure too.
-For the playbook with the "main.yml" name, the command will be $sudo$ $ansible-playbook$ $main.yml$.
+For the playbook with the $main$.$yml$ name, the command will be $sudo$ $ansible$-$playbook$ $main.yml$.
 %An example is provided in Figure~\ref{fig:ansible_output2}. %\\
 $Ok$ at the end of the output signals that the installation was completed successfully.
 %\begin{figure}[ht]   

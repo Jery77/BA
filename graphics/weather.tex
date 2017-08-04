@@ -15,7 +15,7 @@ minimum height=10em, rounded corners]
 minimum height=1.5em, rounded corners]
 \tikzstyle{ntemplate} = [entry, text width=7em, shading = axis,rectangle, left color=blue!10!white, right color=blue!30!white,shading angle=135, anchor=north,
 minimum height=8em, rounded corners]
-\tikzstyle{rtype} = [entry, text width=6.5em, shading = axis,rectangle, left color=blue!10!white, right color=blue!30!white,shading angle=135, anchor=north,
+\tikzstyle{rtype} = [entry, text width=5.5em, shading = axis,rectangle, left color=blue!10!white, right color=blue!30!white,shading angle=135, anchor=north,
 minimum height=4em, rounded corners]
 \tikzstyle{ntype} = [entry, text width=6.5em, shading = axis,rectangle, left color=blue!10!white, right color=blue!30!white,shading angle=135, anchor=north,
 minimum height=7em, rounded corners]
@@ -33,28 +33,28 @@ minimum height=7em, rounded corners]
 \node (requirestemplatetype) at (requirestemplate) [yshift=+1em] [item] {Type};
 \node (requirestemplatefrom) at (requirestemplate) [yshift=-1em] [item] {From};
 \node (requirestemplateto) at (requirestemplate) [yshift=-3em] [item] {To};
-\node at (requirestemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Requires};
+\node at (requirestemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Relation 1};
 
 \node (hostedtemplate) [xshift=-4.5em, yshift=-2em] at ( topology) [rtemplate] {};
 \node (hostedtemplatetype) at (hostedtemplate) [yshift=+1em] [item] {Type};
 \node (hostedtemplatefrom) at (hostedtemplate) [yshift=-1em] [item] {From};
 \node (hostedtemplateto) at (hostedtemplate) [yshift=-3em] [item] {To};
-\node at (hostedtemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Hosted on};
+\node at (hostedtemplate.north) [yshift=-2em][align=center] {\small Relationship\\\small Template\\\large Relation 2};
 
 \node (scripttemplate) [xshift=+4.5em, yshift=+11.5em] at ( topology) [ntemplate] {};
 \node (scripttemplatetype) at (scripttemplate) [yshift=+0em] [item] {Type};
 \node (scripttemplateID) at (scripttemplate) [yshift=-2em] [item] {ID};
-\node at (scripttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Scipt};
+\node at (scripttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large script.py};
 
 \node (environmenttemplate) [xshift=+4.5em, yshift=+3em] at ( topology) [ntemplate] {};
 \node (environmenttemplatetype) at (environmenttemplate) [yshift=+0em] [item] {Type};
 \node (environmenttemplateID) at (environmenttemplate) [yshift=-2em] [item] {ID};
-\node at (environmenttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Environment};
+\node at (environmenttemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Python};
 
 \node (servertemplate) [xshift=+4.5em, yshift=-5.5em] at ( topology) [ntemplate] {};
 \node (servertemplatetype) at (servertemplate) [yshift=+0em] [item] {Type};
 \node (servertemplateID) at (servertemplate) [yshift=-2em] [item] {ID};
-\node at (servertemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Server};
+\node at (servertemplate.north) [yshift=-2em][align=center] {\small Node\\\small Template\\\large Ubuntu};
 
 \node (requirestype) [xshift=-5.5em, yshift=+2em] at ( requirestemplate.west) [rtype] {};
 \node at (requirestype.north) [yshift=-2em][align=center] {\small Relationship\\\small Type\\\large Requires};

@@ -9,8 +9,8 @@ The purpose of this work was to develop a solution resolving external dependenci
 It was designed a concept of the modular framework. 
 According to the concept, modules will process different configuration management tools, package managers and data download utilities. 
 Each module is responsible for identifying and resolving specified type of external references. 
-After resolving, the downloaded data is integrated into the topology of TOSCA application.
-It was presented several modes of integration which can be useful in different use cases.\\
+After resolving, the downloaded data is integrated into the topology of the TOSCA application.
+It was presented several modes of integration which can be suitable in different use cases.\\
 The prototype of the modular framework was developed in Java language.
 The program identifies and resolves external references presented by Bash scripts and Ansible playbooks.
 It has two modes of operation.
@@ -22,14 +22,15 @@ Other mode serves to generate compacter CSAR with small number of nodes. %\\
 %In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
 %To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and  $Ansible$ playbooks with the $apt$ package manager was added.\\
 The framework handles a CSAR as follows.
-The structure of the CSAR is analyzed to determine the internal dependencies.
+The structure of the CSAR is analyzed to determine the internal references.
 %Then each language module selects artifacts written in the language.    
 %All such artifacts are transferred to the package manager modules of the language for processing.
-Then modules find external dependencies, remove them and pass the required packages to the package handler.
-It downloads each package along with all its dependencies and calls the topology handler which creates TOSCA nodes for these packages.
-A runtime environment can analyze these nodes and install the necessary packages.\\
+Then modules find external dependencies, remove them and generates a list of names of required packages.
+Each package will be download along with all dependent packages and integrated into the CSAR. 
+TOSCA nodes are generated for these packages.
+During deployment, a runtime environment can analyze these nodes and install the necessary packages.\\
 In order to show the extensibility of the framework, the addition of the $aptitude$ package manager module into the $Bash$ module was described in detail.
-It  was shown how to create a module which can be added into the framework, how to implement its basic functions, pass data to the packet handler, and connect the module to the $Bash$ module. \\
+It  was shown how to create the module which can be added into the framework, how to implement its basic functions, pass data to the packet handler, and integrate the module to the $Bash$ module. \\
 At the end, the results of the framework's execution were validated.
 The output CSARs were visualized and analyzed with the help of Winery.
 Generated artifacts were verified and executed.

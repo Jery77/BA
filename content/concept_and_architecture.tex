@@ -17,12 +17,12 @@ In section~\ref{subs:analyse}, it will be explained how to determine the Node Te
 Then language modules, package manager modules and download tool modules functionality will be presented.
 In section~\ref{subs:repres}, it will be expressed how to create a new node for a TOSCA topology. 
 After that, some methods to determine the architecture of the final platform will be presented.
-In addition, it will be described, how the results can be validated.
+%In addition, it will be described, how the results can be validated.
 \input{graphics/general}
 
 \subsection{Analysis of a TOSCA-Topology}\label{subs:analyse}
 To update the \gls{tosca} topology properly, it is necessary to add references from the nodes where external references were to the newly created nodes which resolve the external references. 
-For the given artifact with an external reference, one need to find all Node Templates using this artifact, create for each of them new Node Templates resolving the reference and define the dependencies between them.
+For the given artifact with an external reference, one need to find all Node Templates which use this artifact, create for each of them new Node Templates resolving the reference and define the dependencies between them.
 The search can be done once for all artifacts during the preprocessing stage.
 Later one can use the results of the search to identify all Node Templates for the given artifact.
 %According to TOSCA standard, references between Node Templates can only be created in the same Service Template.  
@@ -60,16 +60,16 @@ The following steps to build the internal dependencies tree can be executed duri
 	\item Find all Service Templates and all contained Node Templates they contain. 
 		Each Node Template contains a reference to Node Type what is useful for building a dependency from Artifact to Node Template.
 \end{itemize} 
-In this way the required internal dependencies tree with references $Artifact$ $\rightarrow$ $Node$~$Template$ and $Artifact$ $\rightarrow$ $Service$~$Template$ can be built.
+In this way the required internal dependencies tree with references \\$Artifact$~$\rightarrow$~$Node$~$Template$ and $Artifact$~$\rightarrow$~$Service$~$Template$ can be built.
 \input{graphics/script_serv_tree}
 
 \subsection{Search for Artifacts}\label{subs:searchart}
 Since artifacts may contain external references, we need to find all of them in order to resolve the references.
 The first simple solution is to analyze the structure of a TOSCA application and to identify all Artifact Templates and corresponding artifacts.
-But this method brings an possibility to miss artifacts because some of them can be called from other artifacts and not be presented in the TOSCA topology by an Artifact Template.
+But this method brings possibility to miss artifacts because some of them can be called from other artifacts and not be presented in the TOSCA topology by an Artifact Template.
 This case is presented by Figure~\ref{fig:artart}.
 In this example the "Artifact 1" was deployed into Database by Implementation Artifact Engine and is called by the management plan.
-The "Artifact 2" is an executable file without an Artifact template.
+The "Artifact 2" is an executable file without an Artifact Template.
 That is a bad practice, but we must consider that option too, to provide higher level of reliability.
 It is possible, that the "Artifact 2" will not be considered by the method described above.
 The found solution is to analyze all files presented in input CSARs and resolve external references in all of them.
@@ -84,7 +84,7 @@ Since configuration files can have many forms, like Ansible playbook or Bash scr
 Each language module itself contain and support package managers modules and download tool modules which handle package managers and data download tools respectively.
 A language module should filter files not belonging to the language and the accepted files will be transmitted to the supported modules.
 A package manager module resolves an external reference and transmits the package name from this reference to a package handler described in section~\ref{subs:archph}.
-A data download module identifies download commands, removes them, downloads the data and calls a topology handler defined in section~\ref{subs:archtop}. 
+A download tool module identifies download commands, removes them, downloads the data and calls a topology handler defined in section~\ref{subs:archtop}. 
 This principle can be illustrated by Figure~\ref{fig:lang_pm}.
 %Ease of adding of new modules to the framework will prove the correctness of this system.
 \\
@@ -115,8 +115,7 @@ Since this work is aimed at creating the easily expanded and supplemented tool, 
 \end{Listing}
 \input{graphics/languages_pm}
 \subsection*{Encapsulation of CSARs with extarnal Packages}\label{subs:encaps}
-Here will be define some methods of encapsulation of a CSAR containing external packages.
-
+Here will be defined some methods of encapsulation of a CSAR containing external packages.
 %It will be defined two methods  which install external packages during the deployment.
 %The encapsulation must be achieved through the download of external packages and generation of a new TOSCA node for each of them. 
 %But it can be interesting to analyze other techniques to encapsulate a CSAR. 
@@ -154,43 +153,43 @@ It was developed two modes to handle download commands in CSARs: $addition$ and 
 They will be presented shortly.
 
 \subsubsection*{Addition}
-The method is to add a new TOSCA node.
+The method is to add a new TOSCA node for each downloaded file.
 This node will contain a deployment artifact presenting the downloaded file and an implementation artifact which will try to put the file into the right place.
 Additionally a reference between the old node with an external reference and the added node must be created.
 
 \subsubsection{Integration}
 We can't be sure that the file added by the method described above will be available for other nodes.
-Sometimes it can be difficult to get right position for the downloaded file outside the configuration manager.
-We need to provide another opportunity to user of the framework.
+Sometimes it can be difficult to get right position for the downloaded file. % outside the configuration manager.
+We need to provide another opportunity for a user of the framework.
 In the integration mode, downloaded files must be integrated into the node which contain the download command.
 The download command can be exchanged by a file move command to put the file into the right position.
 
 \subsection{Representing Downloaded Packages in a TOSCA-Topology} \label{subs:repres}
-Using some developed methods like Addition for external files or Sets of packages for external packages, downloaded data must be represented in the structure of a Cloud Application.
+Using some developed methods like Addition for external files or Sets of packages for external packages, downloaded data must be represented in the structure of a TOSCA Application.
 We will introduce two new terms which can facilitate understanding: a package node and a file node.
 These nodes denote to the defined and instantiated \gls{tosca} node, the purpose of which is to install packages or store files respectively.
-Defined means, that the corresponding definition of Node Type, Node Type Implementation, used Artifact Types and Artifact Templates are integrated into the processed CSAR.
+Defined means, that the corresponding definitions of Node Type, Node Type Implementation, Artifact Types and Artifact Templates are integrated into the processed CSAR.
 And to instantiate the nodes one need to create a Node Template.
 The addition of new package and file nodes to the TOSCA topology can be divided into several steps.
 \begin{itemize}
 	\item One must add definitions for common elements like Artifact Types or Relationship Types. 
 		This can be done once.
-	\item The package node common definition will be represented by a Node Type.   
+	\item The common definition of the created node will be represented by a Node Type.   
 		It must contain the $install$ operation, which represents the capability to install the node.
 		For the package nodes that will cause the installation of the package and a file move operation for the file nodes.
 		%There will be described that this node must be installed.
 	\item Artifacts (downloaded data and configuration files) will be referenced by Artifact Templates.
 	\item A Node Type Implementation will combine the Artifact Templates to implement the $install$ operation.
-	\item A Node Template will instantiate a node in the corresponding Service Templates.
-		To determine the corresponding Service Template the autor will use the preprocessing described in the section~\ref{subs:analyse}.
-	\item A Reference Template will provide topology information allowing the observer (a user or a runtime environment) to determine which nodes the package must be installed for.
+	\item A Node Template will instantiate the node in the corresponding Service Templates.
+		To determine the corresponding Service Template the autor will use the method described in the section~\ref{subs:analyse}.
+	\item A Reference Template will provide topology information allowing the observer (a user or a runtime environment) to determine dependencies between nodes.
 		References will connect Node Templates contained external references and Node Template resolving external references.
 \end{itemize}
 After an execution of these steps, a definition of new TOSCA nodes will be finished and they can be used.
 
 \subsection{Determining Architecture of the Final Platform} \label{finplatf}
 To download the right instance of a package one must define its architecture.
-But it is impossible to analyze the structure of any CSAR and determine the architecture of the device which node will be deployed on.
+But it is impossible to analyze the structure of any CSAR and determine the architecture of the device which the nodes will be deployed on.
 There are many pitfalls here.\\
 A single Service Template can use several physical devices with different architectures.
 Many Node Types and Node Templates instantiated on different platforms can refer to the same Implementation Artifact.
@@ -237,22 +236,23 @@ If it will be necessary, this method can easily be expanded to $artifact$ $speci
 
 \section{Architecture}\label{sec:arch}
 This section will present the architecture of the framework and the detailed description of its elements.
-The main elements are a \boldmath $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, a $package$ $handler$, and a $topology$ $handler$. \unboldmath
+The main elements are a \boldmath $CSAR$ $handler$, a $references$ $resolver$, $language$ $modules$, $package$ $manager$ $modules$, $download$ $tool$ $modules$, a $package$ $handler$, and a $topology$ $handler$. \unboldmath
 
 \subsection{CSAR handler} \label{subs:casr_h}
 The CSAR handler provides an access to a \gls{csar} and maintains its consistency. 
-It defines the method to add new files handling the metadata, \mbox{archiving/unarchiving}, and choosing the final platform architecture. \\
+It defines the method to add new files handling the metadata, to \mbox{archive/unarchive} CSARs, and to choose the final platform architecture. \\
 The input CSAR is initially archived and must be decompressed first in order to handle the content.
 When all external references will be resolved, the content will be archived to an output CSAR.
 A new name-value pair must be added to the metadata for each new file integrated into the CSAR during processing. 
 The name represents the full path to the file and the value contains the type of the file. 
 This type will be used by a runtime environment to chose the right behavior. %\\ %\\
 As it was mentioned in section~\ref{finplatf}, an architecture of the final platform will be chosen for the entirely CSAR.
-A command line interface must be provided for a user, to allow him to chose the architecture. 
+This can be done once at start.
+%A command line interface must be provided for a user, to allow him to chose the architecture. 
 The chosen architecture must be saved to the CSAR for the case of future processing by the framework to avoid the collisions between architectures of packages.
 
 \subsection{References Resolver} \label{subs:RR}
-References Resolver is the main element, whose execution is divided into three stages: $preprocessing$, $processing$, $finishing$. \\
+References Resolver is the main element, whose execution is divided into three stages: $preprocessing$, $processing$, $finishing$. %\\
 The first stage is the preprocessing.
 CSAR is an archive file and it must be decompressed in order to manipulate the content. 
 As was mentioned in section~\ref{subs:repres}, one need to add common definitions for used Artifact Types and References Types.
@@ -268,10 +268,10 @@ It's also necessary to update metadata of the CSAR to display the files added.
 %\input{graphics/preprocessing}
 
 \subsubsection{Language Modules} \label{subs:archlm}
-Each $language$ $module$ describes a handling of one language.
-This module must filter files written in the language.
+Each $language$ $module$ describes a handling of one language used to write configuration files.
+This module must accept only the files written in the language.
 It also contains a list of supported package manager modules.
-Each language module must provide the capability for the given package to generate a TOSCA node which must use the language used in the module to install the package.
+Each language module must provide the capability for the given package to generate a TOSCA node which must use the language to install the package.
 For example a Bash module must provide capability to define new package nodes which use Bash to install the packages.
 This means that a configuration file and definitions for Artifact Templates, a Node Type, and a Node Type Implementation should be created by a language module.\\
 As it is already mentioned above, during the $processing$ stage a language module analyzes all files one by one and checks their belonging to the language. 
@@ -310,14 +310,14 @@ The $package$ $handler$ provides interface to communicate with an operating syst
 It can download installation data, determine the type of dependency between packages and provide a list with dependent packages for a given package.
 To download the installation data this component will use given package name and the architecture specified by the CSAR handler.
 Then it transfers the package name to the $topology$ $handler$ and repeats the actions for all depended packages recursively. 
-In the process it stores all names of packages from the dependency tree of original package and sends them back to the calling package manager module.
+During the process it stores all names of packages from the dependency tree of original package and sends them back to the calling package manager module.
 To download the data the command "apt-get download \textbf{package}" can be used. 
 The architecture can be specified by a ":$architecture$" suffix, for example, a "package:arm" mean the package for the $arm$ architecture.
-The list of dependencies will be obtained using the "apt-cache depends \textbf{package}" command. 
-The output of such command should be parsed in order to extract names of depended packages.
+The list of dependencies will be obtained using a system package manager package analyzer. % the "apt-cache depends \textbf{package}" command. 
+Its output should be parsed in order to extract names of depended packages.
 Type of dependency can be achieved in the same manner.
 Of course, in case of a fault during a download of a package, a user interface should be provided to find a solution.
-It can be: retry the download, ignore the package, rename the package or even break the framework's execution.
+For example it can be: retry the download, ignore the package, rename the package or even break the framework's execution.
 
 \subsection{Topology Handler} \label{subs:archtop}
 %This element should handle the TOSCA topology and it has two main tasks: to analyze the TOSCA topology during the preprocessing stage to create internal dependencies trees and to use those trees to create TOSCA definitions for Node Templates and Relationship Templates in the right places for the packages provided by the package handler.

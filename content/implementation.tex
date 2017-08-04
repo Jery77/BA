@@ -1,8 +1,9 @@
 % !TeX spellcheck = en_US
 
 \chapter{Implementation}\label{chap:imp}
-The prototype of the developed framework was implemented and will be described in this chapter.
-The application can resolve external references presented by packages installation commands.
+This chapter provides an information about the implementation of the prototype of the and its elements, whose behavior was described in chapter~\ref{chap:conarch}.
+%The prototype of the developed framework was implemented and will be described in this chapter.
+The application can resolve external references presented by package installation commands.
 It handles the Bash language with apt-get package manager and the Ansible configuration management tool with the apt package manager.
 The developed software can operate in two modes: One node for one package and Sets of packages.\\
 Java language was chosen for implementation, because of its simplicity and strength. 
@@ -10,7 +11,7 @@ To compile the framework a Java Development Kit version 1.8 or above is needed.
 If the software is already compiled, an Java Runtime Environment version 1.8 or above must be installed.
 Additionally, the apt-get package manager which functions only in Unix-like operating systems must be installed to download packages and identify dependencies between them. 
 If a user wants to download packages for specific architecture the package manager must be setup to access this architecture's repository. 
-This chapter provides an information about the implementation of the framework and its elements, whose behavior was described in chapter~\ref{chap:conarch}.
+
 %
 
 %In this language, the elements are represented by classes.
@@ -49,7 +50,7 @@ Then other elements can use the $getFolder$ function to get this name and access
 This class provides the $createFile$, $getPathLength$, and $correctName$ methods used by many other elements.
 The main purpose of these functions is to make the code cleaner. \\
 Using the $createFile$ other elements of the framework can create a file with the given content.
-The $getPathLength$ function returns the deep of the given file's path what is very useful for creating references between files.\\
+The $getPathLength$ function returns the deep of the given file's path what is very useful for creating references between files. %\\
 OpenTOSCA uses some limitations to names of TOSCA nodes. 
 Those names can't contain slashes, dots, etc.
 The function $correctName$ can be used to obtain an acceptable name from a given string.
@@ -294,7 +295,7 @@ An abstract model will be defined to make the extensibility easier.
 The apt-get module for Bash and an apt module for Ansible will be implemented.
 \subsection*{Package Manager Model}
 The model is described by an abstract class.
-It contains only one function $proceed$ that finds and eliminates external references, as well as passes the found package names to the package handler.
+It contains only one function $proceed$ that finds and eliminates external references, as well as passes the found package names to the package handler and return the list of all required packages.
 %\begin{Listing}
 %	\caption{Abstract package manager model}
 %	\label{lst:pmabst}
@@ -361,11 +362,10 @@ $source$ defines the parent element of the package.
 It will be the original artifact file for the root package, and the depending package for other packages.
 $sourcefile$ is a name of the original artifact.
 	%This name will be used by the $language$ to generate package node and by topology handler to create the dependency. 
-
 The $getPackage$ function downloads packages, calls the language's function $createTOSCA\_Node$ using the $language$ variable to create the TOSCA node for the package.
 Then it calls the topology handler's functions $addDependencyToPacket$ or $addDependencyToArtifact$ to update the topology. 
 If dependent packages are available, the function calls itself recursively for each dependent package.
-After those operations, a dependencies three for the $packet$ will be built.\\
+After these operations, a dependencies three for the $packet$ will be built.\\
 The command $apt$-$get$ $download$ \emph{package} is used for download the package. 
 If the process fails, a user input is provided to solve the problem. 
 A user will be able to rename the package, ignore it or even break the processing.
@@ -412,7 +412,7 @@ The Relationship Template references both Node Templates.
 The type of dependency is the value of the $dependencyType$ for the $addDependencyToPacket$ function and the $preDependsOn$ for the $addDependencyToArtifact$.\\
 To update the existing TOSCA definition the $org$.$w3c$.$dom$ and $org$.$xml$.$sax$ packages are used. 
 The definition of a new Node Template for the given $topology$ and $package$ is presented in listing \ref{lst:newnodetemp}.
-Together with definitions from the preprocessing stage and definitions made by languages this satisfy the requirement~\ref{req:represent}. 
+%Together with definitions from the preprocessing stage and definitions made by languages this satisfy the requirement~\ref{req:represent}. 
 \begin{Listing}
 	\caption{Creating of a new Node Template}
 	\label{lst:newnodetemp}

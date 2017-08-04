@@ -1,30 +1,30 @@
 % !TeX spellcheck = en_US
 
-\chapter{Requirements for the Encapsulation}\label{chap:req}
-In this chapter, requirements for the program and its components being developed will be defined.
-Furthermore it will be described what we expect as a result of the application's work.\\
-It's necessary to develop new software, which will resolve external references and complement the TOSCA topology to represent the changes in a given CSAR file.
-A prototype must be implemented to test the correctness of the concept.
-Since the main purpose of the software is to resolve references, further it can be called $References$ $resolver$ $framework$.  
-During this work, such terms as input CSAR and output CSAR will be used.
+\chapter{Requirements}\label{chap:req}
+In this chapter, requirements for the developed solution and its components resolving external references will be defined.
+Furthermore it will be described what we expect as a result of the work.\\
+It's necessary to develop the concept of the new software which will resolve external references in CSARs and complement its topology to represent the changes made.
+A prototype must be implemented to validate the correctness of the concept.
+%Since the main purpose of the software is to resolve references, further it can be called $References$ $resolver$ $framework$.  
+During this work, such terms as $input$ $CSAR$ and $output$ $CSAR$ will be used.
 The $input$ $CSAR$ is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
 The $output$ $CSAR$ is the CSAR, which was processed by the framework and doesn't contain external references. \\%(at least those that are handled by the framework).\\
-The application must proceed an input CSAR and identify references to external packages and files.
-That includes a wide range of file download commands and package installation commands which contact package repositories with the help of different package managers.
-To find such commands the software must be able to unpack the data and access all artifacts contained in a input CSAR .
-Since one can't develop an application which support all possible types of external references the structure of the application must ensure an easy extensibility which allows to extend the software and handle any new types of references.
-Therefore the framework must be developed in the form of modular system so that each module will be able to identify and resolve the corresponding external reference type.
+The application must proceed input CSARs and identify references to external packages and files.
+That includes a wide range of file download commands and package installation commands which access package repositories with the help of different package managers and download external files with the help of data download tools respectively.
+To find such commands the software must be able to unpack the data and access all artifacts contained in input CSARs.
+Since one can't develop an application which support all possible types of external references the structure of the application must ensure easy extensibility which allows to extend the software and handle any new types of references.
+Therefore the framework must be developed in the form of modular system so that each module will be able to identify and resolve the corresponding external references type.
 The three types of modules must be developed.
 One type of modules will be responsible for configuration management tools, the other type will process package managers and the last one will handle data download tools.\\
 When an external reference is identified it must be resolved. 
-In case of packages, that includes remove of package installation command and integration of the package into the proceeded CSAR.
+In case of packages, that includes remove of package installation command and integration of the package installation data into the proceeded CSAR.
 To provide the encapsulation of the output CSAR the package must be accompanied by all dependent packages which must be found, downloaded and added to the CSAR too.
 Then all downloaded packages must be integrated into the TOSCA topology.
 That means that one must define new nodes and relationships to map the dependencies from a package database into the topology.
 For file download commands, one must remove the command, download the file and integrate it into the CSAR structure.
-As a last step the extracted input CSAR with additions must be packed to the output CSAR.
+As a last step the processed TOSCA application must be archived back to get the output CSAR.
 The concept and architecture of a program which satisfies the requirements will be described in chapter~\ref{chap:conarch}.
-The implementation of the program is provided in chapter~\ref{chap:imp}.
+The implementation of the prototype will be provided in chapter~\ref{chap:imp}.
 \if 0 
 A primary type of external references is an artifact represented by a Bash script which uses an apt-get package manager to install new packages.
 The exact command for this type of references is "$apt$-$get$~$install$ \textbf{package}".
@@ -76,7 +76,7 @@ This behavior will be described in the chapter \ref{chap:conarch} and implemente
 As a result of the program's work, an output CSAR will be received.      
 This CSAR must have the same functionality as the input CSAR, but all external references to additional packages or files must be resolved.
 The output CSAR must be able to be deployed properly without downloading these data via the Internet. 
-In addition, the dependencies trees for downloaded packages should be represented in the TOSCA topology. \\
+%In addition, the dependencies trees for downloaded packages should be represented in the TOSCA topology. \\
 In order to validate the output CSAR, the TOSCA topology can be verified and the defined artifacts can be validated through those installations on a test machine. 
 %\clearpage
 \section*{Summarize}
