@@ -2,28 +2,32 @@
 
 \chapter{Conclusion and Future Work}\label{chap:zusfas}
 %The main points of this work will be presented and highlighted.\\  
-External references can negatively affect the performance of Cloud Applications.
-Unfortunately, many TOSCA applications access external sources to install various packages and download data during a deployment.
-If we have a high level of information security or limited access to the Internet, these external dependencies can lead to a lot of problems which can be solved by encapsulation.
-The purpose of this work was to develop the software for the elimination of such dependencies and the encapsulation of a TOSCA application presented by a CSAR.\\
+External references can negatively affect  Cloud Applications.
+If we have a high level of information security or limited access to the Internet, these external dependencies can lead to a lot of problems with performance, stability and security.
+Unfortunately, many TOSCA applications access external sources to install various packages or download files during a deployment.
+The purpose of this work was to develop a solution resolving external dependencies through encapsulation and to implement it in a prototype.\\
 It was designed a concept of the modular framework. 
-According to the concept, the modules will process different configuration management tools, package managers and data download utilities. 
-They are responsible for identifying and resolving specified types of external references. 
-After resolving, the downloaded data is integrated into the TOSCA topology.
+According to the concept, modules will process different configuration management tools, package managers and data download utilities. 
+Each module is responsible for identifying and resolving specified type of external references. 
+After resolving, the downloaded data is integrated into the topology of TOSCA application.
 It was presented several modes of integration which can be useful in different use cases.\\
-The software was developed in Java language, which ensures its portability, ease of maintenance and extensibility.
-The program identifies external references presented by package installation commands, removes them and integrates necessary packages and dependencies between them into the topology of a TOSCA application.
-To enable the ability to handle new types of external dependencies, the software was implemented in the form of a modular framework with separate modules for processing of languages and package managers.
-This allows a consumer to add their new handlers for package managers and languages easily.
-In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
-To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and  $Ansible$ playbooks with the $apt$ package manager was added.\\
+The prototype of the modular framework was developed in Java language.
+The program identifies and resolves external references presented by Bash scripts and Ansible playbooks.
+It has two modes of operation.
+In the first mode dependencies between packages are mapped to a TOSCA topology. 
+Other mode serves to generate compacter CSAR with small number of nodes. %\\
+%The program identifies external references presented by package installation commands, removes them and integrates necessary packages and dependencies between them into the topology of a TOSCA application.
+%To enable the ability to handle new types of external dependencies, the software was implemented in the form of a modular framework with separate modules for processing of languages and package managers.
+%This allows a consumer to add their new handlers for package managers and languages easily.
+%In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
+%To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and  $Ansible$ playbooks with the $apt$ package manager was added.\\
 The framework handles a CSAR as follows.
-The structure of the CSAR is analyzed to determine the internal dependencies between artifacts and Node Templates.
-Then each language module selects artifacts written in the language.
-All such artifacts are transferred to the package manager modules of the language for processing.
-They find external dependencies, remove them and pass the names of the required packages to the package handler.
-It loads each package along with all its dependencies and sends information about them to the topology handler which creates TOSCA nodes for these packages and defines TOSCA dependencies from the original nodes to the new ones.
-Later, a runtime environment can analyze these dependencies and install the necessary packages.\\
+The structure of the CSAR is analyzed to determine the internal dependencies.
+%Then each language module selects artifacts written in the language.    
+%All such artifacts are transferred to the package manager modules of the language for processing.
+Then modules find external dependencies, remove them and pass the required packages to the package handler.
+It downloads each package along with all its dependencies and calls the topology handler which creates TOSCA nodes for these packages.
+A runtime environment can analyze these nodes and install the necessary packages.\\
 In order to show the extensibility of the framework, the addition of the $aptitude$ package manager module into the $Bash$ module was described in detail.
 It  was shown how to create a module which can be added into the framework, how to implement its basic functions, pass data to the packet handler, and connect the module to the $Bash$ module. \\
 At the end, the results of the framework's execution were validated.
@@ -38,18 +42,18 @@ For example, the support of variables can be added into the apt-get module for B
 Some new package manager or languages modules can be developed and added to the framework to handle Shef, CFEngine, yum, pacman, etc.
 Described, but not yet implemented download tool modules can be added in future.\\
 The entire concept can be reworked in order to achieve higher level of abstraction.
-All types of modules can be grouped up to one abstract module.
-This will allow to add some new types of modules, archive module with zip or rar modules, which can handle archives separately without big changes in the structure of the software.
-Now zip archives are processed only within the Ansible module.
-This can be counted as a "dirty code" if an additional module requiring  processing of zip archives will be added.\\
-Another direction of improvement the software's convenience is to implement a visual interface which allows a consumer to chose artifacts which must be processed and modes of the processing separately.
+All types of modules can be grouped up to one abstract type.
+This will allow to add some new types of modules, like archive module with zip or rar modules, which can handle archives separately without big changes in the structure of the software.
+%Now zip archives are processed only within the Ansible module.
+%This can be counted as a "dirty code" if an additional module requiring  processing of zip archives will be added.\\
+Another direction of the improvement of the software's convenience is to implement a visual interface which allows a user to chose artifacts which must be processed and modes of the processing separately.
 Such visualization can be based on some existing program from OpenTOSCA, for example on Winery.
 This can be useful for composite Cloud Application consisting of many parts with diverse architectures which must be handled in different ways separately.
-\section*{Result}
-The framework that resolves external dependencies in a CSAR and satisfies the requirements was obtained.
-It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers, and $Ansible$ language with $apt$ package managers.
-The framework can be easily expanded to handle additional types of external references. 
-Two modes of operation where implemented.
-The first method is to create one TOSCA node for each package.
-By the second method, one TOSCA node combining all packages is created for each artifact containing external reference.
-Such nodes combine all packages needed to eliminate external references in the artifact.
+%\section*{Result}
+%The framework that resolves external dependencies in a CSAR and satisfies the requirements was obtained.
+%It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers, and $Ansible$ language with $apt$ package managers.
+%The framework can be easily expanded to handle additional types of external references. 
+%Two modes of operation where implemented.
+%The first method is to create one TOSCA node for each package.
+%By the second method, one TOSCA node combining all packages is created for each artifact containing external reference.
+%Such nodes combine all packages needed to eliminate external references in the artifact.

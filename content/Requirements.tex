@@ -7,8 +7,8 @@ It's necessary to develop new software, which will resolve external references a
 A prototype must be implemented to test the correctness of the concept.
 Since the main purpose of the software is to resolve references, further it can be called $References$ $resolver$ $framework$.  
 During this work, such terms as input CSAR and output CSAR will be used.
-The input \gls{csar} is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
-The output CSAR is the CSAR, which was processed by the framework and doesn't contain external references. \\%(at least those that are handled by the framework).\\
+The $input$ $CSAR$ is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
+The $output$ $CSAR$ is the CSAR, which was processed by the framework and doesn't contain external references. \\%(at least those that are handled by the framework).\\
 The application must proceed an input CSAR and identify references to external packages and files.
 That includes a wide range of file download commands and package installation commands which contact package repositories with the help of different package managers.
 To find such commands the software must be able to unpack the data and access all artifacts contained in a input CSAR .
@@ -83,14 +83,14 @@ In order to validate the output CSAR, the TOSCA topology can be verified and the
 The requirements are summarized here. 
 The developed framework must:
 \begin{enumerate}
-%	\item identify references to external packages and files in a input CSAR.\label{req:identify}
-	\item identify references to external packages in an input CSAR.\label{req:identify}
+	\item identify references to external packages and files in a input CSAR.\label{req:identify}
+%	\item identify references to external packages in an input CSAR.\label{req:identify}
 	\item delete the external references.\label{req:delete}
-	\item add data into the CSAR to encapsulated installations of the packages.\label{req:adddata}
+	\item integrate installation data and downloaded files into the CSAR to encapsulated it.\label{req:adddata}
 %	\item handle different configuration management tools, package managers and data download tools.\label{req:handledif}
-	\item handle different configuration management tools and package managers.\label{req:handledif}
+%	\item handle different configuration management tools and package managers.\label{req:handledif}
 	\item have an easy expandable structure.\label{req:expand}
 	\item represent the changes into the TOSCA topology.\label{req:represent}
-	\item implement a prototype.
+%	\item implement a prototype.
 	\item generate an output CSAR with the same functionality as the input CSAR, but without external references.\label{req:out}
 \end{enumerate}

@@ -1,9 +1,17 @@
 % !TeX spellcheck = en_US
 
 \chapter{Implementation}\label{chap:imp}
+The prototype of the developed framework was implemented and will be described in this chapter.
+The application can resolve external references presented by packages installation commands.
+It handles the Bash language with apt-get package manager and the Ansible configuration management tool with the apt package manager.
+The developed software can operate in two modes: One node for one package and Sets of packages.\\
+Java language was chosen for implementation, because of its simplicity and strength. 
+To compile the framework a Java Development Kit version 1.8 or above is needed.
+If the software is already compiled, an Java Runtime Environment version 1.8 or above must be installed.
+Additionally, the apt-get package manager which functions only in Unix-like operating systems must be installed to download packages and identify dependencies between them. 
+If a user wants to download packages for specific architecture the package manager must be setup to access this architecture's repository. 
 This chapter provides an information about the implementation of the framework and its elements, whose behavior was described in chapter~\ref{chap:conarch}.
-A software was implemented to resolve external references presented by a packages.
-Java language was chosen, because of its simplicity and strength. 
+%
 
 %In this language, the elements are represented by classes.
 %Java uses additional kind of packages which describe third-party modules and make programming easier. 
@@ -12,7 +20,7 @@ Java language was chosen, because of its simplicity and strength.
 
 \section{Global Elements}
 This section describes the elements used throughout the whole framework's execution.
-A ZIP handler provides a functionality to operate ZIP archives, a CSAR handler keeps an interface to interact with a CSAR and a Utils helps to solve problems common for many other elements.
+The ZIP handler provides a functionality to operate ZIP archives, the CSAR handler keeps an interface to interact with a CSAR and Utils helps to solve problems common for many other elements.
 
 \subsection*{Zip Handler}
 This is a small element with straight functionality. 
@@ -22,7 +30,7 @@ The functions for archiving and unarchiving are called $zipIt$ and $unZipIt$ res
 
 \subsection*{CSAR Handler}
 This element provides an interface to access the content of a CSAR and stores information about files associated with it.
-The most valuable data are the name of a temporary extraction folder, the list of files from the input CSAR, the meta-file entry, and the architecture of the target platform.
+The mostly used data are the name of a temporary extraction folder, the list of files from the input CSAR, the meta-file entry, and the architecture of the target platform.
 All this data is encapsulated into the CSAR handler.
 The set of public functions allowing to operate with this element is available.
 \begin{itemize}
@@ -47,8 +55,8 @@ Those names can't contain slashes, dots, etc.
 The function $correctName$ can be used to obtain an acceptable name from a given string.
 
 \section{References Resolver}
-This is the main module which starts by framework startup and is executed into three stages: preprocessing, processing and finishing. 
-These stages will be described shortly.
+This is the main module which starts by framework startup and is executed into three stages: preprocessing, processing and finishing which were described in section \ref{subs:RR}. 
+In this section, some implementation aspects will be presented briefly.
 
 \subsection*{Preprocessing}
 At the preprocessing stage, the CSAR is unpacked, common \gls{tosca} definitions are generated and internal dependencies trees are built. 
@@ -59,8 +67,8 @@ To unpack the CSAR the function $unpack$ from the CSAR handler is used.\\
 %
 %\subsubsection*{Generating TOSCA Definitions}
 The $javax$.$xml$.$bind$ package was chosen for creating the common TOSCA definition. 
-This Java package allows to generate descriptions - Java classes describing an XML document which are used to store TOSCA definitions. 
-Those following descriptions where created:
+This Java package allows to generate $Descriptions$ - Java classes describing an XML documents which store TOSCA definitions. 
+The following $Descriptions$ where created:
 \begin{itemize}
 	\item $DependsOn$ and $PreDependsOn$ defines Relationship Types which determine dependencies %(Described in the section \nameref{subs:reltype})
 	  between packages.% (described in the section \nameref{subs:dep}). 
@@ -68,15 +76,15 @@ Those following descriptions where created:
 	\item $Script$ $Artifact$ specify an implementation Artifact Type for a script installing a package.
 	\item $Ansible$ $Playbook$ represent a implementation Artifact Type for a package installation via an Ansible playbook.
 \end{itemize}
-An example description of the $Script$ $Artifact$ can be found in listing~\ref{lst:scripttype}.
+An example of $Description$ of the Script Artifact can be found in listing~\ref{lst:scripttype}.
 %%Each description is represented by a separate Java class. \\
 %\\
 %\subsubsection*{Build internal dependencies trees}\label{subs:imp_findintref}
 %Internal dependencies are mainly used by the \nameref{subs:archtop}.
 %Therefore, these two modules were combined within the one Java class named $Topology$~$Handler$.
-To build internal dependencies trees the topology handler described in section~\ref{sec:imptophan} is used. 
+To build internal dependencies trees the topology handler described in section~\ref{sec:imptophan} was used. 
 \begin{Listing} 
-	\caption{Description for the script Artifact Type definition}
+	\caption{Java class containing the $Description$ for the Script Artifact Type definition}
 	\label{lst:scripttype}
 \begin{lstlisting}
 public class RR_ScriptArtifactType {
@@ -116,7 +124,12 @@ public class RR_ScriptArtifactType {
 \end{Listing}
 \subsection*{Processing}
 During this stage, all language modules listed in the framework are started.
-For the references resolver element that is only two strings of code, but they start the main functionality of the framework.
+For the references resolver element that is only two following strings of code, but they start the main functionality of the framework.
+\begin{lstlisting}
+\\All languages are stored in the "languages" variable
+for (Language language : languages)
+	l.proceed();
+\end{lstlisting}
 The languages modules check all files presented in the input CSAR. 
 The list of these files is stored in the CSAR handler, a pointer to which the modules became and translate to the corresponding package manager modules during their instantiation.
 This system allows the modules to access the CSAR's content at any time.
@@ -124,10 +137,6 @@ This system allows the modules to access the CSAR's content at any time.
 %\begin{Listing}
 %\caption{The processing stage}
 %\label{lst:start_lang}
-%\begin{lstlisting}
-%for (Language l : languages)
-%	l.proceed(cr);
-%\end{lstlisting}
 %\end{Listing}
 
 
@@ -135,14 +144,14 @@ This system allows the modules to access the CSAR's content at any time.
 When all external references will be resolved, the framework can enter its last stage.
 At this stage, the changed data should be packed into the output \gls{csar}, whose name was entered during the preprocessing stage.
 The function $pack$ from the CSAR handler is used. 
-After this operation, one becomes a more encapsulated CSAR whose level of access to the Internet will be significantly lower which implements the requirement~\ref{req:out}.
+After this operation, one receives a more encapsulated CSAR which implements the requirements presented in section~\ref{chap:req} and has lower level of access to the Internet.
 
 \section{Language Modules} 
-This section will describe the language modules. %implementation of %TODO
+This section will describe the implemented language modules. %implementation of %TODO
 %For this purpose serve \nameref{subs:archlm} and \nameref{subs:archpmm}.
 Since the framework is initially oriented to easy extensibility, an abstract model for the modules will be defined so, that new modules can be added by implementing this model.
 This abstract model serves to implement requirement~\ref{req:expand}.
-The realization of the Bash and Ansible modules will be provided at the end of the section which responds to requirement~\ref{req:handledif}.
+The realization of the Bash and Ansible modules will be provided at the end of the section. % which responds to requirement~\ref{req:handledif}.
 
 \subsection*{Language Model}
 To specify the common functionality and behavior of different language modules, the language model is used. 
@@ -158,10 +167,10 @@ The common functions are presented below.
 	\item $getNodeName$ uses a package name to generate the name for a Node Type, which will install the package using this language.
 	\item $createTOSCA\_Node$ creates the definitions for a TOSCA node. 
 	Since the created TOSCA nodes must install packages using the same language as the original node, all languages must provide the method for creating such definitions.
-	This function must be implemented in two variants. 
-	First option is to create a node for one package and second option is to take a set of packages. 
-	The second option is needed for the single node mode where a lot of packages can by installed by a one node.
 \end{itemize}
+The $createTOSCA\_Node$ function must be implemented in two variants. 
+The first option is to accept a single package as an argument to implement the One node for one package mode.
+The second implementation is needed for the Sets of packages mode where a lot of packages can by installed by one node and this function must take a set of packages as an argument.
 New language modules must be inherited from the language model and then can be added to the framework.
 \begin{Listing}
 	\caption{Abstract language model}
@@ -206,9 +215,11 @@ public abstract class Language {
 \end{lstlisting}
 \end{Listing}
 \subsection*{Bash Module Implementation}
-The processing of the popular language Bash was implemented. 
-The Bash module should accept only files written on the Bash language.
-To chose such files some signs inherent to all Bash scripts can be used. 
+The processing of the popular language Bash was implemented in the prototype. 
+The Bash module should accept only files written in the Bash language.
+All the files presented in Artifact Templates with a Bash script type will be accepted.
+Additionally the module will accept files not presented in Artifact Templates at all, but possessing specific signs.
+%Some signs inherent to all Bash scripts can be used to chose artifacts not represented in Artifact Templates. 
 These signs can be the file extensions (".sh" or ".bash") and the first line ("\#!/bin/bash"). 
 Each file which contains those signs will be passed to supported package managers modules, in our case to the $apt$-$get$ module described later. \\
 The Bash module must provide a capability for the given package to create a definition of a TOSCA node which uses the Bash language to install the package.
@@ -223,109 +234,106 @@ Those definitions and the installation script are created by the $createTOSCA\_N
 %Then the node name is generated using $getNodeName$ and TOSCA definitions for this name are created.
 
 \subsection*{Ansible Implementation}
-Ansible configuration management tool was added to test the extensibility of the framework.
+Ansible configuration management tool was added to validate the extensibility of the framework.
 Since Ansible playbooks are often packed into archives, it may be necessary to unpack them first and then to analyze the content.
 Thus, the files are either immediately transferred to the package manager modules, or they are unzipped first.
-Listing~\ref{lst:ansible_proceed} represents those operations.
-As a sign of Ansible files, the ".$yml$" extension is used, since its playbooks don't contain any specific header.\\
-Creation of an Ansible \gls{tosca} node for a package is a complicated operation. 
+%Listing~\ref{lst:ansible_proceed} represents those operations.
+To filter Ansible files not represented by Artifact Templates, the ".$yml$" extension is used, because Ansible playbooks don't contain any specific header.\\
+Creation of an Ansible \gls{tosca} node for a package is a complicated operation because one need to define the configuration of the created Ansible playbook and to archive the configuration, playbook and installation data. 
 As the first step, the original files should be analyzed to determine the configuration (the set of options like a user name or a proxy server).
 If the implemented analyzer is unable to find all necessary options, a user interface will be provided to fulfill any missing parameters.
-After that a playbook and a configuration file will be created in a temporary folder.
-When the installation data are downloaded and added to the folder, it can be packed to a zip archive.
+After that, the Ansible playbook installing the package and the configuration file describing the playbook will be created in a temporary folder.
+After addition of installation data into the folder, it can be packed to a zip archive.
 This archive is an implementation artifact, which the Artifact Template should be created for.
 A Node Type with an "$install$" operation % and a name built from the name of the package
 should be defined.
 And finally, a Node Type Implementation linking the operation and the Artifact Templates should be generated.
 A Node Template will be added by the topology handler.
-\begin{Listing}
-	\caption{Ansible proceeding}
-	\label{lst:ansible_proceed}
-\begin{lstlisting}
-public void proceed()
-	throws FileNotFoundException, IOException, JAXBException {
-	if (ch == null)
-		throw new NullPointerException();
-	for (String f : ch.getFiles())
-		for (String suf : extensions)
-			if (f.toLowerCase().endsWith(suf.toLowerCase())) {
-				if(ch.getResolving() == CSAR_handler.Resolving.Single){
-					if (suf.equals(".zip")) 
-						createTOSCA_Node(proceedZIP(f),f);
-					else
-						createTOSCA_Node(proceed(f, f),f);
-				}
-				else{
-					if (suf.equals(".zip")) 
-						proceedZIP(f);
-					else
-						proceed(f, f);
-				}
-			}
-}
-	
-public List<String> proceed(String filename, String source)
-	throws FileNotFoundException, IOException, JAXBException {
-	List<String> packages = new LinkedList<String>();
-	for (PackageManager pm : packetManagers)
-		packages.addAll(pm.proceed(filename, source));
-	List<String> templist = new LinkedList<String>();
-	for(String temp:packages)
-		templist.add(Utils.correctName(temp));
-	return templist;
-}
-\end{lstlisting}
-\end{Listing}
+%\begin{Listing}
+%	\caption{Ansible proceeding}
+%	\label{lst:ansible_proceed}
+%\begin{lstlisting}
+%public void proceed()
+%	throws FileNotFoundException, IOException, JAXBException {
+%	if (ch == null)
+%		throw new NullPointerException();
+%	for (String f : ch.getFiles())
+%		for (String suf : extensions)
+%			if (f.toLowerCase().endsWith(suf.toLowerCase())) {
+%				if(ch.getResolving() == CSAR_handler.Resolving.Single){
+%					if (suf.equals(".zip")) 
+%						createTOSCA_Node(proceedZIP(f),f);
+%					else
+%						createTOSCA_Node(proceed(f, f),f);
+%				else{
+%					if (suf.equals(".zip")) 
+%						proceedZIP(f);
+%					else
+%						proceed(f, f);
+%				}
+%			}
+%}
+%	
+%public List<String> proceed(String filename, String source)
+%	throws FileNotFoundException, IOException, JAXBException {
+%	List<String> packages = new LinkedList<String>();
+%	for (PackageManager pm : packetManagers)
+%		packages.addAll(pm.proceed(filename, source));
+%	List<String> templist = new LinkedList<String>();
+%	for(String temp:packages)
+%		templist.add(Utils.correctName(temp));
+%	return templist;
+%}
+%\end{lstlisting}
+%\end{Listing}
 \section{Package Manager Modules}
 In this section, package manager modules will be specified.
 The main task of this modules is to identify external references, delete them and call the package handler.
-Those modules satisfy the requirements~\ref{req:identify} and~\ref{req:delete}.
-An abstract model will be defined to make the extensibility easier, which is needed for requirement~\ref{req:expand}.
+%Those modules satisfy the requirements~\ref{req:identify} and~\ref{req:delete}.
+An abstract model will be defined to make the extensibility easier.
 The apt-get module for Bash and an apt module for Ansible will be implemented.
 \subsection*{Package Manager Model}
 The model is described by an abstract class.
-Its description which is provided in listing~\ref{lst:pmabst} contains only one function $proceed$ , that finds and eliminates external references, as well as passes the found package names to the package handler.
-\begin{Listing}
-	\caption{Abstract package manager model}
-	\label{lst:pmabst}
-\begin{lstlisting}
-public abstract class PacketManager {
-	
-	// Name of manager
-	static public String Name;
-	
-	protected Language language;
-	
-	protected Control_references cr;
-	
-	/**
-	* Proceed given file with different source (like archive)
-	* 
-	* @param filename
-	* @param source
-	* @throws FileNotFoundException
-	* @throws IOException
-	* @throws JAXBException
-	*/
-	public abstract List<String> proceed(String filename, String source) 
-		throws FileNotFoundException, IOException, JAXBException;
-}
-\end{lstlisting}
-\end{Listing}
+It contains only one function $proceed$ that finds and eliminates external references, as well as passes the found package names to the package handler.
+%\begin{Listing}
+%	\caption{Abstract package manager model}
+%	\label{lst:pmabst}
+%\begin{lstlisting}
+%public abstract class PacketManager {
+%	
+%	// Name of manager
+%	static public String Name;
+%	
+%	protected Language language;
+%	
+%	protected Control_references cr;
+%	
+%	/**
+%	* Proceed given file with different source (like archive)
+%	* 
+%	* @param filename
+%	* @throws IOException
+%	* @throws JAXBException
+%	*/
+%	public abstract List<String> proceed(String filename, String source) 
+%		throws FileNotFoundException, IOException, JAXBException;
+%}
+%\end{lstlisting}
+%\end{Listing}
 \subsection*{Apt-get for Bash}
 The apt-get package manager module is a simple line-by-line file parser which searches for the lines starting with the "$apt$-$get$ $install$" string, comments them out and passes the command's arguments to the package handler's public function $getPackage$. 
 %The code can be found in the listing~\ref{lst:bash_apt_parse}.
 \subsection*{Apt for Ansible}
-Since Ansible package installation commands which use the $apt$ package manager can be written in many different ways, then the processing will be a complicated task too.
-It's worth mentioning that the processing uses a simple state machine and regular expression from the $java$.$util$.$regex$ package.
+Since Ansible package installation commands which use the $apt$ package manager can be written in many different ways, then the processing will be more difficult than a simple line parser.
+Therefore, to handle Ansible playbook a state machine and regular expressions from the $java$.$util$.$regex$ package are used.
 
 \section{Package Handler}
 Package handler provides an interface for an interaction with the package manager of the operating system.
-It allows to download packages, to determine the type of dependencies between them and to obtain a list with dependent packages for the given package.
+It allows to $download$ $packages$, to $determine$ $the$ $type$ $of$ $dependencies$ between them and to $obtain$ $the$ $list$ $with$ $dependent$ $packages$ for the given package.
 
-\subsection*{Package Downloading}
+\subsection*{Download Packages}
 The download operation is performed using the recursive function $getPackage$. 
-Download of installation data will satisfy the requirement~\ref{req:adddata}. % defined in the listing \ref{lst:getpack}.
+%Download of installation data will satisfy the requirement~\ref{req:adddata}. % defined in the listing \ref{lst:getpack}.
 %\begin{Listing}
 %\caption{The $getPackage$ definition}
 %\label{lst:getpack}
@@ -345,23 +353,24 @@ Download of installation data will satisfy the requirement~\ref{req:adddata}. % 
 %\end{lstlisting}
 %\end{Listing}
 The arguments of the function are described shortly.
-\begin{itemize}
-	\item $language$ is a reference to the language module which has accepted the original artifact.
-	\item $packet$ is a name of the package.
-	\item $listed$ holds a list with already downloaded packages.
-	 It is not necessary to download them again, but new dependencies must be created.
-	\item $source$ defines the parent element of the package. 
-	It will be the original artifact file for the root package, and the depending package for other packages.
-	\item $sourcefile$ is a name of the original artifact.
+$language$ is a reference to the language module which has accepted the original artifact.
+$packet$ is a name of the package.
+$listed$ holds a list with already downloaded packages.
+It is not necessary to download them again, but new dependencies must be created.
+$source$ defines the parent element of the package. 
+It will be the original artifact file for the root package, and the depending package for other packages.
+$sourcefile$ is a name of the original artifact.
 	%This name will be used by the $language$ to generate package node and by topology handler to create the dependency. 
-\end{itemize}
-This function downloads packages, calls the language's function $createTOSCA\_Node$ to create the TOSCA node for the package and the topology handler's functions $addDependencyToPacket$ or $addDependencyToArtifact$ to update the topology. Then this function calls itself recursively for all depended packages.
+
+The $getPackage$ function downloads packages, calls the language's function $createTOSCA\_Node$ using the $language$ variable to create the TOSCA node for the package.
+Then it calls the topology handler's functions $addDependencyToPacket$ or $addDependencyToArtifact$ to update the topology. 
+If dependent packages are available, the function calls itself recursively for each dependent package.
 After those operations, a dependencies three for the $packet$ will be built.\\
 The command $apt$-$get$ $download$ \emph{package} is used for download the package. 
 If the process fails, a user input is provided to solve the problem. 
 A user will be able to rename the package, ignore it or even break the processing.
 
-\subsection*{List with Dependent Packages}
+\subsection*{Obtain List with Dependent Packages}
 To obtain the dependent packages the $getDependensies$ function was developed.
 It becomes a \emph{package} as an argument and uses the command $apt$-$cache$ $depends$ \emph{package} to build a list with dependencies for the \emph{package}. 
 The $apt$-$cache$ command is a part of the $apt$-$get$ package manager and uses a packages database to print the dependencies.
@@ -369,7 +378,7 @@ The output is parsed to find strings like "Depends: \emph{dependent\_package}".
 These dependent packages are combined to a list and returned back.
 %An example output was presented in the section \ref{subs:dep}.
 
-\subsection*{Type of Dependency}
+\subsection*{Determine Type of Dependency}
 To determine the type of dependency between two packages the $getDependencyType$ function is used.
 It becomes the names of the source package and the target package and uses the $apt$-$cache$ $depends$ command to get the type.
 It can be $Depends$, $preDepends$ or $noDepends$ dependencies.
@@ -416,9 +425,3 @@ Together with definitions from the preprocessing stage and definitions made by l
 	topology.appendChild(template);
 	\end{lstlisting}
 \end{Listing}
-
-\section{Environment}
-In this section the environment necessary for the correct work of the developed software will be described.
-Since the framework is written in Java, to start it a Java Development Kit version 1.8 or above is needed.
-Additionally, the apt-get package manager must be installed to properly download packages and identify dependencies between them. 
-If a user want to download packages for specific architecture the package manager must be setup to access this architecture's repository. 

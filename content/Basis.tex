@@ -226,7 +226,7 @@ Complex relationships between different packages requiring different versions of
 Good package management is vital to these systems.\\
 %\subsection*{Repository}
 To give users more control over the kinds of programs that they allow to install on their systems, packages are often downloaded only from a number of software repositories.
-In Unix systems, a package manager uses official repositories appropriate for the operating system and the architecture  of device where it's operate, but it's possible to use additional repositories, like third-party repositories or repositories for another architecture.\\
+In Unix-like systems, a package manager uses official repositories appropriate for the operating system and the architecture  of device where it's operate, but it's possible to use additional repositories, like third-party repositories or repositories for another architecture.\\
 %\subsection*{Dependencies} \label{subs:dep}
 Package managers distinguish between two types of dependencies: $required$ and $preRequired$. %\\
 Dependency $package1$ \textbf{$required$} $package2$ indicates that the $package2$ must be installed for a proper \textbf{operation} of the $package1$. %\\
@@ -248,7 +248,7 @@ Dependency $package1$ \textbf{$preRequired$} $package2$ indicates that the $pack
 In these examples, the $package2$ is needed for the $package1$, but the $package2$ itself can require additional packages.
 A structure describing all necessary packages and dependencies between them for the given root-package is called a dependency tree. 
 The dependency type $required$ can lead to cycles in dependency trees which differs them from the normal tree graph structures.
-\subsection*{Example Dependencies Handling}
+\subsection*{Example Dependencies Handling}\label{subs:depapt}
 Its necessary to define the principle of operation of common package managers to determine methods of encapsulation of their work.
 Therefore, the $apt$-$get$ package manager will be considered to provide an example of execution.
 This application is part of \gls{apt} program which uses $dpkg$ application to communicate with an operating system.
@@ -267,29 +267,19 @@ It happens only if there are no other packages depending on the $package$.
 If the deletion is very important, then these packages can also be removed too to keep the consistency of the database. 
 The packages necessary for the $package$ itself will be deleted only by the autoremove command.
 \input{graphics/packages}
-\section{Configuration Management}
-In this section the process configuration management will be described. 
-Common configuration management tools and data download utilities will be presented.\\
-\subsection{Configuration Management Tools}
-To ease the package and file management, various tools can be used. 
-We will consider some of them to determine the form of files which contain external references. %TODO
-To store the configuration acceptable for a configuration
-One can use scripts to describe needed configuration, packages and files.
-A script is a file containing different commands which check an environment and call package managers and tools for data download to install the necessary packages and download the necessary data.
-These files are processed by configuration management tools 
+\section{Configuration Management}\label{sec:confman}
+In this section the $configuration management$ will be described. 
+Configuration is the specific state of the operating system.
+It describes what packages need to be installed, what accounts must be created, what files need to be downloaded, where they must be stored and other necessary characteristics.
+One can define all these setting in an configuration file which can be proceed by corresponding configuration management tool to achieve specified state.
+During proceeding, configuration management tools can use package managers and data download utilities which handle external references.
+Data download utilities are used to get necessary data from remote sources.
+That can be database images, other configuration files, etc.
+Common configuration management tools like Ansible, Chef and CFEngine will be presented.
+Additionally the Bash language and the Wget and cURL data download utilities will be described. 
 
-The tools will be associated with languages, which was used to write scripts.
-Popular management tools like Bash, Ansible, Chef and CFEngine will be described below.
-\subsubsection*{Bash} \label{lang:bash}
-Bash is a Unix command language written as a free software.
-It provides enough capabilities to be used as a management tool.
-In addition Bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
-Bash is examined because it is very popular since it is the default command line processor in Unix systems~\cite*{bashdef}.
-Instead of typing commands direct into a command line, a script can be executed directly~\cite{bash}.
-These scripts can be used to configure a system, install package, create files, check environment, etc.
-Bash is a very popular and ease language, therefore a huge number of problems have solutions in Bash scripts already.
 \subsubsection*{Ansible} \label{lang:ansible}
-Ansible is an open-source automation engine that automates software provisioning, configuration management, and application deployment.
+$Ansible$ is an open-source automation engine. % that automates software provisioning, configuration management, and application deployment.
 As with most configuration management software, Ansible has two types of servers: controlling machines and nodes.
 First, there is a single controlling machine which is where orchestration begins.
 Nodes are managed by a controlling machine over SSH.
@@ -299,29 +289,35 @@ The playbook format is YAML.
 Each playbook maps a group of hosts to a set of roles.
 Each role is represented by calls to Ansible tasks~\cite{ansible}.
 \subsubsection*{Chef} \label{lang:shef}
-Chef is a configuration management tool, which uses Ruby for writing system configuration files called "recipes".
+$Chef$ is a configuration management tool, which uses Ruby for writing system configuration files called "recipes".
 They describe how Chef manages applications and utilities and how they are to be configured.
 These recipes which can be grouped together as a "cookbook" for easier management define a series of resources that should be in a particular state: packages that should be installed, services that should be running, or files that should be written.
 Chef can run in client/server mode, or in a standalone configuration named "chef-solo".
 In client/server mode, the Chef client sends various attributes about the node to the Chef server. 
 In solo mode the local system will be configured~\cite{chef}.
 \subsubsection*{CFEngine}
-CFEngine is an open source configuration management system.
+$CFEngine$ is an open source configuration management system.
 Its primary function is to provide automated configuration and maintenance of large-scale computer systems, including the unified management of servers, desktops, consumer and industrial devices, embedded networked devices, mobile smartphones, and tablet computers~\cite{cfengine}.
 Configurations are described by "policy" files, which are plain text-files with .cf extension.
 These files define the necessary state of files, packages, users, processes, services, etc~\cite{cfengine2}.
+\subsubsection*{Bash} \label{lang:bash}
+$Bash$ is a Unix command language written as a free software.
+It isn't a configuration management tool, but provides enough capabilities to be used as if it is.
+In addition Bash denotes a command processor that typically runs in a text window, where a user types commands that cause actions.
+Bash is examined because it is very popular since it is the default command line processor in Unix-like systems~\cite*{bashdef}.
+%Instead of typing commands direct into a command line, a script can be executed directly~\cite{bash}.
+%A script is a file containing different commands which check an environment and call package managers and tools for data download to install the necessary packages and download the necessary data.
+Executable file containing bash commands are called scripts.
+We are interesting in these scripts which are used to configure a system: check environment, call package managers and data download utilities, etc.
+%Bash is a very popular and ease language, therefore a huge number of problems have solutions in Bash scripts already.
 
-\subsection{Tools for Data Download}\label{sec:datadown}
-Sometimes is necessary to download data for the operation of Cloud Application.
-That can be a configuration file, a database image or something else.
-To get external files a lot of utilities like the popular $wget$ tool~\cite{wgetstat,wget} or cURL~\cite{curl} can be used. 
-These utilities will be described below.
 \subsubsection*{Wget}
-GNU Wget is a utility designed for retrieving binary documents across the Web, through the use of HTTP and FTP, and saving them to disk.
+GNU $Wget$ is a utility designed for retrieving binary documents across the Web, through the use of HTTP and FTP.
 Wget is non-interactive, which means it can work in the background, while the user is not logged in~\cite{wget_desc}.
 This tool is suitable for automatically  tasks because it has built-in mechanism for the server response analyze.
 A user can setup it to repeat download a certain number of times in case of fault.
 Additionally Wget supports recursion mechanism which allows to download folders as simple as a single files.
 \subsubsection*{cURL}
-cURL is a command line tool to transfer the data. It is based on libcurl a free open source library ported to a big number of platforms like AIX, AmigaOS, Android, BeOS, BlackBerry, OpenVMS, Darwin, DOS, FreeBSD, HP-UX, HURD, iOS, IRIX, Linux, macOS, NetBSD, NetWare, OpenBSD, OS/2, QNX Neutrino, RISC OS, Solaris, Symbian, Tru64, Ultrix, UnixWare, and Windows and supports a huge number of protocols.
+$cURL$ is a command line tool to transfer the data.
+ It is based on libcurl a free open source library ported to a big number of platforms and supports a various protocols.
 Due to this portability, cURL is often used in small embedded devices to transfer data~\cite{curl}.

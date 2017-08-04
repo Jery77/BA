@@ -11,10 +11,12 @@
 \tikzstyle{entry}=[draw, fill=green!20, minimum height=2.2em, text width=7em]
 \tikzstyle{myentry}=[draw, fill=Dandelion!20, minimum height=2.5em, text width=7em]
 \tikzstyle{ann} = [above, text width=5em]
-\tikzstyle{frame} = [entry, text width=9em, fill=red!20, 
+\tikzstyle{frame} = [entry, text width=10em, fill=red!20, 
 minimum height=17em, rounded corners]
-\tikzstyle{csar_content} = [entry, text width=8em, fill=blue!20, 
+\tikzstyle{csar_content} = [entry, text width=9em, fill=blue!20, 
 minimum height=14em, rounded corners]
+\tikzstyle{out_content} = [entry, text width=10em, fill=blue!20, 
+minimum height=17em, rounded corners]
 \def\blockdist{2.3}
 \def\edgedist{2.5}
 \begin{figure}
@@ -23,10 +25,10 @@ minimum height=14em, rounded corners]
 
 
 \node (csar_frame) [frame] {};
-\node [xshift=+5mm, yshift=-2mm, below right] at (csar_frame.north west) {\large CSAR};
+\node [xshift=+5mm, yshift=-2mm, below right] at (csar_frame.north west) {\large Input CSAR};
 
 \node (csar_content) at ( [yshift=-3mm]csar_frame) [csar_content] {};
-\node [xshift=+5mm, yshift=-2mm, below right] at (csar_content.north west) {\large content};
+\node [xshift=+5mm, yshift=-2mm, below right] at (csar_content.north west) {\large Content};
 
 \node (l2pm1) at ([yshift=+15mm]csar_content) [entry] {Definitions\\};
 \node (l2pm2) at ([yshift=0mm]csar_content) [entry] {TOSCA-Metadata\\};
@@ -34,15 +36,15 @@ minimum height=14em, rounded corners]
 \node at ($(l2pm2)!.5!(l2pmn)$) {\vdots};
     
 \node [right of=csar_frame, xshift=30mm](dc_frame) [csar_content] {};
-\node [xshift=+1mm, yshift=-2mm, below right] at (dc_frame.north west) {\large Decompressed};
+\node [xshift=+0mm, yshift=-2mm, below right] at (dc_frame.north west) {\large Content of the CSAR };
 \draw [->] (csar_frame) -- (dc_frame);
 \node (2pm1) at ([yshift=+15mm]dc_frame) [entry] {Definitions\\};
 \node (2pm2) at ([yshift=0mm]dc_frame) [entry] {TOSCA-Metadata\\};
 \node (2pmn) at ([yshift=-22mm]dc_frame) [entry] {Artifacts\\};
 \node at ($(2pm2)!.5!(2pmn)$) {\vdots};
 
-\node [right of=dc_frame, xshift=30mm](my_frame) [frame] {};
-\node [xshift=+5mm, yshift=-2mm, below right] at (my_frame.north west) {\large With new files};
+\node [right of=dc_frame, xshift=30mm](my_frame) [out_content] {};
+\node [xshift=+4mm, yshift=-2mm, below right] at (my_frame.north west) {\large Content with new files};
 \draw [->] (dc_frame) -- (my_frame);
 \node (3pmd) at ([yshift=+20mm]my_frame) [myentry] {New definitions\\};
 \node (3pm1) at ([yshift=+6mm]my_frame) [entry] {Definitions\\};
@@ -71,5 +73,5 @@ child { node  {\ldots}
 \node at ($(n21)!.5!(n22)$) {\ldots};
 
 \end{tikzpicture} 
-\caption{Preprocessing: decompression, adding files and generating dependencies} 	\label{fig:preproc}
+\caption{Preprocessing: decompression, addition of common definitions and generation of internal dependencies trees} 	\label{fig:preproc}
 \end{figure}
