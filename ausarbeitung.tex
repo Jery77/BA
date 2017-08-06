@@ -156,13 +156,14 @@ The problem is that each platform provides its own \textbf{A}pplication \textbf{
 Therefore it's difficult to create one unified application functioning on various platforms properly. 
 \textbf{T}opology and \textbf{O}rchestration \textbf{S}pecification for \textbf{C}loud \textbf{A}pplication (TOSCA) provides a solution for this problem.
 %%This standard adds an additional level of abstraction to a Cloud Applications, in other words, a layer between the external interfaces of the Cloud Application and a Cloud service provider's API.
-With the help of TOSCA, it's possible to describe several models of interaction with many different APIs within one TOSCA Cloud Application.
-A TOSCA runtime environment is responsible to choose and process the right model and serves as a layer between external interfaces of a Cloud Application and an API of a platform.
-This allows to automate the migration of Cloud Applications between platforms which use completely different APIs. 
-The description of a Cloud Application is stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for the Cloud Application life-cycle. \\
+With the help of TOSCA, it's possible to describe several models of interaction with many different APIs within one TOSCA Application.
+A TOSCA runtime environment is responsible to choose and process the right model and serves as a layer between external interfaces of a TOSCA application and an API of a platform.
+This allows to automate the migration of TOSCA applications between platforms which use completely different APIs. 
+The description of a TOSCA Application is stored in a \textbf{C}loud \textbf{S}ervice \textbf{AR}chive (CSAR), which contains all components necessary for the application life-cycle. \\
 %The University of Stuttgart implemented this specification in the runtime environment named OpenTOSCA. \\
 Cloud Applications are often described in such way that during their deployment some external packages, programs and files need to be downloaded via the Internet.
 These downloads can slow down the deployment and when the access to the Internet is limited, unstable or missing, they can prevent the installation at all.
+In addition, the download from external sources can compromise the security of applications.
 %If a Cloud Application consists of a single virtual server with one operating system, this can slightly slow down the deployment. 
 %But in composite Cloud Computing, a large number of identical operating systems can download a huge amount of the same data, which can significantly increase the time needed for deployment.\\
 %During this work a software solution which will eliminate external dependencies in CSAR, resupply them with all packages necessary for deployment and also change the internal structure to display the achieved self-containment will be developed and implemented.

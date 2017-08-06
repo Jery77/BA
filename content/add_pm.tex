@@ -2,12 +2,12 @@
 
 \chapter{Example Integration of new Module}\label{chap:add}
 This chapter shows the extensibility of the framework by adding a new $aptitude$ package manager module for the Bash language. %\\
-Section~\ref{sec:aptitude} provides common information about the $aptitude$. %\\
+Section~\ref{sec:aptitude} provides common information about $aptitude$. %\\
 In section~\ref{sec:aptitude_imp} the module is developed and integrated into the Bash language module.
 
 \section{Aptitude Package Manager}\label{sec:aptitude}
 This section describes the $aptitude$ package manager.
-Like the $apt$-$get$, the $aptitude$ is a command line program, where a package can be installed using the $aptitude$ $install$ \emph{package} command. 
+Like to $apt$-$get$, $aptitude$ is a command line program, where a package can be installed using the $aptitude$ $install$ \emph{package} command. 
 In additional, it can be started in a pseudo-graphical mode to provide a visual interface shown in Figure~\ref{fig:aptitude_gui}).
 An another advantage compared to $apt$-$get$ is the capability to search for packages by a part of the name (or by any other attributes) using the $aptitude$ $search$ $text$ command.
 \begin{figure}[ht]   
@@ -87,6 +87,7 @@ public void proceed(String filename, String source)
 	throws FileNotFoundException, IOException, JAXBException {
 	if (ch == null)
 		throw new NullPointerException();
+	List<String> output = new LinkedList<String>();
 	System.out.println(Name + " proceed " + filename);
 	BufferedReader br = new BufferedReader(new FileReader(filename));
 	boolean isChanged = false;
@@ -119,7 +120,7 @@ if (words.length >= 1 + i && words[i].equals("aptitude")) {
 		isChanged = true;
 		for (int packet = 2 + i; packet < words.length; packet++) {
 			System.out.println("package: " + words[packet]);
-			output = ch.getPackage(language, words[packet], source);
+			output.addAll(ch.getPackage(language, words[packet], source));
 		}
 	}
 	newFile += "#//References resolver//" + line + '\n';
