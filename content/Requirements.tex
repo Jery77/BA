@@ -10,7 +10,7 @@ During this work, such terms as $input$ $CSAR$ and $output$ $CSAR$ will be used.
 The $input$ $CSAR$ is the \gls{csar}, which can contain external references and will be processed by the framework. %\\
 The $output$ $CSAR$ is the CSAR, which was processed by the framework and doesn't contain external references. \\%(at least those that are handled by the framework).\\
 The application must proceed input CSARs and identify references to external packages and files.
-That includes a wide range of file download and package installation commands which access package repositories with the help of package managers and download external files with the help of data download tools respectively.
+That includes a wide range of file download and package installation commands which use package managers to access package repositories and data download tools to get external files.
 To find such commands the software must be able to unpack the data and access all artifacts contained in input CSARs.
 Since one can't develop an application which support all possible types of external references, the structure of the application must ensure easy extensibility which allows to extend the software and handle any new types of references.
 Therefore the framework must be developed in the form of modular system so that each module will be able to identify and resolve the corresponding external references type.
@@ -89,8 +89,8 @@ The developed framework must:
 	\item integrate installation data and downloaded files into the CSAR to encapsulated it.\label{req:adddata}
 %	\item handle different configuration management tools, package managers and data download tools.\label{req:handledif}
 %	\item handle different configuration management tools and package managers.\label{req:handledif}
-	\item have an easy expandable structure.\label{req:expand}
 	\item represent the changes into the TOSCA topology.\label{req:represent}
+	\item have an easy expandable structure.\label{req:expand}
 %	\item implement a prototype.
 	\item generate an output CSAR with the same functionality as the input CSAR, but without external references.\label{req:out}
 \end{enumerate}

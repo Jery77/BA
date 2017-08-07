@@ -39,7 +39,7 @@ An attempt to deploy a Cloud Application with external dependencies in such netw
 During this work, a concept of a software solution for this problem will be developed.
 This concept will describe the resolution of external references in CSARs with the help of encapsulation.
 Since it is impossible to predict and describe all possible types of external dependencies, the software must be developed in the form of a framework which means an easily expandable modular system. 
-To encapsulate a CSAR it is necessary to analyze it, identify dependencies to external packages and files, remove them by downloading the files and the necessary installation data for the packages as well as installation data for all depended packages. 
+To encapsulate a CSAR it is necessary to analyze it, identify dependencies to external files and packages, resolve them by downloading the files and the necessary installation data for the packages as well as installation data for all depended packages. 
 Then all downloaded data must be added into the CSAR.
 %The output of the framework is a CSAR which contains additions to the original structure, like all the packages and files necessary for the deployment and operation of the Cloud Application.
 Thus, these changes minimize or even eliminate the required access to the Internet during an application life-cycle.

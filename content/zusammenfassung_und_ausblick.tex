@@ -1,61 +1,87 @@
-% !TeX spellcheck = en_US
 
+
+% !TeX spellcheck = de_DE
 \chapter{Conclusion and Future Work}\label{chap:zusfas}
-%The main points of this work will be presented and highlighted.\\  
 External references can negatively affect  Cloud Applications.
 If we have a high level of information security or limited access to the Internet, these external dependencies can lead to a lot of problems with performance, stability and security.
-Unfortunately, many TOSCA applications access, during their deployment, external sources to install packages or download files.
+Unfortunately, during deployment, many TOSCA applications access external sources to install packages or download files.
 The purpose of this work was to develop a solution resolving external dependencies through encapsulation and to implement it in a prototype.\\
-It was designed a concept of the modular framework. 
+A concept of the modular framework was designed. 
 According to the concept, modules will process different configuration management tools, package managers and data download utilities. 
 Each module is responsible for identification and resolution of specified type of external references. 
 To resolve a reference it's necessary to download the data needed during deployment.
 The downloaded data is integrated into the topology of the TOSCA application.
-It was presented several modes of integration which can be suitable in different use cases.\\
+Several modes of integration  were presented, which can be suitable in different use cases.\\
 The prototype of the modular framework was developed in the Java language.
-The program identifies and resolves external references to packages presented by Bash scripts and Ansible playbooks.
+The program identifies and resolves references to external packages.
+The application can handle $Bash$ scripts and $Ansible$ playbooks.
 It has two modes of operation.
 In the first mode dependencies between packages are mapped to a TOSCA topology. 
-Other mode serves to generate compacter CSAR with small number of nodes. %\\
-%The program identifies external references presented by package installation commands, removes them and integrates necessary packages and dependencies between them into the topology of a TOSCA application.
-%To enable the ability to handle new types of external dependencies, the software was implemented in the form of a modular framework with separate modules for processing of languages and package managers.
-%This allows a consumer to add their new handlers for package managers and languages easily.
-%In the first version, the framework handled only $Bash$ scripts  which use the $apt$-$get$ package manager.
-%To check the simplicity of the extensibility, the processing of $Bash$ scripts with the $aptitude$ package manager and  $Ansible$ playbooks with the $apt$ package manager was added.\\
+Other mode serves to generate compacter CSAR with small number of nodes. 
 The framework handles a CSAR as follows.
 The structure of the CSAR is analyzed to determine the internal references.
-%Then each language module selects artifacts written in the language.    
-%All such artifacts are transferred to the package manager modules of the language for processing.
-Then modules find external dependencies, remove them and generates a list with names of the required packages.
 Each package will be download along with all dependent packages and integrated into the CSAR. 
 TOSCA nodes are generated for these packages.
-During deployment, a runtime environment can analyze these nodes and install the necessary packages.\\
+During deployment, a TOSCA runtime environment can analyze these nodes and install the necessary packages.\\
 In order to show the extensibility of the framework, the addition of the $aptitude$ package manager module into the $Bash$ module was described in detail.
 It  was shown how to create the module which can be added into the framework, how to implement its basic functions, pass data and integrate the module into the $Bash$ module. \\
 At the end, the results of the framework's execution were validated.
 The output CSARs were visualized and analyzed with the help of Winery.
 Generated artifacts were verified and executed.
 \section*{Future Work}
-The developed framework represents a prototype of the software which will able to provide a fully self containment for the processed CSAR.
+The developed framework represents a prototype of the software which will be able to make the processed CSAR fully self-contained.
 Now it can be extended or even its concept can be rethought.
 There are many different directions available to expand the existing prototype.
 The package manager modules can be reworked to handle installation commands in better way.
 For example, the support of variables can be added into the apt-get module for Bash.
-Some new package manager or languages modules can be developed and added into the framework to handle Shef, CFEngine, yum, pacman, etc.
+Some new package manager or languages modules can be developed and added into the framework to handle for example Shef, CFEngine, yum, pacman, etc.
 Described, but not yet implemented download tool modules can be added in future.\\
 The entire concept can be reworked in order to achieve higher level of abstraction.
 All types of modules can be grouped up to one abstract type.
-This will allow to add some new types of modules, like archive module with zip or rar modules, which can handle archives separately without big changes in the structure of the software.
-%Now zip archives are processed only within the Ansible module.
-%This can be counted as a "dirty code" if an additional module requiring  processing of zip archives will be added.\\
-Another direction of the improvement of the software's convenience is to implement a visual interface which allows a user to chose artifacts which must be processed and modes of the processing separately.
+This will allow to add some new types of elements, like archive module with zip or rar submodules, which can handle archives separately without big changes in the structure of the software.
+Another direction of the improvement of the software's convenience is to implement a visual interface which allows a user to choose artifacts which must be processed and modes of the processing separately.
 Such visualization can be based on some existing program from OpenTOSCA, for example on Winery.
-This can be useful for composite Cloud Application consisting of many parts with diverse architectures which must be handled in different ways separately.
-%\section*{Result}
-%The framework that resolves external dependencies in a CSAR and satisfies the requirements was obtained.
-%It handles $Bash$ language with $aptitude$ and $apt$-$get$ package managers, and $Ansible$ language with $apt$ package managers.
-%The framework can be easily expanded to handle additional types of external references. 
-%Two modes of operation where implemented.
-%The first method is to create one TOSCA node for each package.
-%By the second method, one TOSCA node combining all packages is created for each artifact containing external reference.
-%Such nodes combine all packages needed to eliminate external references in the artifact.
+This can be useful for composite Cloud Applications consisting of many parts with diverse architectures which must be handled in different ways separately.
+\if 0
+%\else
+% !TeX spellcheck = de_DE
+\chapter{Zusammenfassung und weitere Arbeit}\label{chap:zusfas}
+Externe Referenzen können Rechnerwolken negativ beeinflussen. 
+Wenn wir ein hohes Niveau der Informationssicherheit oder einen begrenzten Zugang zum Internet haben, können diese externen Abhängigkeiten zu vielen Problemen mit Leistung, Stabilität und Sicherheit führen. 
+Leider greifen viele TOSCA Applikationen während der Bereitstellung auf externe Quellen zu, um Pakete zu installieren oder Dateien herunterzuladen. 
+Das Ziel dieser Arbeit war es, eine Lösung zu entwickeln, indem man externe Abhängigkeiten durch Datenkapselung auflöst, und die Lösung in einen Prototyp zu implementieren.\\
+Es wurde ein Konzept des modularen Frameworks entworfen. 
+Dem Konzept entsprechend werden die Module verschiedene Konfigurationsmanagement-Tools, Paketverwaltungen und Dienstprogramme zum Herunterladen von Files bearbeiten. 
+Jedes Modul ist für die Identifizierung und Auflösung einer bestimmten Art der externen Referenzen verantwortlich. 
+Nach der Auflösung werden die heruntergeladenen Dateien in die Topologie der TOSCA Applikationen integriert. Es wurden mehrere Integrierungsmodi präsentiert, die für verschiedene Anwendungsfälle geeignet sein können.\\
+Der Prototyp des modularen Frameworks wurde in Java Sprache entwickelt. 
+Das Programm identifiziert und löst Referenzen zu externen Paketen auf. 
+Die Anwendung kann $Bash$-Skripten und $Ansible$-playbooks bearbeiten. 
+Sie hat zwei Arbeitsmodi. 
+Im ersten Modus werden die Abhängigkeiten zwischen den Paketen auf die TOSCA Topologie abgebildet. 
+Das andere Modus dient für die Generierung eines kompakten CSAR mit wenigen Knoten. 
+Das Framework bearbeitet ein CSAR folgendermaßen. 
+Die Struktur des CSAR wird analysiert, um innere Referenzen zu ermitteln. 
+Dann finden die Module externe Abhängigkeiten, entfernen sie und erstellen eine Liste mit den Namen von benötigten Paketen. 
+Jedes Paket wird zusammen mit allen abhängigen Paketen heruntergeladen und ins CSAR integriert. 
+TOSCA Knoten für diese Pakete werden erstellt. 
+Während der Bereitstellung kann die TOSCA Laufzeitumgebung diese Knoten analysieren und die benötigten Pakete installieren. \\
+Um die Erweiterbarkeit des Frameworks anzuzeigen, wurde die Hinzufügung des $aptitude$ Paketverwaltungsmoduls dem $Bash$ Modul detailliert beschrieben. 
+Es wurde gezeigt, wie man ein Modul erzeugt, das dem Framework hinzugefügt werden kann, wie man seine Grundfunktionen implementiert, Dateien weitergibt und dieses Modul ins $Bash$ Modul integriert.\\
+Zum Schluß wurden die Ergebnisse der Ausführung des Frameworks geprüft. 
+Die ausgegebenen CSARs wurden mit Hilfe von Winery visualisiert und analysiert. Die erzeugten Artefakte wurden verifiziert und ausgeführt.
+\section*{Weitere Arbeit}
+Das entwickelte Framework repräsentiert den Prototyp einer Software, die einmal fähig wird, das bearbeitende CSAR völlig in sich geschlossen zu machen. 
+Jetzt kann er erweitert werden oder sogar sein Konzept kann verändert werden. 
+Es gibt viele verschiedene Richtungen vorhanden, um den bestehenden Prototyp zu erweitern. 
+Die Paketverwandlungsmodule können übergearbeitet werden, damit sie die Installationsanweisungen besser verarbeiten. 
+Zum Beispiel kann man die Unterstützung für Variablen dem apt-get Modul für Bash zuzugeben. 
+Einige neue Paketverwandlungs- und Konfigurationsmanagementmodule können entwickelt und dem Framework hinzugefügt werden, um zum Beispiel Shef, CFEngine, yum, pacman, etc. zu bearbeiten. 
+Die beschriebenen, aber noch nicht implementierten Module für Anwendungen zum Herunterladen von Files können in Zukunft hinzugefügt werden.\\
+Das gesamte Konzept kann übergearbeitet werden, um das höhere Niveau der Abstraktion zu erreichen. 
+Alle Arten der Module können zu einer abstrakten Art gruppiert werden. 
+Das ermöglicht die Hinzufügung von einigen neuen Arten der Komponenten, so wie Archivmodule mit zip oder rar Submodulen, die die Archive ohne große Änderungen in der Struktur der Software getrennt bearbeiten können. 
+Die andere Richtung der Vervollkommnung der Zweckmäßigkeit der Software ist es, eine visuelle Schnittstelle zu implementieren, die es dem Benutzer ermöglicht, die Artefakte, die verarbeitet werden müssen, und die Modi der Verarbeitung getrennt zu wählen. 
+Solche Visualisierung kann auf einem bestehenden Programm aus OpenTOSCA basieren, zum Beispiel auf Winery. 
+Das kann für zusammengesetzte Rechnerwolken, die aus vielen Teilen mit vielfältigen Architekturen bestehen, welche auf unterschiedliche Weisen getrennt bearbeitet werden müssen, nützlich sein. 
+\fi

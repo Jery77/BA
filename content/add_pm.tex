@@ -25,7 +25,7 @@ After that, the $aptitude$ class can be used as a regular package manager module
 It is necessary to add the common code, like the constructor and the manager's name.
 After these operations, the $aptitude$ module can be presented in listing~\ref{lst:aptit_common}. %\\
 \begin{Listing} 
-	\caption{The $aptitude$ inherited from the $PackageManager$ abstract class}
+	\caption{The $aptitude$ module inherited from the $PackageManager$ abstract class}
 	\label{lst:aptit_inher}
 \begin{lstlisting}
 public final class PM_aptitude extends PackageManager {
@@ -79,7 +79,7 @@ During the parsing which is defined in the listing \ref{lst:aptit_parse}, the li
 Each found package name is transmitted to the packet handler as an argument of its public function $getPackage$.
 In additional, this function must take the language and the source artifact's name as the arguments.
 \begin{Listing} 
-\caption{The aptitude $proceed$ function}
+\caption{The $aptitude$ module $proceed$ function}
 \label{lst:aptit_proceed}
 \begin{lstlisting}
 @Override
@@ -104,7 +104,7 @@ public void proceed(String filename, String source)
 \end{lstlisting}
 \end{Listing} 
 \begin{Listing} 
-\caption{The aptitude line parser}
+\caption{The $aptitude$ module line parser}
 \label{lst:aptit_parse}
 \begin{lstlisting}
 String[] words = line.replaceAll("[;&]", "").split("\\s+");
