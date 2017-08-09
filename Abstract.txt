@@ -1,0 +1,27 @@
+Abstract
+In recent years, Cloud Computing is gaining more and more popularity. But if someone
+will try to create a Cloud Application suitable to work with several different platforms,
+he will face a problem. The problem is that each platform provides its own Application
+Programming Interface (API) to interact with Cloud Applications. Therefore it’s difficult
+to create one unified application functioning on various platforms properly. Topology
+and Orchestration Specification for Cloud Application (TOSCA) provides a solution
+for this problem. With the help of TOSCA, it’s possible to define several models of
+interaction with many different APIs within one TOSCA Application. A TOSCA runtime
+environment is responsible to choose and process the right model and serves as a layer
+between external interfaces of a TOSCA application and an API of a platform. This
+allows to automate the migration of TOSCA applications between platforms which use
+completely different APIs. The description of a TOSCA Application is stored in a Cloud
+Service ARchive (CSAR), which contains all components necessary for the application
+life-cycle.
+Cloud Applications are often defined in such way that during their deployment some
+external packages, programs and files need to be downloaded via the Internet. These
+downloads can slow down the deployment and when the access to the Internet is limited,
+unstable or missing, they can prevent the installation at all. In addition, the download
+from external sources can compromise the security of applications. This document
+considers the development of the solution to this problem through the predownload
+of the necessary data. Different methods of encapsulation of CSARs will be defined. It
+will be described the architecture of the software solution which can recognize external
+dependencies in a CSAR, eliminate them, resupply the CSAR with all the data necessary
+for deployment and also change the internal structure of the CSAR to display the
+achieved self-containment. The prototype of the software will be implemented and
+validated.
